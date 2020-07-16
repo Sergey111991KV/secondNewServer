@@ -21,6 +21,45 @@ description:         Please see the README on GitHub at <https://github.com/gith
 
 dependencies:
 - base >= 4.7 && < 5
+- template-haskell
+- aeson
+- time-lens
+- mtl
+- http-client
+- http-client-tls
+- http-types 
+- cookie
+- postgresql-simple
+- postgresql-libpq >= 0.9.4.2
+- time
+- text
+- bytestring
+
+
+
+default-extensions:
+
+- OverloadedStrings
+- QuasiQuotes
+- GeneralizedNewtypeDeriving
+- ConstraintKinds
+- FlexibleContexts
+- TemplateHaskell
+- ExistentialQuantification
+- RecordWildCards
+- TypeFamilies
+- AllowAmbiguousTypes 
+- DeriveGeneric
+- MultiParamTypeClasses
+- ScopedTypeVariables
+- GeneralizedNewtypeDeriving
+- FlexibleInstances
+- StandaloneDeriving 
+- UndecidableInstances
+# - Arrows 
+# - DefaultSignatures  
+# - ExtendedDefaultRules  
+
 
 library:
   source-dirs: src
