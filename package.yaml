@@ -33,7 +33,12 @@ dependencies:
 - postgresql-libpq >= 0.9.4.2
 - time
 - text
+- text-time
 - bytestring
+- data-has
+- resource-pool
+- exceptions
+
 
 
 

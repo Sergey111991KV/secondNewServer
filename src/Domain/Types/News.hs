@@ -19,7 +19,9 @@ data News = News {
     main_photo_url_news   :: Text,
     other_photo_url_news  :: PGArray Text,
     short_name_news       :: Text,
-    drafts                :: [Draft]
+    drafts                :: [Draft],
+    comments              :: [Comment],
+    tegs                  :: [Teg]
     } deriving (Show, Eq, Generic)
              
     
