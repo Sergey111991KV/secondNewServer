@@ -3,6 +3,7 @@ module Domain.Service.FilterService where
 
 import Domain.ImportEntity
 import Domain.Service.CommonService 
+import ClassyPrelude
 
 
 class CommonService m  => FilterService m  where

@@ -1,6 +1,8 @@
 module Domain.Types.Comment where
 
 import Domain.Types.Imports
+import Database.PostgreSQL.Simple.FromField 
+import ClassyPrelude
 
 
 
@@ -19,3 +21,13 @@ instance FromRow Comment where
 instance FromJSON Comment
 instance ToJSON Comment
 instance  ToRow Comment
+
+instance FromField Comment where
+  fromField = fromJSONField 
+instance ToField Comment where
+  toField = toJSONField 
+
+instance FromField [Comment] where
+  fromField = fromJSONField 
+instance ToField [Comment] where
+  toField = toJSONField 

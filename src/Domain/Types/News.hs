@@ -7,6 +7,7 @@ import Domain.Types.Draft
 import Domain.Types.Comment 
 import Domain.Types.Teg 
 import Domain.Types.Category
+import ClassyPrelude
 
 import Database.PostgreSQL.Simple.Types 
 
@@ -23,7 +24,10 @@ data News = News {
     comments              :: [Comment],
     tegs                  :: [Teg]
     } deriving (Show, Eq, Generic)
-             
+
+instance FromRow News where
+    -- fromRow = News <$> field <*> field <*> field <*> field <*> field <*> field <*> field <*> field <*> field <*> field <*> field <*> field <*> field 
+instance  ToRow News         
     
 instance FromJSON News
 instance ToJSON News

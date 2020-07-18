@@ -1,6 +1,7 @@
 module Domain.Types.Error where
 
 import Domain.Types.Imports
+import ClassyPrelude
 
 
 data Error =  AccessError 

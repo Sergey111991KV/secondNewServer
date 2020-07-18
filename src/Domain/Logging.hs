@@ -1,5 +1,6 @@
 module Domain.Logging where
 
+import ClassyPrelude
 import Data.Aeson
 import GHC.Generics
 import Domain.Types.Error as E
@@ -78,7 +79,7 @@ writeText txt = date ++  txt
 
         
 takeCurrentDate ::  String
-takeCurrentDate = Data.Text.unpack $ toStrict $ formatISODateTime $ unsafePerformIO time
+takeCurrentDate = Data.Text.unpack $ Data.Text.Lazy.toStrict $ formatISODateTime $ unsafePerformIO time
         where 
                 time = getCurrentTime
      

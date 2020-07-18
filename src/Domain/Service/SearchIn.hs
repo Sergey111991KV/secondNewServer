@@ -3,6 +3,7 @@ module Domain.Service.SearchIn where
 
 import Domain.ImportEntity
 import Domain.Service.CommonService 
+import ClassyPrelude
 
 
 class CommonService m  => SearchIn m  where

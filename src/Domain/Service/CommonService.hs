@@ -2,6 +2,7 @@ module Domain.Service.CommonService where
 
 
 import  Domain.ImportEntity 
+import ClassyPrelude
 
 
 class Monad m =>  CommonService m  where

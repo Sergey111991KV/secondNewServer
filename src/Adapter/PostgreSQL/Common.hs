@@ -9,6 +9,7 @@ import Data.ByteString
 import Control.Monad.Catch 
 import Control.Monad.Reader
 import Control.Monad.IO.Class
+import ClassyPrelude
 
 type PG r m = (Has State r, MonadReader r m, MonadIO m, MonadThrow m)
 
@@ -23,7 +24,7 @@ data Config = Config
 
 withPool :: Config -> (State -> IO a) -> IO a
 withPool cfg action =
-        bracket initPool cleanPool action
+        Control.Monad.Catch.bracket initPool cleanPool action
         where
           initPool = createPool openConn closeConn
                       (configStripeCount cfg)

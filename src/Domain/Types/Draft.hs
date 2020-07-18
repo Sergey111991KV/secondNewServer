@@ -1,7 +1,8 @@
 module Domain.Types.Draft where
 
 import Domain.Types.Imports
-
+import Database.PostgreSQL.Simple.FromField 
+import ClassyPrelude
 
 
 data Draft = Draft {
@@ -18,3 +19,12 @@ instance FromRow Draft where
 instance FromJSON Draft
 instance ToJSON Draft
 instance  ToRow Draft
+
+instance FromField Draft where
+  fromField = fromJSONField 
+instance ToField Draft where
+  toField = toJSONField 
+instance FromField [Draft] where
+  fromField = fromJSONField 
+instance ToField [Draft] where
+  toField = toJSONField 

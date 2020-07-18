@@ -38,12 +38,15 @@ dependencies:
 - data-has
 - resource-pool
 - exceptions
+- transformers
+- classy-prelude
+
 
 
 
 
 default-extensions:
-
+- NoImplicitPrelude
 - OverloadedStrings
 - QuasiQuotes
 - GeneralizedNewtypeDeriving

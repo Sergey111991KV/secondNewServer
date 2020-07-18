@@ -1,6 +1,10 @@
 module Domain.Types.Category where
 
 import Domain.Types.Imports
+import Control.Applicative 
+import Control.Monad
+import Database.PostgreSQL.Simple.FromField 
+import ClassyPrelude
 
 
 data  Category1 = Category1 
@@ -8,6 +12,17 @@ data  Category1 = Category1
         , name_category_1           :: String
         , category2                :: Category2
         } deriving (Show, Eq, Generic)
+
+instance FromRow Category1 where
+  fromRow = Category1 <$> field <*> field <*> field
+  -- return Category2 `ap` field `ap` field `ap` return Category3 `ap` field `ap` field
+
+instance  ToRow Category1
+
+instance FromField Category1 where
+  fromField = fromJSONField 
+instance ToField Category1 where
+  toField = toJSONField 
 
 instance ToJSON Category1
 instance  FromJSON Category1
@@ -19,6 +34,17 @@ data  Category2 = Category2
         , category3                 :: Category3
         } deriving (Show, Eq, Generic)
 
+        
+instance FromRow Category2 where
+  fromRow = Category2 <$> field <*> field <*>  field
+
+instance  ToRow Category2
+
+instance FromField Category2 where
+  fromField = fromJSONField 
+instance ToField Category2 where
+  toField = toJSONField 
+
 instance ToJSON Category2
 instance  FromJSON Category2   
  
@@ -28,6 +54,17 @@ data  Category3 = Category3
         , name_category_3          :: String
         } deriving (Show, Eq, Generic)
 
+
+instance FromRow Category3 where
+  fromRow = Category3 <$> field <*> field 
+
+instance  ToRow Category3
+
+
+instance FromField Category3 where
+  fromField = fromJSONField 
+instance ToField Category3 where
+  toField = toJSONField 
 
 instance ToJSON Category3
 instance  FromJSON Category3
