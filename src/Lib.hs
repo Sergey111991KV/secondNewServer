@@ -7,7 +7,9 @@ import Domain.ImportEntity
 import qualified Adapter.PostgreSQL.ImportPostgres as PG
 import Control.Monad.Catch (MonadThrow, MonadCatch)
 import ClassyPrelude
+import qualified Prelude as Prelude -------------------------
 import qualified Config as Config
+import Database.PostgreSQL.Simple.Types
 
 type State = (PG.State)
 newtype App a = App
@@ -19,10 +21,10 @@ run  state =  flip runReaderT state . unApp
 
 instance CommonService App where
       create  =   PG.create
-    --   editing =   PG.editing
+      editing =   PG.editing
     --   getAll  =   PG.getAll
       getOne  =   PG.getOne
-    --   remove  =   PG.remove
+      remove  =   PG.remove
 
 
 
@@ -42,8 +44,8 @@ withState config action =
 
 action :: App ()
 action = do
-    user <-  getOne True "user" 1
-    print user
+    -- user <-  getOne True "user" 1
+    -- print user
     -- tag <- getOne True  "tag" 1 
     -- print tag
     -- draft <- getOne True  "draft" 1 
@@ -60,11 +62,80 @@ action = do
     -- print category3
     -- news <- getOne True  "news" 1 
     -- print news
-    let teg = Teg 1 "testTeg"
-    create True teg
+    let time = (Prelude.read "2011-11-19 18:28:52.607875 UTC") :: UTCTime
+    let pgArrayText = PGArray ["test 1 other photo", "test 1 other photo2"]
+    let auth = EntAuthor (Author 5 "DaniTEST!!!!" (User  2 "Daniel" "Abramov" "daniel11" "qwerty" "avatarDaniel"  time  True True))
+    let auth' = Author 5 "DaniTEST!!!!" (User  2 "Daniel" "Abramov" "daniel11" "qwerty" "avatarDaniel"  time  True True)
+    -- createAuth <- create True auth
+    -- print  createAuth
+    let us = EntUser (User 33 "TestUser" "TestLastName" "dd" "qwerty" "avatar" time True True)  
+    let teg = EntTeg (Teg 1 "testTeg!!!!!!")
+    let teg' = Teg 1 "testTeg!!!!!!"
+    let cat1 = EntCategory (CatCategory1 (Category1 4 "Art"))
+    let cat2 = EntCategory (CatCategory2 (Category2 7 "Theatre" (Category1 4 "Art")))
+    let cat3 = EntCategory (CatCategory3 (Category3 13 "Big Theatre of Moskow" (Category2 7 "Theatre" (Category1 4 "Art"))))
+    let cat3' = Category3 13 "Big Theatre of Moskow" (Category2 7 "Theatre" (Category1 4 "Art"))
+    let comment = (EntComment  (Comment 1 "test comment1" time 1 1))
+    let comment' =  PGArray [Comment 1 "test comment1" time 1 1] :: PGArray Comment
+    let draft = (EntDraft    (Draft 1 "test 1 draft" time 1 "test 1 main photo url" pgArrayText "TestDragtForFirstNews")) 
+    let draft' = (Draft 1 "test 1 draft" time 1 "test 1 main photo url" pgArrayText "TestDragtForFirstNews")
+    let news = ( EntNews (News 
+                                2  
+                                time 
+                                auth'  
+                                cat3' 
+                                "News of Today" 
+                                "url main Photo" 
+                                pgArrayText 
+                                "TodayNews" 
+                                (PGArray [draft'])
+                                comment'
+                                (PGArray [teg'])
+                                ))
+   
+    -- id_news               :: Int,
+    -- data_create_news      :: UTCTime,
+    -- authors               :: Author,
+    -- category              :: Category3,
+    -- text_news             :: Text,
+    -- main_photo_url_news   :: Text,
+    -- other_photo_url_news  :: PGArray Text,
+    -- short_name_news       :: Text
+    -- , drafts                :: PGArray Draft,
+    -- comments              :: PGArray Comment,
+    -- tegs                  :: PGArray Teg
+
+
+
+    -- createTeg <- create True teg
+    -- print createTeg
+    -- createCat1 <- create True cat1
+    -- print createCat1
+    -- createCat2 <- create True cat2
+    -- print createCat2
+    -- createCat3 <- create True cat3
+    -- print createCat3
+    -- createComm <- create True comment
+    -- print createComm
+    -- createDraft <- create True draft
+    -- print createDraft
+    -- createDraft <- create True draft
+    -- print createDraft
+    -- createUser <- create True us 
+    -- print createUser
+    createNews <- create True news
+    print createNews
+
+
+    
+    
    
 
-
+    -- remTag <- remove True "tag" 1
+    -- print remTag
+    -- editTag <- editing True teg 
+    -- print editTag
+   
 
 
 

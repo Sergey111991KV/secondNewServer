@@ -21,7 +21,7 @@ data News = News {
     main_photo_url_news   :: Text,
     other_photo_url_news  :: PGArray Text,
     short_name_news       :: Text
-    , drafts                :: PGArray Draft,
+    , drafts              :: PGArray Draft,
     comments              :: PGArray Comment,
     tegs                  :: PGArray Teg
     } deriving (Show, Eq, Generic)
@@ -60,6 +60,7 @@ deriving instance Generic (PGArray Draft) => Generic (PGArray Draft)
 
 instance FromJSON (PGArray Comment)
 instance ToJSON (PGArray Comment)
+instance ToRow (PGArray Comment)
 deriving instance Generic (PGArray Comment) => Generic (PGArray Comment)
 
 instance FromJSON (PGArray Teg)

@@ -8,6 +8,8 @@ import  Data.Either
 import  Control.Monad.Trans
 import GHC.Exception.Type
 import ClassyPrelude
+import Data.Text
+import qualified Data.ByteString.Lazy as B
 
 
 -- getAll :: PG r m => Bool -> Text -> m (Either Error [Entity])
@@ -119,7 +121,6 @@ getOne access text idE
                                            
                                     []      -> Left DataErrorPostgreSQL
                     | text == "author" = do
-                        -- let q = "SELECT author.id, author.description, user_blog.id_user , user_blog.name , user_blog.last_name , user_blog.login , user_blog.password , user_blog.avatar , user_blog.data_create , user_blog.admini , user_blog.author FROM author JOIN user_blog where author.user_id = user_blog.id_user"
                         let q = "SELECT author.id_author, author.description_author, user_blog.id_user , user_blog.name_user , user_blog.last_name_user , user_blog.login , user_blog.password , user_blog.avatar , user_blog.data_create_u , user_blog.admini , user_blog.author FROM author, user_blog where author.id_user = user_blog.id_user AND author.id_user = (?)"
                         i <- (withConn $ \conn -> query conn q [idE] :: IO [Author]) 
                         return $ case i of
@@ -192,31 +193,126 @@ getOne access text idE
                                 []      -> Left DataErrorPostgreSQL
 
 
-
 create  :: PG r m => Bool -> Entity  -> m (Either Error ())
-create access (EntAuthor  auth)  = undefined
-create access (EntCategory (CatCategory1 cat))  = undefined
-create access (EntCategory (CatCategory2 cat))  = undefined
-create access (EntCategory (CatCategory3 cat))  = undefined
-create access (EntComment  com)                 = undefined
-create access (EntDraft    draft)               = undefined
-create access (EntNews     news)                = undefined
+create access (EntAuthor  auth)  = do
+        let q = "INSERT INTO author (id_author, description_author, id_user) VALUES (?,?,?);"
+        result <- withConn $ \conn -> execute conn q ((id_author auth), (description auth), (id_user $ user auth) )
+        return $ case result of
+            _        ->  Right () 
+            i        ->  Left DataErrorPostgreSQL
+
+create access (EntUser  us)  = do
+        let q = "INSERT INTO user_blog  VALUES (?,?,?,?,?,?,?,?,?);"
+        result <- withConn $ \conn -> execute conn q us
+        return $ case result of
+            _        ->  Right () 
+            i        ->  Left DataErrorPostgreSQL
+            
+create access (EntCategory (CatCategory1 cat))  = do
+        let q = "INSERT INTO category_1 (id_c1, description_cat1) VALUES (?,?);"
+        result <- withConn $ \conn -> execute conn q (id_category_1 cat, name_category_1 cat )
+        return $ case result of
+            _        ->  Right () 
+            i        ->  Left DataErrorPostgreSQL
+
+create access (EntCategory (CatCategory2 cat))  = do
+        let q = "INSERT INTO category_2 (id_c2, description_cat2, category_1_id) VALUES (?,?,?);"
+        result <- withConn $ \conn -> execute conn q (id_category_2 cat, name_category_2 cat , (id_category_1 $ category1 cat))
+        return $ case result of
+            _        ->  Right () 
+            i        ->  Left DataErrorPostgreSQL
+
+create access (EntCategory (CatCategory3 cat))  = do
+        let q = "INSERT INTO category_3 (id_c3, description_cat3, category_2_id) VALUES (?,?,?);"
+        result <- withConn $ \conn -> execute conn q (id_category_3 cat, name_category_3 cat , (id_category_2 $ category2 cat))
+        return $ case result of
+            _        ->  Right () 
+            i        ->  Left DataErrorPostgreSQL
+
+create access (EntComment  com)                 = do
+        let q = "INSERT INTO comments (element_comment) VALUES((?,?,?,?,?));"
+        result <- withConn $ \conn -> execute conn q com
+        return $ case result of
+            _        ->  Right () 
+            i        ->  Left DataErrorPostgreSQL
+
+create access (EntDraft    draft)               = do
+        let q = "INSERT INTO drafts (elements_draft) VALUES((?,?,?,?,?,?,?));"
+        result <- withConn $ \conn -> execute conn q draft
+        return $ case result of
+            _        ->  Right () 
+            i        ->  Left DataErrorPostgreSQL
+
 create access (EntTeg      teg)                 = do
-            let q = "INSERT INTO tags (element_tags) VALUES((1.1,2.2));"
-            result <- withConn $ \conn -> execute conn q teg
-            return $ case result of
-                _        ->  Left DataErrorPostgreSQL
-                i        ->  Right ()
-       
+        let q = "INSERT INTO tags (element_tags) VALUES((?,?));"
+        result <- withConn $ \conn -> execute conn q teg
+        return $ case result of
+            _        ->  Right () 
+            i        ->  Left DataErrorPostgreSQL
 
+create access (EntNews     news)                = do
+        let q =
+             "INSERT INTO news VALUES (?,?,?,?,?,?,?,?,?,?,?);"
+            --      , e AS ( 
+                -- "WITH a AS (select ARRAY ( SELECT CONCAT (comment_type.text_comments , comment_type.data_create_comments ) from json_populate_recordset (null::comment_type, (?)))) 
+                -- "INSERT INTO comments (element_comment) VALUES((?,?,?,?,?));"
+                -- \ , q AS ( INSERT INTO drafts (elements_draft) VALUES(?)) \
+                -- \ INSERT INTO tags (element_tags) VALUES (?);" 
+        
+        result <- withConn $ \conn -> execute conn q ( (id_news news)
+                                                     , (data_create_news news)
+                                                     , (authors news)
+                                                     , (category news)
+                                                     , (text_news news)
+                                                     , ( news)
+                                                     , ( news)
+                                                     , ( news)
+                                                     , ( news)
+                                                     , ( news) )
+                                                    data_create_news      :: UTCTime,
+                                                    authors               :: Author,
+                                                    category              :: Category3,
+                                                    text_news             :: Text,
+                                                    main_photo_url_news   :: Text,
+                                                    other_photo_url_news  :: PGArray Text,
+                                                    short_name_news       :: Text
+                                                    , drafts              :: PGArray Draft,
+                                                    comments              :: PGArray Comment,
+                                                    tegs                  :: PGArray Teg
+                                                              
 
+        return $ case result of
+            _        ->  Right () 
+            i        ->  Left DataErrorPostgreSQL
+                
+            -- \ FOREACH x IN ARRAY (?) \
+            -- \ LOOP \
+            -- \ INSERT INTO comments (element_comment) VALUES x \
+            -- \ END LOOP) \
 
+remove  :: PG r m => Bool -> Text -> Int ->  m (Either Error ())
+remove access text idE 
+                        | text == "tag" = do
+                                let q = "DELETE FROM tags WHERE (element_tags).id_teg = (?);"
+                                result <- withConn $ \conn -> execute conn q [idE]
+                                return $ case result of
+                                    _        ->  Right () 
+                                    i        ->  Left DataErrorPostgreSQL
 
-
-
-
-
-
+editing  :: PG r m =>  Bool -> Entity -> m (Either Error ())
+editing access (EntTeg      teg)                 = do
+        let q  = "UPDATE tags SET element_tags.name_teg = (?) WHERE (element_tags).id_teg = (?);"
+        result <- withConn $ \conn -> execute conn q ((name_teg teg), (id_teg teg))
+        return $ case result of
+            _        ->  Right () 
+            i        ->  Left DataErrorPostgreSQL
+            
+editing access (EntAuthor      auth)                 = do
+        let q  = "UPDATE author SET  description_author = (?), id_user = (?)  WHERE id_author = (?) ;"
+        result <- withConn $ \conn -> execute conn q ((description auth), (id_user $ user $ auth), (id_author auth))
+        return $ case result of
+            _        ->  Right () 
+            i        ->  Left DataErrorPostgreSQL
 
 
 -- "SELECT n.id_news, \
@@ -250,6 +346,10 @@ create access (EntTeg      teg)                 = do
 
 
 
-
+    -- - 9.4+ ARRAY constructor in correlated subquery
+    -- SELECT tbl_id, ARRAY(SELECT json_array_elements_text(t.data->'tags')) AS txt_arr
+    -- FROM   tbl t;
+    -- SELECT ARRAY (SELECT comment_type
+    
 
     
