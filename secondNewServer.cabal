@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 21fa51f78b04d793555b48d918e01aca92ff09fdccae2ea224680743af7e5462
+-- hash: 85162eeab60cd1c36fd03286caf864d18be8878172c589b7013ed34a99273aa1
 
 name:           secondNewServer
 version:        0.1.0.0
@@ -30,6 +30,7 @@ library
       Adapter.PostgreSQL.Common
       Adapter.PostgreSQL.CommonService
       Adapter.PostgreSQL.ImportPostgres
+      Adapter.PostgreSQL.SortedOfService
       Config
       Domain.ImportEntity
       Domain.ImportService
@@ -48,6 +49,7 @@ library
       Domain.Types.News
       Domain.Types.Teg
       Domain.Types.User
+      DraftOfCode
       Lib
   other-modules:
       Paths_secondNewServer

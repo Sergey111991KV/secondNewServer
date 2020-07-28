@@ -7,7 +7,7 @@ import ClassyPrelude
 data Teg = Teg {
     id_teg   :: Int,
     name_teg :: String
-    } deriving (Show, Eq, Generic)
+    } deriving (Show, Generic)
 
 instance FromRow Teg where
     fromRow = Teg <$> field <*> field 

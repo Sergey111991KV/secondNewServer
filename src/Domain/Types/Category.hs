@@ -70,3 +70,9 @@ instance ToJSON Category3
 instance  FromJSON Category3
 
 
+data Category = CatCategory1 Category1 | CatCategory2 Category2 | CatCategory3 Category3 deriving (Show, Eq, Generic)
+
+instance FromJSON Category
+instance ToJSON Category
+
+

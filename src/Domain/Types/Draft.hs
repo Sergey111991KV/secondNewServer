@@ -10,12 +10,13 @@ data Draft = Draft
     { id_draft          :: Int
     , text_draft        :: String
     , data_create_draft  :: UTCTime
+    -- , data_create_draft :: ZonedTime
     , news_id_draft      :: Int
     , main_photo_url    :: String
     , other_photo_url   :: PGArray Text
     , short_name        :: String
     --  ZonedTime
-    } deriving (Show, Eq, Generic)
+    } deriving (Show, Generic)
 
 instance FromRow Draft where
     fromRow = Draft <$> field <*> field <*> field <*> field <*> field <*> field <*> field  

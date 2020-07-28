@@ -24,7 +24,7 @@ data News = News {
     , drafts              :: PGArray Draft,
     comments              :: PGArray Comment,
     tegs                  :: PGArray Teg
-    } deriving (Show, Eq, Generic)
+    } deriving (Show, Generic)
 
 instance FromRow News where
     fromRow = News <$> field 

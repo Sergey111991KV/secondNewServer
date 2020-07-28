@@ -14,6 +14,7 @@ data  User = User
   , authLogin    :: Text
   , authPassword :: Text
   , avatar       :: Text
+  -- , dataCreate   :: ZonedTime
   , dataCreate   :: UTCTime
   , authAdmin    :: Bool
   , authAuthor   :: Bool

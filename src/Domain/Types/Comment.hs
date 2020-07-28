@@ -10,10 +10,10 @@ data Comment = Comment {
     id_comments         :: Int,
     text_comments        :: String,
     data_create_comments :: UTCTime,
-    -- ZonedTime,
+    -- data_create_comments :: ZonedTime,
     news_id_comments     :: Int,              
     users_id_comments    :: Int
-    } deriving (Show, Eq, Generic)
+    } deriving (Show, Generic)
 
 instance FromRow Comment where
     fromRow = Comment <$> field <*> field <*> field <*> field <*> field
