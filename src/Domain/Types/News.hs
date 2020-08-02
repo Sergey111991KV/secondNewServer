@@ -9,6 +9,7 @@ import Domain.Types.Teg
 import Domain.Types.User
 import Domain.Types.Category
 import ClassyPrelude
+import Database.PostgreSQL.Simple.FromField
 
 import Database.PostgreSQL.Simple.Types 
 
@@ -38,6 +39,9 @@ instance FromRow News where
                     <*> field 
                     <*> field 
                     <*> field
+
+
+
 instance  ToRow News   
     -- where
     --         toRow news = [
@@ -56,6 +60,11 @@ instance ToJSON News
 
 instance FromJSON (PGArray Draft)
 instance ToJSON (PGArray Draft)
+instance ToRow (PGArray Draft)
+
+
+instance ToField [Draft]
+
 deriving instance Generic (PGArray Draft) => Generic (PGArray Draft)
 
 instance FromJSON (PGArray Comment)
@@ -65,4 +74,5 @@ deriving instance Generic (PGArray Comment) => Generic (PGArray Comment)
 
 instance FromJSON (PGArray Teg)
 instance ToJSON (PGArray Teg)
+instance ToRow (PGArray Teg)
 deriving instance Generic (PGArray Teg) => Generic (PGArray Teg)

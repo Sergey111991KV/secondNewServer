@@ -9,10 +9,10 @@ import ClassyPrelude
 
 
 data Author = Author {
-    id_author          :: Int,
+    id_author          :: Integer,
     description        :: String,
     user               :: User
-    } deriving (Show, Eq, Generic)
+    } deriving (Show, Generic)
 
 instance FromJSON Author
 instance ToJSON Author

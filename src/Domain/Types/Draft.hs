@@ -4,6 +4,11 @@ import Domain.Types.Imports
 import Database.PostgreSQL.Simple.FromField 
 import ClassyPrelude
 import Database.PostgreSQL.Simple.Types 
+-- import Database.PostgreSQL.Simple.Arrays
+import qualified Data.Attoparsec.ByteString.Char8 as A
+import           Data.ByteString.Builder
+import           Data.ByteString
+import Data.ByteString.Internal
 
 
 data Draft = Draft 
@@ -25,14 +30,34 @@ instance FromJSON Draft
 instance ToJSON Draft
 instance  ToRow Draft
 
-instance FromField Draft where
-  fromField = fromJSONField 
+instance FromField Draft 
+
 instance ToField Draft where
-  toField = toJSONField 
-instance FromField [Draft] where
-  fromField = fromJSONField 
-instance ToField [Draft] where
-  toField = toJSONField 
+    toField (Draft idD text dataTime newid mainP othrP sname) = 
+        Many [
+            Plain "row("
+          , Plain (intDec idD)
+          , Plain ","
+          , Escape (fromString text)
+          , Plain ","
+          -- , Plain ( utcTimeToBuilder dataTime)
+          , Plain ")"
+        ]
+-- instance ToField Address where
+--   toField Address{..} = 
+    -- Many [ Plain "row("
+    --      , Escape (encodeUtf8 addressStreet)
+    --      , Plain ","
+    --      , maybe (Plain "null") (Escape . encodeUtf8) addressStreet2
+    --      , Plain ","
+    --      , Escape (encodeUtf8 addressCity)
+    --      , Plain ","
+    --      , Escape (encodeUtf8 addressState)
+    --      , Plain ","
+    --      , Escape (encodeUtf8 addressPostCode)
+    --      , Plain ")"
+    --      ]
+
 
 instance FromJSON (PGArray Text)
 instance ToJSON (PGArray Text)

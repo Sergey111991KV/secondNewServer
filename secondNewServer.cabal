@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 85162eeab60cd1c36fd03286caf864d18be8878172c589b7013ed34a99273aa1
+-- hash: c69c5c310b9760a69271ec838af921159b83ddfcf28051083fb16a67ddcb6950
 
 name:           secondNewServer
 version:        0.1.0.0
@@ -29,12 +29,14 @@ library
   exposed-modules:
       Adapter.PostgreSQL.Common
       Adapter.PostgreSQL.CommonService
+      Adapter.PostgreSQL.FilterService
       Adapter.PostgreSQL.ImportPostgres
       Adapter.PostgreSQL.SortedOfService
       Config
       Domain.ImportEntity
       Domain.ImportService
       Domain.Logging
+      Domain.Parse.ParsePostgresTypes
       Domain.Service.CommonService
       Domain.Service.FilterService
       Domain.Service.SearchIn
@@ -58,6 +60,7 @@ library
   default-extensions: NoImplicitPrelude OverloadedStrings QuasiQuotes GeneralizedNewtypeDeriving ConstraintKinds FlexibleContexts TemplateHaskell ExistentialQuantification RecordWildCards TypeFamilies AllowAmbiguousTypes DeriveGeneric MultiParamTypeClasses ScopedTypeVariables GeneralizedNewtypeDeriving FlexibleInstances StandaloneDeriving UndecidableInstances
   build-depends:
       aeson
+    , attoparsec
     , base >=4.7 && <5
     , bytestring
     , classy-prelude
@@ -89,6 +92,7 @@ executable secondNewServer-exe
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       aeson
+    , attoparsec
     , base >=4.7 && <5
     , bytestring
     , classy-prelude
@@ -122,6 +126,7 @@ test-suite secondNewServer-test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       aeson
+    , attoparsec
     , base >=4.7 && <5
     , bytestring
     , classy-prelude

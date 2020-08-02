@@ -31,6 +31,16 @@ instance CommonService App where
 instance SortedOfService App where
         sortedNews  =   PG.sortedNews
 
+instance FilterService App where
+        filterOfData       =   PG.filterOfData
+        filterAuthor        =   PG.filterAuthor
+        filterCategory      =   PG.filterCategory
+        filterTeg          =   PG.filterTeg
+        filterTegs          = PG.filterTegs
+        -- filterName          =   PG.filterName
+        -- filterContent      =   PG.filterContent
+    
+
 
 
 someFunc :: IO ()
@@ -51,7 +61,8 @@ action :: App ()
 action = do
     -- let t  = getZonedTime
     let time = ( Prelude.read "2011-11-19 18:28:52.607875 UTC" )::UTCTime
-    print time
+    let time' =  "'2011-11-19 18:28:52.607875'"
+   
         -- unsafePerformIO getZonedTime
         -- unsafePerformIO getCurrentTime
         -- unsafePerformIO getZonedTime
@@ -63,7 +74,7 @@ action = do
     -- createAuth <- create True auth
     -- print  createAuth
     let us = EntUser (User 33 "TestUser" "TestLastName" "dd" "qwerty" "avatar" time True True)  
-    let teg = EntTeg (Teg 1 "testTeg!!!!!!")
+    let teg = EntTeg (Teg 6 "testTeg6")
     let teg' = Teg 1 "testTeg!!!!!!"
     let teg'' = Teg 2 "History"
     let cat1 = EntCategory (CatCategory1 (Category1 4 "Art"))
@@ -72,13 +83,14 @@ action = do
     let cat3' = Category3 12 "Big Theatre of Moskow" (Category2 7 "Theatre" (Category1 4 "Art"))
     let cat3'' = Category3 7 "Big Theatre of Moskow" (Category2 7 "Theatre" (Category1 4 "Art"))
     let cat34 = Category3 7 "Big Theatre of Moskow" (Category2 7 "Theatre" (Category1 4 "Art"))
-    let comment = (EntComment  (Comment 1 "test comment1" time 1 1))
+    let comment = (EntComment  (Comment 3 "test comment1" time 1 1))
     let comment' =  PGArray [Comment 1 "test comment1" time 1 1] :: PGArray Comment
-    let draft = (EntDraft    (Draft 1 "test 1 draft" time 1 "test 1 main photo url" pgArrayText "TestDragtForFirstNews")) 
-    let draft' = (Draft 1 "test 1 draft" time 1 "test 1 main photo url" pgArrayText "TestDragtForFirstNews")
+    
+    let draft = (EntDraft    (Draft 1 "test 2 draft" time 1 "test 2 main photo url" pgArrayText "TestDragtForFirstNews")) 
+    let draft' = Draft 2 "test 2 draft" time 1 "test 1 main photo url" pgArrayText "TestDragtForFirstNews"
     let draft'' = (Draft 2 "test 2 draft" time 2 "test 2 main photo url" pgArrayText "TestDragtForFirstNews")
     let news = ( EntNews (News 
-                                3  
+                                1  
                                 time 
                                 auth'  
                                 cat3' 
@@ -90,58 +102,38 @@ action = do
                                 comment'
                                 (PGArray [teg'])
                                 ))
-    let news1 = ( EntNews (News 
-                                4  
-                                time 
-                                auth'  
-                                cat3'' 
-                                "News of Now" 
-                                "url main Photo" 
-                                pgArrayText 
-                                "TodayNews" 
-                                (PGArray [draft''])
-                                comment'
-                                (PGArray [teg'])
-                                ))
-    let news2 = ( EntNews (News 
-                                5  
-                                time 
-                                auth'  
-                                cat34 
-                                "News of Germany" 
-                                "url main Photo" 
-                                pgArrayText 
-                                "TodayNews" 
-                                (PGArray [draft'])
-                                comment'
-                                (PGArray [teg''])
-                                ))
+    -- let news1 = ( EntNews (News 
+    --                             4  
+    --                             time 
+    --                             auth'  
+    --                             cat3'' 
+    --                             "News of Now" 
+    --                             "url main Photo" 
+    --                             pgArrayText 
+    --                             "TodayNews" 
+    --                             (PGArray [draft''])
+    --                             comment'
+    --                             (PGArray [teg'])
+    --                             ))
+    -- let news2 = ( EntNews (News 
+    --                             6  
+    --                             time 
+    --                             auth'  
+    --                             cat34 
+    --                             "News of Germany" 
+    --                             "url main Photo" 
+    --                             pgArrayText 
+    --                             "TodayNews" 
+    --                             (PGArray [draft'])
+    --                             comment'
+    --                             (PGArray [teg''])
+    --                             ))
    
-    -- author <- getAll True  "authors" 
-    -- print author
-    -- user <-  getAll True "users" 
-    -- print user
-    -- tag <- getAll True  "tags" 
-    -- print tag
-    -- news <- getAll True  "news" 
-    -- print news
-    -- category1 <- getAll True  "categorys1" 
-    -- print category1
-    -- category2 <- getAll True  "categorys2" 
-    -- print category2
-    -- category3 <- getAll True  "categorys3" 
-    -- print category3
-   
-
-    -- draft <- getAll True  "drafts" 
-    -- print draft
-    -- comment <- getAll True   "comments" 
-    -- print comment
    
     
- -- user <-  getOne True "user" 1
+    -- user <-  getOne True "user" 1
     -- print user
-    -- tag <- getOne True  "tag" 1 
+    -- tag <- getOne True  "tag" 5
     -- print tag
     -- draft <- getOne True  "draft" 1 
     -- print draft
@@ -155,7 +147,7 @@ action = do
     -- print category2
     -- category3 <- getOne True  "category3" 1 
     -- print category3
-    -- news <- getOne True  "news" 1 
+    -- news <- getOne True  "news" 1
     -- print news
 
     -- createTeg <- create True teg
@@ -180,6 +172,27 @@ action = do
     -- createNews1 <- create True news1
     -- createNews2 <- create True news2
     -- print createNews
+
+
+    -- news <- getAll True  "news" 
+    -- print news
+    -- author <- getAll True  "authors" 
+    -- print author
+    -- user <-  getAll True "users" 
+    -- print user
+    tag <- getAll True  "tags" 
+    print tag
+    -- category1 <- getAll True  "categorys1" 
+    -- print category1
+    -- category2 <- getAll True  "categorys2" 
+    -- print category2
+    -- category3 <- getAll True  "categorys3" 
+    -- print category3
+   
+    -- draft <- getAll True  "drafts" 
+    -- print draft
+    -- comment <- getAll True   "comments" 
+    -- print comment
 
     -- removeTeg <- remove True  "tag" 1 
     -- print removeTeg
@@ -219,17 +232,29 @@ action = do
     -- editingNews <- editing True news
     -- print editingNews
 
-    sorteD <- sortedNews "date"
-    print sorteD
-    sorteA <- sortedNews "author"
-    print sorteA
-    sorteC <- sortedNews "category"
-    print sorteC
-    sorteP <- sortedNews "photo"
-    print sorteP
+    -- sorteD <- sortedNews "date"
+    -- print sorteD
+    -- sorteA <- sortedNews "author"
+    -- print sorteA
+    -- sorteC <- sortedNews "category"
+    -- print sorteC
+    -- sorteP <- sortedNews "photo"
+    -- print sorteP
 
+    
+    -- filD <- filterOfData   time' "<"
+    -- print    filD 
+    -- filA <- filterAuthor  "DaniTEST!!!!"
+    -- print filA
 
+    -- filA <- filterCategory  13
+    -- print filA
 
+    -- oneTegNews <- filterTeg 1
+    -- print oneTegNews
+    
+    -- filterName          =   PG.filterName
+    -- filterContent      =   PG.filterContent
 
 
 
