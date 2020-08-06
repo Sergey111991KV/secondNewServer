@@ -9,28 +9,58 @@ import qualified Data.Attoparsec.ByteString.Char8 as A
 import           Data.ByteString.Builder
 import           Data.ByteString
 import Data.ByteString.Internal
+import qualified Prelude as P
+import Domain.Parse.ParsePostgresTypes
 
 
 data Draft = Draft 
     { id_draft          :: Int
     , text_draft        :: String
     , data_create_draft  :: UTCTime
-    -- , data_create_draft :: ZonedTime
     , news_id_draft      :: Int
     , main_photo_url    :: String
     , other_photo_url   :: PGArray Text
     , short_name        :: String
-    --  ZonedTime
     } deriving (Show, Generic)
 
-instance FromRow Draft where
-    fromRow = Draft <$> field <*> field <*> field <*> field <*> field <*> field <*> field  
+instance FromRow Draft 
+instance  ToRow Draft
 
 instance FromJSON Draft
 instance ToJSON Draft
-instance  ToRow Draft
 
-instance FromField Draft 
+
+instance FromField Draft where
+    fromField = fromPGRow "drafts_type" parseDraft 
+
+
+parseDraft :: A.Parser Draft
+parseDraft = do
+  _ <- A.char '('
+  idD <- textContent 
+  _ <- A.char ','
+  text <-  textContent
+  _ <- A.char ','
+  dataTime <- textContent 
+  _ <- A.char ','
+  newId <-  textContent
+  _ <- A.char ','
+  mainP <- textContent 
+  _ <- A.char ','
+  _ <- A.char '"'
+  othrP <- textContentArray 
+  _ <- A.char '"'
+  _ <- A.char ','
+  sname <- textContent 
+  _ <- A.char ')'
+  pure (Draft (P.read $ ClassyPrelude.unpack $ idD) 
+                (ClassyPrelude.unpack text)  
+                (timeFromByteString dataTime  )
+                (P.read $ ClassyPrelude.unpack $ newId)
+                (ClassyPrelude.unpack mainP) 
+                (parseTextToPGArrayText othrP) 
+                (ClassyPrelude.unpack sname)
+                )
 
 instance ToField Draft where
     toField (Draft idD text dataTime newid mainP othrP sname) = 
@@ -40,25 +70,34 @@ instance ToField Draft where
           , Plain ","
           , Escape (fromString text)
           , Plain ","
-          -- , Plain ( utcTimeToBuilder dataTime)
+          , Escape (timeToByteStr dataTime)
           , Plain ")"
+          , Plain (intDec newid)
+          , Plain ","
+          , Escape (fromString mainP)
+          , Plain ","
+
+          -- , Escape (fromString othrP)
+          , Plain ","
+
+          , Escape (fromString sname)
         ]
--- instance ToField Address where
---   toField Address{..} = 
-    -- Many [ Plain "row("
-    --      , Escape (encodeUtf8 addressStreet)
-    --      , Plain ","
-    --      , maybe (Plain "null") (Escape . encodeUtf8) addressStreet2
-    --      , Plain ","
-    --      , Escape (encodeUtf8 addressCity)
-    --      , Plain ","
-    --      , Escape (encodeUtf8 addressState)
-    --      , Plain ","
-    --      , Escape (encodeUtf8 addressPostCode)
-    --      , Plain ")"
-    --      ]
+
 
 
 instance FromJSON (PGArray Text)
 instance ToJSON (PGArray Text)
 deriving instance Generic (PGArray Text) => Generic (PGArray Text)
+
+instance FromJSON (PGArray Draft)
+instance ToJSON (PGArray Draft)
+
+deriving instance Generic (PGArray Draft) => Generic (PGArray Draft)
+
+data TestArrayDraft = TestArrayDraft {
+  arrayd :: PGArray Draft
+  } deriving (Show, Generic)
+
+instance FromRow TestArrayDraft 
+instance  ToRow TestArrayDraft 
+  

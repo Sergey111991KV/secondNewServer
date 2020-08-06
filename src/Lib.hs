@@ -12,6 +12,8 @@ import qualified Config as Config
 import Database.PostgreSQL.Simple.Types
 import Data.Time.LocalTime
 import System.IO.Unsafe
+import qualified Data.Attoparsec.ByteString.Char8 as A
+import Domain.Parse.ParsePostgresTypes as TT
 
 type State = (PG.State)
 newtype App a = App
@@ -39,14 +41,23 @@ instance FilterService App where
         filterTegs          = PG.filterTegs
         -- filterName          =   PG.filterName
         -- filterContent      =   PG.filterContent
-    
 
 
+draft' :: ByteString     
+draft' = "(1,\"test 2 draft\",\"2011-11-19 22:28:52.607875+04\",1,\"test 2 main photo url\",\"{\"\"test 1 other photo\"\",\"\"test 1 other photo2\"\"}\",TestDragtForFirstNews)"
+
+dr :: ByteString  
+dr = "{\"\"test 1 other photo\"\",\"\"test 1 other photo2\"\"}\",TestDragtForFirstNews)"
 
 someFunc :: IO ()
-someFunc = 
-    withState Config.devConfig $ \pgState -> do 
-        run pgState action
+someFunc = do
+    -- f <- A.parseTest parseComment testComment
+    let f = A.parseOnly textContentArray dr
+    print f 
+    -- f <- A.parseTest parseDraft draft'
+    print "main"
+    -- withState Config.devConfig $ \pgState -> do 
+    --     run pgState action
         
        
 
@@ -61,8 +72,9 @@ action :: App ()
 action = do
     -- let t  = getZonedTime
     let time = ( Prelude.read "2011-11-19 18:28:52.607875 UTC" )::UTCTime
-    let time' =  "'2011-11-19 18:28:52.607875'"
-   
+    let time' = ( Prelude.read "2011-11-19 22:28:52.607875+04" )::UTCTime
+    let tt = timeToByteStr time'
+
         -- unsafePerformIO getZonedTime
         -- unsafePerformIO getCurrentTime
         -- unsafePerformIO getZonedTime
@@ -83,10 +95,10 @@ action = do
     let cat3' = Category3 12 "Big Theatre of Moskow" (Category2 7 "Theatre" (Category1 4 "Art"))
     let cat3'' = Category3 7 "Big Theatre of Moskow" (Category2 7 "Theatre" (Category1 4 "Art"))
     let cat34 = Category3 7 "Big Theatre of Moskow" (Category2 7 "Theatre" (Category1 4 "Art"))
-    let comment = (EntComment  (Comment 3 "test comment1" time 1 1))
-    let comment' =  PGArray [Comment 1 "test comment1" time 1 1] :: PGArray Comment
+    let comment = (EntComment  (Comment 5 "test comment4" time 1 1))
+    let comment' =  PGArray [Comment 2 "test comment1" time 1 1] :: PGArray Comment
     
-    let draft = (EntDraft    (Draft 1 "test 2 draft" time 1 "test 2 main photo url" pgArrayText "TestDragtForFirstNews")) 
+    let draft = (EntDraft    (Draft 2 "test 2 draft" time 1 "test 2 main photo url" pgArrayText "TestDragtForFirstNews")) 
     let draft' = Draft 2 "test 2 draft" time 1 "test 1 main photo url" pgArrayText "TestDragtForFirstNews"
     let draft'' = (Draft 2 "test 2 draft" time 2 "test 2 main photo url" pgArrayText "TestDragtForFirstNews")
     let news = ( EntNews (News 
@@ -128,8 +140,14 @@ action = do
     --                             comment'
     --                             (PGArray [teg''])
     --                             ))
-   
-   
+    
+    -- testTeg <- PG.testArrayTeg
+    -- print testTeg
+    -- testComment <- PG.testArrayComment
+    -- print testComment
+    testDraft <- PG.testArrayDraft
+    print testDraft
+    
     
     -- user <-  getOne True "user" 1
     -- print user
@@ -137,7 +155,7 @@ action = do
     -- print tag
     -- draft <- getOne True  "draft" 1 
     -- print draft
-    -- comment <- getOne True   "comment" 1 
+    -- comment <- getOne True   "comment" 3
     -- print comment
     -- author <- getOne True  "author" 1 
     -- print author
@@ -180,8 +198,8 @@ action = do
     -- print author
     -- user <-  getAll True "users" 
     -- print user
-    tag <- getAll True  "tags" 
-    print tag
+    -- tag <- getAll True  "tags" 
+    -- print tag
     -- category1 <- getAll True  "categorys1" 
     -- print category1
     -- category2 <- getAll True  "categorys2" 

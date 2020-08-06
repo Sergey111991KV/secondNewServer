@@ -7,6 +7,7 @@ import qualified Data.Attoparsec.ByteString.Char8 as A
 import qualified Data.ByteString.Char8                as B
 import qualified Prelude as P
 import Domain.Parse.ParsePostgresTypes
+import Database.PostgreSQL.Simple.Types 
 
 
 data Teg = Teg {
@@ -14,10 +15,8 @@ data Teg = Teg {
     name_teg :: String
     } deriving (Show, Generic)
 
-instance FromRow Teg where
- fromRow  = Teg <$> field <*> field
-instance  ToRow Teg where
-    toRow t = [toField t]
+instance FromRow Teg 
+instance  ToRow Teg 
   
 instance FromJSON Teg
 instance ToJSON Teg
@@ -46,8 +45,17 @@ instance ToField Teg where
         ]
 
 
+instance FromJSON (PGArray Teg)
+instance ToJSON (PGArray Teg)
 
-instance FromField [Teg] where
-  fromField = fromJSONField 
-instance ToField [Teg] where
-  toField = toJSONField 
+deriving instance Generic (PGArray Teg) => Generic (PGArray Teg)
+
+
+
+data TestArrayTeg = TestArrayTeg {
+  arrays :: PGArray Teg
+  } deriving (Show, Generic)
+
+instance FromRow TestArrayTeg 
+instance  ToRow TestArrayTeg 
+  

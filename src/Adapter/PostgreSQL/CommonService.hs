@@ -30,7 +30,7 @@ getAll access text
                                 users         ->  Right (convertToEntityArray users)
                                       
                 | text == "tags"        = do
-                        let q = "SELECT ARRAY(SELECT  ((element_tags).id_teg, (element_tags).name_teg) FROM tags );"
+                        let q = "SELECT (element_tags).id_teg, (element_tags).name_teg FROM tags ;"
                         result <- (withConn $ \conn -> query_ conn q  :: IO [Teg])
                         return $ case result of
                                 [ ]             ->  Left DataErrorPostgreSQL
@@ -88,7 +88,30 @@ getAll access text
                         return $ case result of
                                 [ ]             ->  Left DataErrorPostgreSQL
                                 comments         ->  Right (convertToEntityArray comments)
-                
+               
+
+testArrayTeg :: PG r m =>  m (Either Error TestArrayTeg)
+testArrayTeg = do 
+                let q = " SELECT ARRAY (SELECT * FROM tags)"
+                result <- (withConn $ \conn -> query_ conn q  :: IO [TestArrayTeg]) 
+                return $ case result of
+                        [ ]             ->  Left DataErrorPostgreSQL
+                        [teg]             ->  Right teg
+
+testArrayComment :: PG r m =>  m (Either Error TestArrayComment)
+testArrayComment = do 
+                let q = " SELECT ARRAY (SELECT * FROM comments)"
+                result <- (withConn $ \conn -> query_ conn q  :: IO [TestArrayComment]) 
+                return $ case result of
+                        [ ]             ->  Left DataErrorPostgreSQL
+                        [teg]             ->  Right teg
+testArrayDraft :: PG r m =>  m (Either Error TestArrayDraft)
+testArrayDraft = do 
+                let q = " SELECT ARRAY (SELECT * FROM drafts)"
+                result <- (withConn $ \conn -> query_ conn q  :: IO [TestArrayDraft]) 
+                return $ case result of
+                        [ ]             ->  Left DataErrorPostgreSQL
+                        [teg]             ->  Right teg
 
 
 

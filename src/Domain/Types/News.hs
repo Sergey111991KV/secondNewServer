@@ -58,21 +58,3 @@ instance  ToRow News
 instance FromJSON News
 instance ToJSON News
 
-instance FromJSON (PGArray Draft)
-instance ToJSON (PGArray Draft)
-instance ToRow (PGArray Draft)
-
-
-instance ToField [Draft]
-
-deriving instance Generic (PGArray Draft) => Generic (PGArray Draft)
-
-instance FromJSON (PGArray Comment)
-instance ToJSON (PGArray Comment)
-instance ToRow (PGArray Comment)
-deriving instance Generic (PGArray Comment) => Generic (PGArray Comment)
-
-instance FromJSON (PGArray Teg)
-instance ToJSON (PGArray Teg)
-instance ToRow (PGArray Teg)
-deriving instance Generic (PGArray Teg) => Generic (PGArray Teg)
