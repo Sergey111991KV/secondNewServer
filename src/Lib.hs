@@ -2,18 +2,25 @@ module Lib
     ( someFunc
         ) where
 
+import ClassyPrelude
 import Domain.ImportService
 import Domain.ImportEntity 
+
 import qualified Adapter.PostgreSQL.ImportPostgres as PG
-import Control.Monad.Catch (MonadThrow, MonadCatch)
-import ClassyPrelude
-import qualified Prelude as Prelude -------------------------
+import qualified Adapter.HTTP.Main as HTTP
 import qualified Config as Config
+
+import Control.Monad.Catch (MonadThrow, MonadCatch)
+import qualified Prelude as Prelude -------------------------
 import Database.PostgreSQL.Simple.Types
 import Data.Time.LocalTime
 import System.IO.Unsafe
 import qualified Data.Attoparsec.ByteString.Char8 as A
 import Domain.Parse.ParsePostgresTypes as TT
+import qualified Text.Parsec as Parsec
+import qualified ClassyPrelude as ClassyPrelude
+
+
 
 type State = (PG.State)
 newtype App a = App
@@ -29,6 +36,12 @@ instance CommonService App where
       getAll  =   PG.getAll
       getOne  =   PG.getOne
       remove  =   PG.remove
+
+instance Auth App where
+        findUsers                   = PG.findUsers
+        newSession                  = PG.newSession   
+        findUserBySession           = PG.findUserBySession   
+       
 
 instance SortedOfService App where
         sortedNews  =   PG.sortedNews
@@ -52,12 +65,20 @@ dr = "{\"\"test 1 other photo\"\",\"\"test 1 other photo2\"\"}\",TestDragtForFir
 someFunc :: IO ()
 someFunc = do
     -- f <- A.parseTest parseComment testComment
-    let f = A.parseOnly textContentArray dr
-    print f 
+    -- let f = A.parseOnly textContentArray dr
+    -- let f = A.parseOnly  myParser dr
+    -- print f 
+    -- let f' = A.parseOnly  myPairs dr
+    -- print f' 
+    -- let f'' = A.parseOnly  parseSepBy dr
+    -- print f''
     -- f <- A.parseTest parseDraft draft'
+    -- f <- A.parseTest textContentArray dr
+    -- print f 
+   
     print "main"
-    -- withState Config.devConfig $ \pgState -> do 
-    --     run pgState action
+    withState Config.devConfig $ \pgState -> do 
+            HTTP.main port runner run pgState action
         
        
 
@@ -72,8 +93,7 @@ action :: App ()
 action = do
     -- let t  = getZonedTime
     let time = ( Prelude.read "2011-11-19 18:28:52.607875 UTC" )::UTCTime
-    let time' = ( Prelude.read "2011-11-19 22:28:52.607875+04" )::UTCTime
-    let tt = timeToByteStr time'
+    let time' = "2011-11-19 22:28:52.607875+04" :: String
 
         -- unsafePerformIO getZonedTime
         -- unsafePerformIO getCurrentTime
@@ -145,8 +165,8 @@ action = do
     -- print testTeg
     -- testComment <- PG.testArrayComment
     -- print testComment
-    testDraft <- PG.testArrayDraft
-    print testDraft
+    -- testDraft <- PG.testArrayDraft
+    -- print testDraft
     
     
     -- user <-  getOne True "user" 1
@@ -260,16 +280,17 @@ action = do
     -- print sorteP
 
     
-    -- filD <- filterOfData   time' "<"
-    -- print    filD 
+  
     -- filA <- filterAuthor  "DaniTEST!!!!"
     -- print filA
-
     -- filA <- filterCategory  13
     -- print filA
 
-    -- oneTegNews <- filterTeg 1
-    -- print oneTegNews
+
+    oneTegNews <- filterTeg 1
+    print oneTegNews
+    -- filD <- filterOfData   time' "<"
+    -- print    filD 
     
     -- filterName          =   PG.filterName
     -- filterContent      =   PG.filterContent

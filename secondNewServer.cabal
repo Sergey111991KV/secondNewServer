@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: c69c5c310b9760a69271ec838af921159b83ddfcf28051083fb16a67ddcb6950
+-- hash: 1192780eee170950dba32587ea69f402c8ba892c3f5227e85e6e7cafc5dc01bd
 
 name:           secondNewServer
 version:        0.1.0.0
@@ -27,6 +27,11 @@ source-repository head
 
 library
   exposed-modules:
+      Adapter.HTTP.API.Auth
+      Adapter.HTTP.API.CommonService
+      Adapter.HTTP.Common
+      Adapter.HTTP.Main
+      Adapter.PostgreSQL.Auth
       Adapter.PostgreSQL.Common
       Adapter.PostgreSQL.CommonService
       Adapter.PostgreSQL.FilterService
@@ -37,10 +42,12 @@ library
       Domain.ImportService
       Domain.Logging
       Domain.Parse.ParsePostgresTypes
+      Domain.Service.Auth
       Domain.Service.CommonService
       Domain.Service.FilterService
       Domain.Service.SearchIn
       Domain.Service.SortedOfService
+      Domain.Types.Auth
       Domain.Types.Author
       Domain.Types.Category
       Domain.Types.Comment
@@ -62,6 +69,7 @@ library
       aeson
     , attoparsec
     , base >=4.7 && <5
+    , blaze-builder
     , bytestring
     , classy-prelude
     , cookie
@@ -71,15 +79,20 @@ library
     , http-client-tls
     , http-types
     , mtl
+    , parsec
     , postgresql-libpq >=0.9.4.2
     , postgresql-simple
     , resource-pool
+    , scotty
+    , string-random
     , template-haskell
     , text
     , text-time
     , time
     , time-lens
     , transformers
+    , wai
+    , wai-extra
   default-language: Haskell2010
 
 executable secondNewServer-exe
@@ -94,6 +107,7 @@ executable secondNewServer-exe
       aeson
     , attoparsec
     , base >=4.7 && <5
+    , blaze-builder
     , bytestring
     , classy-prelude
     , cookie
@@ -103,16 +117,21 @@ executable secondNewServer-exe
     , http-client-tls
     , http-types
     , mtl
+    , parsec
     , postgresql-libpq >=0.9.4.2
     , postgresql-simple
     , resource-pool
+    , scotty
     , secondNewServer
+    , string-random
     , template-haskell
     , text
     , text-time
     , time
     , time-lens
     , transformers
+    , wai
+    , wai-extra
   default-language: Haskell2010
 
 test-suite secondNewServer-test
@@ -128,6 +147,7 @@ test-suite secondNewServer-test
       aeson
     , attoparsec
     , base >=4.7 && <5
+    , blaze-builder
     , bytestring
     , classy-prelude
     , cookie
@@ -137,14 +157,19 @@ test-suite secondNewServer-test
     , http-client-tls
     , http-types
     , mtl
+    , parsec
     , postgresql-libpq >=0.9.4.2
     , postgresql-simple
     , resource-pool
+    , scotty
     , secondNewServer
+    , string-random
     , template-haskell
     , text
     , text-time
     , time
     , time-lens
     , transformers
+    , wai
+    , wai-extra
   default-language: Haskell2010

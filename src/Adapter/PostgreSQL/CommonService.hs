@@ -8,13 +8,14 @@ import GHC.Exception.Type
 import ClassyPrelude
 import Data.Text
 import qualified Data.ByteString.Lazy as B
+import Domain.Service.Auth 
 
 
 
                                     -- Get All
 
-getAll :: PG r m => Bool -> Text -> m (Either Error [Entity])
-getAll access text  
+getAll :: (PG r m, Auth m) => SessionId -> Text -> m (Either Error [Entity])
+getAll sess text  
                 | text == "authors"     = do
                     let q = "SELECT author.id_author, author.description_author, user_blog.id_user , user_blog.name_user , user_blog.last_name_user , user_blog.login , user_blog.password , user_blog.avatar , user_blog.data_create_u , user_blog.admini , user_blog.author FROM author, user_blog ;"
                     result <- (withConn $ \conn -> query_ conn q  :: IO [Author])
@@ -122,8 +123,8 @@ testArrayDraft = do
 
 
 
-getOne :: PG r m => Bool -> Text -> Int ->  m (Either Error  Entity)
-getOne access text idE
+getOne :: PG r m => SessionId -> Text -> Int ->  m (Either Error  Entity)
+getOne sess text idE
                     | text == "news" = do
                             let q = fromString $ (ClassyPrelude.init $ impureNonNull getAllNewsSQLText) ++ " where endNews.id_news = (?);"
                             
@@ -213,64 +214,64 @@ getOne access text idE
 
 
 
-create  :: PG r m => Bool -> Entity  -> m (Either Error ())
-create access (EntAuthor  auth)  = do
+create  :: PG r m => SessionId -> Entity  -> m (Either Error ())
+create sess (EntAuthor  auth)  = do
         let q = "INSERT INTO author (id_author, description_author, id_user) VALUES (?,?,?);"
         result <- withConn $ \conn -> execute conn q ((id_author auth), (description auth), (id_user $ user auth) )
         return $ case result of
             1        ->  Right () 
             0        ->  Left DataErrorPostgreSQL
 
-create access (EntUser  us)  = do
+create sess (EntUser  us)  = do
         let q = "INSERT INTO user_blog  VALUES (?,?,?,?,?,?,?,?,?);"
         result <- withConn $ \conn -> execute conn q us
         return $ case result of
             1        ->  Right () 
             0        ->  Left DataErrorPostgreSQL
             
-create access (EntCategory (CatCategory1 cat))  = do
+create sess (EntCategory (CatCategory1 cat))  = do
         let q = "INSERT INTO category_1 (id_c1, description_cat1) VALUES (?,?);"
         result <- withConn $ \conn -> execute conn q (id_category_1 cat, name_category_1 cat )
         return $ case result of
             1        ->  Right () 
             0        ->  Left DataErrorPostgreSQL
 
-create access (EntCategory (CatCategory2 cat))  = do
+create sess (EntCategory (CatCategory2 cat))  = do
         let q = "INSERT INTO category_2 (id_c2, description_cat2, category_1_id) VALUES (?,?,?);"
         result <- withConn $ \conn -> execute conn q (id_category_2 cat, name_category_2 cat , (id_category_1 $ category1 cat))
         return $ case result of
             1        ->  Right () 
             0        ->  Left DataErrorPostgreSQL
 
-create access (EntCategory (CatCategory3 cat))  = do
+create sess (EntCategory (CatCategory3 cat))  = do
         let q = "INSERT INTO category_3 (id_c3, description_cat3, category_2_id) VALUES (?,?,?);"
         result <- withConn $ \conn -> execute conn q (id_category_3 cat, name_category_3 cat , (id_category_2 $ category2 cat))
         return $ case result of
             1        ->  Right () 
             0        ->  Left DataErrorPostgreSQL
 
-create access (EntComment  com)                 = do
+create sess (EntComment  com)                 = do
         let q = "INSERT INTO comments (element_comment) VALUES((?,?,?,?,?));"
         result <- withConn $ \conn -> execute conn q com
         return $ case result of
             1        ->  Right () 
             0        ->  Left DataErrorPostgreSQL
 
-create access (EntDraft    draft)               = do
+create sess (EntDraft    draft)               = do
         let q = "INSERT INTO drafts (elements_draft) VALUES((?,?,?,?,?,?,?));"
         result <- withConn $ \conn -> execute conn q draft
         return $ case result of
             1        ->  Right () 
             0        ->  Left DataErrorPostgreSQL
 
-create access (EntTeg      teg)                 = do
+create sess (EntTeg      teg)                 = do
         let q = "INSERT INTO tags (element_tags) VALUES(?);"
         result <- withConn $ \conn -> execute conn q teg
         return $ case result of
             1        ->  Right () 
             0        ->  Left DataErrorPostgreSQL
 
-create access (EntNews     news)                = do
+create sess (EntNews     news)                = do
         let q = "INSERT INTO news VALUES (?,?,?,?,?,?,?,?);"
         result <- withConn $ \conn -> execute conn q ( (id_news news)
                                                      , (data_create_news news)
@@ -292,8 +293,8 @@ create access (EntNews     news)                = do
 
 
                 
-remove  :: PG r m => Bool -> Text -> Int ->  m (Either Error ())
-remove access text idE 
+remove  :: PG r m => SessionId -> Text -> Int ->  m (Either Error ())
+remove sess text idE 
                         | text == "tag" = do
                                 let q = "DELETE FROM tags WHERE (element_tags).id_teg = (?);"
                                 result <- withConn $ \conn -> execute conn q [idE]
@@ -361,40 +362,40 @@ remove access text idE
 
 
 
-editing  :: PG r m =>  Bool -> Entity -> m (Either Error ())
-editing access (EntTeg      teg)                 = do
+editing  :: PG r m =>  SessionId -> Entity -> m (Either Error ())
+editing sess (EntTeg      teg)                 = do
         let q  = "UPDATE tags SET element_tags.name_teg = (?) WHERE (element_tags).id_teg = (?);"
         result <- withConn $ \conn -> execute conn q ((name_teg teg), (id_teg teg))
         return $ case result of
             1        ->  Right () 
             0        ->  Left DataErrorPostgreSQL
             
-editing access (EntAuthor      auth)                 = do
+editing sess (EntAuthor      auth)                 = do
         let q  = "UPDATE author SET  description_author = (?), id_user = (?)  WHERE id_author = (?) ;"
         result <- withConn $ \conn -> execute conn q ((description auth), (id_user $ user $ auth), (id_author auth))
         return $ case result of
             1        ->  Right () 
             0        ->  Left DataErrorPostgreSQL
 
-editing access (EntCategory (CatCategory1 cat1))                 = do
+editing sess (EntCategory (CatCategory1 cat1))                 = do
         let q  = "UPDATE category_1 SET  description_cat1 = (?)  WHERE id_c1 = (?) ;"
         result <- withConn $ \conn -> execute conn q ((name_category_1 cat1), (id_category_1 cat1))
         return $ case result of
             1        ->  Right () 
             0        ->  Left DataErrorPostgreSQL
-editing access (EntCategory (CatCategory2 cat2))                 = do
+editing sess (EntCategory (CatCategory2 cat2))                 = do
         let q  = "UPDATE category_2 SET  description_cat2 = (?)  WHERE id_c2 = (?) ;"
         result <- withConn $ \conn -> execute conn q ((name_category_2 cat2), (id_category_2 cat2))
         return $ case result of
             1        ->  Right () 
             0        ->  Left DataErrorPostgreSQL
-editing access (EntCategory (CatCategory3 cat3))                 = do
+editing sess (EntCategory (CatCategory3 cat3))                 = do
         let q  = "UPDATE category_3 SET  description_cat3 = (?)  WHERE id_c3 = (?) ;"
         result <- withConn $ \conn -> execute conn q ((name_category_3 cat3), (id_category_3 cat3))
         return $ case result of
             1        ->  Right () 
             0        ->  Left DataErrorPostgreSQL
-editing access ( EntComment  com )                 = do
+editing sess ( EntComment  com )                 = do
         let q  = "UPDATE comments SET  element_comment.text_comments = (?) \
                                     \ , element_comment.data_create_comments = (?) \
                                     \ , element_comment.news_id_comments = (?) \
@@ -409,7 +410,7 @@ editing access ( EntComment  com )                 = do
             1        ->  Right () 
             0        ->  Left DataErrorPostgreSQL
 
-editing access (EntDraft    draft )                 = do
+editing sess (EntDraft    draft )                 = do
         let q  =    "UPDATE drafts SET    elements_draft.text_draft = (?) \
                                         \ , elements_draft.data_create_draft = (?) \
                                         \ , elements_draft.news_id_draft = (?) \
@@ -427,7 +428,7 @@ editing access (EntDraft    draft )                 = do
         return $ case result of
             1        ->  Right () 
             0        ->  Left DataErrorPostgreSQL
-editing access ( EntNews     news)                 = do
+editing sess ( EntNews     news)                 = do
         let q  = "UPDATE news SET       data_create_n = (?) \
                                         \ , authors_id = (?) \
                                         \ , category_3_id = (?) \
@@ -449,7 +450,7 @@ editing access ( EntNews     news)                 = do
             1        ->  Right () 
             0        ->  Left DataErrorPostgreSQL
 
-editing access (EntUser    user )                 = do
+editing sess (EntUser    user )                 = do
         let q  = "UPDATE user_blog SET       name_user = (?) \
                                         \ , last_name_user = (?) \
                                         \ , login = (?) \

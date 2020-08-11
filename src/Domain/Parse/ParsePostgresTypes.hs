@@ -7,6 +7,9 @@ import qualified Data.Attoparsec.ByteString.Char8 as A
 import qualified Data.ByteString.Char8                as B
 import qualified Prelude as P
 import Database.PostgreSQL.Simple.Types 
+import qualified Text.Parsec as Parsec
+import Control.Applicative
+
 
 
 
@@ -27,24 +30,50 @@ plain = A.takeWhile1 (A.notInClass ",\"()")
 
 
 
--- splitBy :: (a -> Bool) -> [a] -> [[a]]
--- splitBy _ [] = []
--- splitBy f list = first : splitBy f (P.dropWhile f rest) where
---   (first, rest) = P.break f list
 
-textContentArray :: A.Parser Text
-textContentArray = decodeUtf8 <$> (quoted' <|> plain')
+splitBy :: (a -> Bool) -> [a] -> [[a]]
+splitBy _ [] = []
+splitBy f list = first : splitBy f (P.dropWhile f rest) where
+  (first, rest) = P.break f list
 
-quoted' :: A.Parser ByteString
-quoted' = A.char '{' *> A.option "" esc <* A.char '}'
+
+getCurrentArray ::  [String] -> [String]
+getCurrentArray [] = []
+getCurrentArray (x:xs) 
+                        | x == [','] =  getCurrentArray xs
+                        | x == "}" =  getCurrentArray xs
+                        | x == "{" =  getCurrentArray xs
+                        | x == ['"'] =  getCurrentArray xs
+                        | x == "" =  getCurrentArray xs
+                        | otherwise = x : getCurrentArray xs
+
+textContentArray :: A.Parser [Text]
+-- textContentArray = undefined
+textContentArray = do
+      t <- scobe
+      let a = getCurrentArray $ splitBy (== '"') $ ClassyPrelude.unpack t
+      return (fmap ClassyPrelude.pack a)
+
+
+
+
+scobe :: A.Parser Text
+scobe = decodeUtf8 <$> (A.char '{' *> A.option "" contents <* A.char '}')
   where
-    esc = A.char '\\' *> (A.char '\\' <|> A.char '}')
-    -- unQ = A.takeWhile1 (A.notInClass "\"\\")
-    -- contents = mconcat <$> many (unQ <|> B.singleton <$> esc)
+    esc = A.char '{' *> (A.char '{' <|> A.char '}')
+    unQ = A.takeWhile1 (A.notInClass "}")
+    contents = mconcat <$> many (unQ <|> B.singleton <$> esc)
 
--- | Recognizes a plain string literal, not containing comma, quotes, or parens.
-plain' :: A.Parser ByteString
-plain' = A.takeWhile1 (A.notInClass "\"()")
+
+-- parseMy :: A.Parser String
+-- parseMy = pure (:) <*> .... <*> parseMy <|> pure ""
+
+
+-- mySeparator ::  A.Parser ()
+-- mySeparator = do
+--     A.space
+--     A.char '"'
+--     A.space
 
 
 
@@ -75,5 +104,5 @@ timeFromByteString' :: Text -> Maybe ZonedTime
 timeFromByteString' s =  parseTimeM True defaultTimeLocale  "%Y" (ClassyPrelude.unpack  s) :: Maybe ZonedTime
 
 
-parseTextToPGArrayText :: Text -> PGArray Text
-parseTextToPGArrayText text =  PGArray (fmap ClassyPrelude.pack  (ClassyPrelude.words $ ClassyPrelude.unpack text))
+parseTextToPGArrayText :: [Text] -> PGArray Text
+parseTextToPGArrayText text =  PGArray text

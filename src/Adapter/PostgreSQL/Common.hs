@@ -55,9 +55,9 @@ getAllNewsSQLText =
     \ , endNews.description_news , endNews.main_photo_url_n \
     \ , endNews.other_photo_url_n \
     \ , endNews.short_name_n \
-    \ , ARRAY (SELECT  ((elements_draft).id_draft, (elements_draft).text_draft , (elements_draft).data_create_draft , (elements_draft).news_id_draft , (elements_draft).main_photo_url , (elements_draft).other_photo_url , (elements_draft).short_name  ) FROM drafts where  endNews.id_news = (elements_draft).news_id_draft) \
-    \ , ARRAY(SELECT  ((element_comment).id_comments, (element_comment).text_comments , (element_comment).data_create_comments , (element_comment).news_id_comments , (element_comment).users_id_comments) FROM comments where endNews.id_news = (element_comment).news_id_comments  ) \
-    \ , ARRAY(SELECT  ((element_tags).id_teg, (element_tags).name_teg) FROM tags where endNews.id_news = news_tags.news_id) \
+    \ , ARRAY (SELECT * FROM drafts where  endNews.id_news = (elements_draft).news_id_draft) \
+    \ , ARRAY(SELECT  * FROM comments where endNews.id_news = (element_comment).news_id_comments  ) \
+    \ , ARRAY(SELECT * FROM tags where endNews.id_news = news_tags.news_id) \
     \ from news_tags, ( select * from (news LEFT join ( SELECT * from author LEFT join user_blog USING (id_user)) as a ON news.authors_id = a.id_author) as newsAuthor \
     \  LEFT join (SELECT * from category_1 LEFT join (SELECT * from category_3 LEFT join category_2 ON category_3.category_2_id = category_2.id_c2) as c2 on category_1.id_c1 = c2.category_1_id) as cat on newsAuthor.category_3_id = cat.id_c3) \
     \ as endNews "

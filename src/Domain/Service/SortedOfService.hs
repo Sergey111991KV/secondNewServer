@@ -5,7 +5,6 @@ import Domain.ImportEntity
 import Domain.Service.CommonService
  
 
-class CommonService m => SortedOfService m  where        --     API новостей должно поддерживать сортировку по:
-
+class CommonService m => SortedOfService m  where       
     sortedNews :: Text -> m [News]
    

@@ -41,6 +41,12 @@ dependencies:
 - transformers
 - classy-prelude
 - attoparsec
+- parsec
+- scotty
+- wai
+- wai-extra
+- blaze-builder
+- string-random
 
 
 

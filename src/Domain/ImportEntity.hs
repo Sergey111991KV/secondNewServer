@@ -13,3 +13,5 @@ import Domain.Types.Error      as Y
 import Domain.Types.User       as Y
 import Domain.Types.Imports    as Y
 import Domain.Types.Entity     as Y
+import Domain.Types.Auth       as Y
+
