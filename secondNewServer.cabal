@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 1192780eee170950dba32587ea69f402c8ba892c3f5227e85e6e7cafc5dc01bd
+-- hash: 95861824fe3b42ac3a57637bdead34286df91deab0438eb495fdcd78763b4275
 
 name:           secondNewServer
 version:        0.1.0.0
@@ -33,7 +33,11 @@ library
       Adapter.HTTP.Main
       Adapter.PostgreSQL.Auth
       Adapter.PostgreSQL.Common
-      Adapter.PostgreSQL.CommonService
+      Adapter.PostgreSQL.CommonService.Editing
+      Adapter.PostgreSQL.CommonService.GetAll
+      Adapter.PostgreSQL.CommonService.GetOne
+      Adapter.PostgreSQL.CommonService.Remove
+      Adapter.PostgreSQL.CommonService.Сreate
       Adapter.PostgreSQL.FilterService
       Adapter.PostgreSQL.ImportPostgres
       Adapter.PostgreSQL.SortedOfService

@@ -56,12 +56,15 @@ class ConvertEntity a where
             convertToEntity :: a -> Entity
             convertFromEntity :: Entity -> a
             convertToEntityArray :: [a] -> [Entity]
+            convertFromEntityArray  :: [Entity] -> [a]
 
 instance ConvertEntity Author where
             convertToEntity a =  EntAuthor a
             convertFromEntity (EntAuthor a) = a
             convertToEntityArray [] = []
             convertToEntityArray (x:xs) = (convertToEntity x) : (convertToEntityArray xs)
+            convertFromEntityArray  [] = []
+            convertFromEntityArray (x:xs) = (convertFromEntity x) : (convertFromEntityArray xs)
             
 
 

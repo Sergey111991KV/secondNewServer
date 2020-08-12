@@ -9,7 +9,7 @@ import Text.StringRandom
 
 findUsers :: PG r m  => Text -> Text -> m (Either Error User)
 findUsers pas log = do 
-        let q = "SELECT * FROM user_blog where login = (?) , password = (?)"
+        let q = "SELECT * FROM user_blog where password = (?) and login = (?)"
         i <- (withConn $ \conn -> query conn q (pas, log ) :: IO [User]) 
         return $ case i of
                 [x]     -> Right  x
@@ -43,7 +43,7 @@ insertNewSession :: PG r m
                 => User  -> m Int64 
 insertNewSession  us  = do
     sId <- liftIO $ stringRandomIO "[a-zA-Z0-9]{32}"
-    result <- withConn $ \conn -> execute conn qry [(id_user us)]
+    result <- withConn $ \conn -> execute conn qry (sId , (id_user us))
     return result 
     where
         qry = "INSERT INTO session (key ,user_id) values (?,?)"     
@@ -51,7 +51,6 @@ insertNewSession  us  = do
 
 
 findUserBySession :: PG r m  => SessionId -> m (Either Error User)
-findUserBySession sesId = undefined
 findUserBySession sesId = do 
         i <- findUserIdBySessionId sesId
         case i of

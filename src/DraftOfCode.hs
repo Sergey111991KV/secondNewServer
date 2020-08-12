@@ -149,3 +149,43 @@ module DraftOfCode where
 -- -- Indices -------------------------------------------------------
 
 -- CREATE UNIQUE INDEX category_1_pkey ON category_1(id_c1 int4_ops);
+
+
+
+
+
+
+-- testArrayTeg :: PG r m =>  m (Either Error TestArrayTeg)
+-- testArrayTeg = do 
+--                 let q = " SELECT ARRAY (SELECT * FROM tags)"
+--                 result <- (withConn $ \conn -> query_ conn q  :: IO [TestArrayTeg]) 
+--                 return $ case result of
+--                         [ ]             ->  Left DataErrorPostgreSQL
+--                         [teg]             ->  Right teg
+
+-- testArrayComment :: PG r m =>  m (Either Error TestArrayComment)
+-- testArrayComment = do 
+--                 let q = " SELECT ARRAY (SELECT * FROM comments)"
+--                 result <- (withConn $ \conn -> query_ conn q  :: IO [TestArrayComment]) 
+--                 return $ case result of
+--                         [ ]             ->  Left DataErrorPostgreSQL
+--                         [teg]             ->  Right teg
+-- testArrayDraft :: PG r m =>  m (Either Error TestArrayDraft)
+-- testArrayDraft = do 
+--                 let q = " SELECT ARRAY (SELECT * FROM drafts)"
+--                 result <- (withConn $ \conn -> query_ conn q  :: IO [TestArrayDraft]) 
+--                 return $ case result of
+--                         [ ]             ->  Left DataErrorPostgreSQL
+--                         [teg]             ->  Right teg
+
+
+
+
+
+                          -- let q = "SELECT   (elements_draft).id_draft  \
+                                                --         \ , (elements_draft).text_draft \
+                                                --         \ , (elements_draft).data_create_draft \
+                                                --         \ , (elements_draft).news_id_draft \
+                                                --         \ , (elements_draft).main_photo_url \
+                                                --         \ , (elements_draft).other_photo_url \
+                                                --         \ , (elements_draft).short_name FROM drafts where ;"
