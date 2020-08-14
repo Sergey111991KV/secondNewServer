@@ -30,6 +30,7 @@ class ConvertClas a where
         convertToCategory :: a -> Category
         convertFromCategory :: Category -> a
         convertToCatEntArray :: [a] -> [Category]
+        convertFromCatEntArray :: [Category] -> [a]
 
 
 instance ConvertClas Category1 where
@@ -37,18 +38,24 @@ instance ConvertClas Category1 where
         convertFromCategory (CatCategory1 a) = a
         convertToCatEntArray [] = []
         convertToCatEntArray (x:xs) = (convertToCategory x) : (convertToCatEntArray xs)
+        convertFromCatEntArray [] =  []
+        convertFromCatEntArray (x:xs) = (convertFromCategory x :: Category1) : (convertFromCatEntArray xs)
 
 instance ConvertClas Category2 where
         convertToCategory a =  CatCategory2 a
         convertFromCategory (CatCategory2 a) = a
         convertToCatEntArray [] = []
         convertToCatEntArray (x:xs) = (convertToCategory x) : (convertToCatEntArray xs)
+        convertFromCatEntArray [] =  []
+        convertFromCatEntArray (x:xs) = (convertFromCategory x :: Category2) : (convertFromCatEntArray xs)
 
 instance ConvertClas Category3 where
         convertToCategory a = CatCategory3 a
         convertFromCategory (CatCategory3 a) = a
         convertToCatEntArray  [] = []
         convertToCatEntArray (x:xs) = (convertToCategory x) : (convertToCatEntArray xs)
+        convertFromCatEntArray [] =  []
+        convertFromCatEntArray (x:xs) = (convertFromCategory x :: Category3) : (convertFromCatEntArray xs)
 
 
 
@@ -73,7 +80,8 @@ instance ConvertEntity Category where
             convertFromEntity (EntCategory a) = a
             convertToEntityArray [] = []
             convertToEntityArray (x:xs) = (convertToEntity x) : (convertToEntityArray xs)
-
+            convertFromEntityArray  [] = []
+            convertFromEntityArray (x:xs) = (convertFromEntity x) : (convertFromEntityArray xs)
 
 
 
@@ -82,27 +90,46 @@ instance ConvertEntity Comment where
             convertFromEntity (EntComment a) = a
             convertToEntityArray [] = []
             convertToEntityArray (x:xs) = (convertToEntity x) : (convertToEntityArray xs)
+            convertFromEntityArray  [] = []
+            convertFromEntityArray (x:xs) = (convertFromEntity x) : (convertFromEntityArray xs)
+
+
 
 instance ConvertEntity Draft where
             convertToEntity a =  EntDraft a
             convertFromEntity (EntDraft a) = a
             convertToEntityArray [] = []
             convertToEntityArray (x:xs) = (convertToEntity x) : (convertToEntityArray xs)
+            convertFromEntityArray  [] = []
+            convertFromEntityArray (x:xs) = (convertFromEntity x) : (convertFromEntityArray xs)
+
+
 
 instance ConvertEntity News where
             convertToEntity a =  EntNews a
             convertFromEntity (EntNews a) = a
             convertToEntityArray [] = []
             convertToEntityArray (x:xs) = (convertToEntity x) : (convertToEntityArray xs)
+            convertFromEntityArray  [] = []
+            convertFromEntityArray (x:xs) = (convertFromEntity x) : (convertFromEntityArray xs)
+
+
 
 instance ConvertEntity User where
             convertToEntity a =  EntUser a
             convertFromEntity (EntUser a) = a
             convertToEntityArray [] = []
             convertToEntityArray (x:xs) = (convertToEntity x) : (convertToEntityArray xs)
+            convertFromEntityArray  [] = []
+            convertFromEntityArray (x:xs) = (convertFromEntity x) : (convertFromEntityArray xs)
+
+
 
 instance ConvertEntity Teg where
             convertToEntity a =  EntTeg a
             convertFromEntity (EntTeg a) = a
             convertToEntityArray [] = []
             convertToEntityArray (x:xs) = (convertToEntity x) : (convertToEntityArray xs)
+            convertFromEntityArray  [] = []
+            convertFromEntityArray (x:xs) = (convertFromEntity x) : (convertFromEntityArray xs)
+

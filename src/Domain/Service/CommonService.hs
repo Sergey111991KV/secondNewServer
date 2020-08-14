@@ -11,3 +11,4 @@ class Monad m =>  CommonService m  where
     getAll  :: SessionId -> Text -> m (Either Error [Entity])
     getOne  :: SessionId -> Text -> Int ->  m (Either Error  Entity)
     remove  :: SessionId -> Text -> Int ->  m (Either Error ())
+    updeit  :: SessionId -> Int ->  m (Either Error ())

@@ -43,7 +43,7 @@ filterTeg idT = do
                                 [ ]             ->  Left DataErrorPostgreSQL
                                 news         ->  Right  news 
 
-filterTegs          :: PG r m => [Int] -> Bool -> m (Either Error [News])
+filterTegs          :: PG r m => [Int]  -> m (Either Error [News])
 filterTegs = undefined 
 
 -- filterName          :: PG r m => Text -> m (Either Error [News]) -- API новостей  фильтрация по название (вхождение подстроки)

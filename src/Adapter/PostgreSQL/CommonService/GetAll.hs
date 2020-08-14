@@ -19,7 +19,7 @@ getAll sess text
                            Right user -> do      
                                 case (authAdmin user) of
                                         True -> do
-                                                let q = "SELECT author.id_author, author.description_author, user_blog.id_user , user_blog.name_user , user_blog.last_name_user , user_blog.login , user_blog.password , user_blog.avatar , user_blog.data_create_u , user_blog.admini , user_blog.author FROM author, user_blog ;"
+                                                let q = "SELECT author.id_author, author.description_author, user_blog.id_user , user_blog.name_user , user_blog.last_name_user , user_blog.login , user_blog.password , user_blog.avatar , user_blog.data_create_u , user_blog.admini , user_blog.author FROM author, user_blog where author.id_user = user_blog.id_user ;"
                                                 result <- (withConn $ \conn -> query_ conn q  :: IO [Author])
                                                 return $ case result of
                                                         [ ]             ->  Left DataErrorPostgreSQL

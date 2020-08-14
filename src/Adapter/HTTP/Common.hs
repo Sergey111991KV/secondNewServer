@@ -36,6 +36,9 @@ setSessionIdInCookie sId = do
                   , setCookieSameSite = Just sameSiteLax
                   }
 
+
+
+                  
 -- getCurrentUserId :: (S.SessionRepo m, ScottyError e) => ActionT e m (Maybe UserId)
 -- getCurrentUserId = do
 --   -- let err :: Text = "Error of Get SessionId"

@@ -36,6 +36,7 @@ instance CommonService App where
       getAll  =   PG.getAll
       getOne  =   PG.getOne
       remove  =   PG.remove
+      updeit  =   PG.updeit
 
 instance Auth App where
         findUsers                   = PG.findUsers

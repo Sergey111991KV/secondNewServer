@@ -11,7 +11,7 @@ class CommonService m  => FilterService m  where
     filterAuthor        :: String -> m (Either Error [News])-- API новостей  фильтрация по имени автора
     filterCategory      :: Int -> m (Either Error [News])-- API новостей  фильтрация по категории по айди
     filterTeg           :: Int -> m (Either Error [News])-- API новостей  фильтрация по тега по айди
-    filterTegs          :: [Int] -> Bool -> m (Either Error [News])
+    filterTegs          :: [Int] -> m (Either Error [News])
     filterName          :: Text -> m (Either Error [News]) -- API новостей  фильтрация по название (вхождение подстроки)
     filterContent       :: Text -> m (Either Error [News])-- API новостей  фильтрация по название контент (вхождение подстроки)
 
