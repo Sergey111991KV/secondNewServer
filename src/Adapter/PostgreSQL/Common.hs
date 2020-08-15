@@ -65,8 +65,8 @@ getAllNewsSQLText =
     \ as endNews "
                                
 
-getAllNewsSQLTextOneTeg :: String
-getAllNewsSQLTextOneTeg = "SELECT  n.id_news,  n.data_create_n \
+getAllNewsSQLTextTeg :: String
+getAllNewsSQLTextTeg = "SELECT  n.id_news,  n.data_create_n \
                                   \ , n.id_author, n.description_author, n.id_user, n.name_user, n.last_name_user, n.login, n.password, n.avatar, n.data_create_u, n.admini, n.author \
                                   \ , cat.id_c3, cat.description_cat3, cat.id_c2, cat.description_cat2, cat.id_c1, cat.description_cat1 \
                                   \ , n.description_news \
@@ -79,8 +79,7 @@ getAllNewsSQLTextOneTeg = "SELECT  n.id_news,  n.data_create_n \
                                   \ from (SELECT * from (SELECT * from news_tags LEFT join news AS tegnews on news_tags.news_id = tegnews.id_news) \
                                         \ as tt LEFT join ( SELECT * from author LEFT join user_blog USING (id_user)) \
                                         \ as a ON  tt.authors_id = a.id_author) as n LEFT join (SELECT * from category_1 LEFT join (SELECT * from category_3 LEFT join category_2 ON category_3.category_2_id = category_2.id_c2) \
-                                        \ as c2 on category_1.id_c1 = c2.category_1_id) as cat on n.category_3_id = cat.id_c3 \
-                                        \ where n.tags_id = (?);"
+                                        \ as c2 on category_1.id_c1 = c2.category_1_id) as cat on n.category_3_id = cat.id_c3 "
 
 
 

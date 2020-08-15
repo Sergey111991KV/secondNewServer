@@ -18,6 +18,7 @@ import Domain.ImportEntity
 
 routes :: ( ScottyError e, MonadIO m, Auth m )
           => ScottyT e m ()
+
 routes = do
         get "/api/auth/:password/:login" $ do
                 login   :: Text   <-      param "login" 
@@ -33,5 +34,8 @@ routes = do
                         print "Авторизация успешная"
                         status status200
 
-
+        get "/api/auth/exit" $ do
+                        setDefaultCookie
+                        print "Exit"
+                        status status200
                 

@@ -42,6 +42,7 @@ instance Auth App where
         findUsers                   = PG.findUsers
         newSession                  = PG.newSession   
         findUserBySession           = PG.findUserBySession   
+      
        
 
 instance SortedOfService App where
@@ -52,11 +53,14 @@ instance FilterService App where
         filterAuthor        =   PG.filterAuthor
         filterCategory      =   PG.filterCategory
         filterTeg          =   PG.filterTeg
-        filterTegs          = PG.filterTegs
-        -- filterName          =   PG.filterName
-        -- filterContent      =   PG.filterContent
+        filterOneOfTegs          = PG.filterOneOfTegs
+        filterAllOfTegs          = PG.filterAllOfTegs
+        filterName          =   PG.filterName
+        filterContent      =   PG.filterContent
 
-
+instance SearchIn App where
+                searchInContent =  PG.searchInEntyty
+                searchInEntyty  =  PG.searchInEntyty
 
 withState :: Config.Config -> (Int -> State -> IO ()) -> IO ()
 withState config action = do
@@ -75,7 +79,10 @@ mainWithConfig config =
     HTTP.mainHTTP port runner
 
 mainDev :: IO ()
-mainDev = mainWithConfig Config.devConfig
+mainDev = do
+        let result =        PG.toStringFromArrayInt [1,2,3]
+        print result
+        -- mainWithConfig Config.devConfig
 
 
         

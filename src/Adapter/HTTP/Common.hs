@@ -22,6 +22,10 @@ getCookie key = do
     val <- lookup bsKey cookie
     return $ decodeUtf8 val
 
+defCookie = defaultSetCookie { setCookieName = "sId", setCookieValue = "" }
+
+setDefaultCookie :: (ScottyError e, Monad m) => ActionT e m ()
+setDefaultCookie  = setCookie defCookie
 
 
 setSessionIdInCookie :: (MonadIO m, ScottyError e) => SessionId -> ActionT e m ()

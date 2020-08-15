@@ -62,9 +62,9 @@ routes = do
                     Right news -> do
                         Web.Scotty.Trans.json news
 
-        get "/api/news/filterTegs/:idTegs" $ do
+        get "/api/news/filterOneOfTegs/:idTegs" $ do
                 idTegs   :: Text   <-      param "idTegs" 
-                getResult <- lift $ filterTegs  (Prelude.read (ClassyPrelude.unpack idTegs) :: [Int])
+                getResult <- lift $ filterOneOfTegs  (Prelude.read (ClassyPrelude.unpack idTegs) :: [Int])
                 case getResult of
                     Left err -> do
                         status status400

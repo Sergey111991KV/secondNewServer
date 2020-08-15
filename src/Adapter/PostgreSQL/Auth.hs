@@ -39,6 +39,12 @@ deleteOldSession us  = do
         where
             qry = "delete from session where user_id = ?"
 
+
+
+
+
+
+
 insertNewSession :: PG r m
                 => User  -> m Int64 
 insertNewSession  us  = do
