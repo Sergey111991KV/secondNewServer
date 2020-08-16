@@ -10,13 +10,6 @@ import Domain.ImportEntity
 import qualified Prelude as Prelude
 
 
--- filterOfData        :: String -> String -> m (Either Error [News]) -- API новостей  фильтрация по дате
--- filterAuthor        :: String -> m (Either Error [News])-- API новостей  фильтрация по имени автора
--- filterCategory      :: Int -> m (Either Error [News])-- API новостей  фильтрация по категории по айди
--- filterTeg           :: Int -> m (Either Error [News])-- API новостей  фильтрация по тега по айди
--- filterTegs          :: [Int] -> Bool -> m (Either Error [News])
--- filterName          :: Text -> m (Either Error [News]) -- API новостей  фильтрация по название (вхождение подстроки)
--- filterContent       :: Text -> m (Either Error [News])-- API новостей  фильтрация по название контент (вхождение подстроки)
 
 routes :: ( ScottyError e, MonadIO m, FilterService m)
           => ScottyT e m ()
@@ -65,6 +58,36 @@ routes = do
         get "/api/news/filterOneOfTegs/:idTegs" $ do
                 idTegs   :: Text   <-      param "idTegs" 
                 getResult <- lift $ filterOneOfTegs  (Prelude.read (ClassyPrelude.unpack idTegs) :: [Int])
+                case getResult of
+                    Left err -> do
+                        status status400
+                        print $ errorString err
+                    Right news -> do
+                        Web.Scotty.Trans.json news
+
+        get "/api/news/filterAllOfTegs/:idTegs" $ do
+                idTegs   :: Text   <-      param "idTegs" 
+                getResult <- lift $ filterAllOfTegs  (Prelude.read (ClassyPrelude.unpack idTegs) :: [Int])
+                case getResult of
+                    Left err -> do
+                        status status400
+                        print $ errorString err
+                    Right news -> do
+                        Web.Scotty.Trans.json news
+
+        get "/api/news/filterName/:param" $ do
+                txt   :: Text   <-      param "param" 
+                getResult <- lift $ filterName (ClassyPrelude.unpack txt) 
+                case getResult of
+                    Left err -> do
+                        status status400
+                        print $ errorString err
+                    Right news -> do
+                        Web.Scotty.Trans.json news
+
+        get "/api/news/filterContent/:param" $ do
+                txt   :: Text   <-      param "param" 
+                getResult <- lift $ filterContent  (ClassyPrelude.unpack txt)
                 case getResult of
                     Left err -> do
                         status status400

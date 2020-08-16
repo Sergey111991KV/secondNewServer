@@ -42,7 +42,7 @@ instance Auth App where
         findUsers                   = PG.findUsers
         newSession                  = PG.newSession   
         findUserBySession           = PG.findUserBySession   
-      
+
        
 
 instance SortedOfService App where
@@ -80,9 +80,7 @@ mainWithConfig config =
 
 mainDev :: IO ()
 mainDev = do
-        let result =        PG.toStringFromArrayInt [1,2,3]
-        print result
-        -- mainWithConfig Config.devConfig
+        mainWithConfig Config.devConfig
 
 
         

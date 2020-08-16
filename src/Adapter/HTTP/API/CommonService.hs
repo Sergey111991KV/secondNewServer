@@ -122,7 +122,7 @@ routes = do
                                                         print $ errorString err
                                                 Right () -> do
                                                         status status200
-                                                        print "Create author success!!"
+                                                        print "Put success!!"
 
         Web.Scotty.Trans.delete "/api/create/:entity/:ide" $ do
                 authResult <- getCookie "sId"
@@ -140,7 +140,7 @@ routes = do
                                             print $ errorString err
                                     Right () -> do
                                             status status200
-                                            print "Create author success!!"
+                                            print "Delete  success!!"
 
                             
 

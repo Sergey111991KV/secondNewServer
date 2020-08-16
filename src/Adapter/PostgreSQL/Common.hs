@@ -6,6 +6,7 @@ import Domain.ImportEntity
 import Data.Has
 import Data.Pool
 import Data.ByteString
+import Database.PostgreSQL.Simple.Migration
 import Control.Monad.Catch 
 import Control.Monad.Reader
 import Control.Monad.IO.Class
@@ -39,13 +40,25 @@ withPool cfg action =
 withState  ::  Config  -> ( State  ->  IO  a ) ->  IO  a
 withState cfg action =
     withPool cfg $ \state -> do
-        -- migrate state  можно добавлять дополнительные действия не меняя интерфейс главного действия withPool
+        migrate state  -- можно добавлять дополнительные действия не меняя интерфейс главного действия withPool
         action state
 
 withConn :: PG r m => (Connection -> IO a) -> m a
 withConn action = do
   pool <- asks getter
   liftIO . withResource pool $ \conn -> action conn
+
+migrate :: State -> IO ()
+migrate pool = withResource pool $ \conn -> do
+  result <- withTransaction conn (runMigrations False conn cmds)
+  case result of
+    MigrationError err -> throwString err
+    _ -> return ()
+  where
+    cmds =  [ MigrationInitialization
+            , MigrationDirectory "src/Adapter/PostgreSQL/Migrations"
+            ]
+
 
 getAllNewsSQLText :: String
 getAllNewsSQLText = 

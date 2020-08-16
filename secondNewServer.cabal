@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f96f7d59a876ee6752d8d4cd45883e1773063d456b1f915a48eaf5d226f11314
+-- hash: 91c1c09c6de40e870544621caf21ec248865ebc2224143d0417c0b94d7b004e5
 
 name:           secondNewServer
 version:        0.1.0.0
@@ -83,6 +83,7 @@ library
     , cookie
     , data-has
     , exceptions
+    , hspec
     , http-client
     , http-client-tls
     , http-types
@@ -90,6 +91,7 @@ library
     , parsec
     , postgresql-libpq >=0.9.4.2
     , postgresql-simple
+    , postgresql-simple-migration
     , resource-pool
     , scotty
     , string-random
@@ -121,6 +123,7 @@ executable secondNewServer-exe
     , cookie
     , data-has
     , exceptions
+    , hspec
     , http-client
     , http-client-tls
     , http-types
@@ -128,6 +131,7 @@ executable secondNewServer-exe
     , parsec
     , postgresql-libpq >=0.9.4.2
     , postgresql-simple
+    , postgresql-simple-migration
     , resource-pool
     , scotty
     , secondNewServer
@@ -146,6 +150,7 @@ test-suite secondNewServer-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      Domain.Service.AuthSpec
       Paths_secondNewServer
   hs-source-dirs:
       test
@@ -161,6 +166,7 @@ test-suite secondNewServer-test
     , cookie
     , data-has
     , exceptions
+    , hspec
     , http-client
     , http-client-tls
     , http-types
@@ -168,6 +174,7 @@ test-suite secondNewServer-test
     , parsec
     , postgresql-libpq >=0.9.4.2
     , postgresql-simple
+    , postgresql-simple-migration
     , resource-pool
     , scotty
     , secondNewServer
