@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 91c1c09c6de40e870544621caf21ec248865ebc2224143d0417c0b94d7b004e5
+-- hash: 66c200cd7b181a0823a9d1e0d6e60805ab7a554edf24bc625226540414fd94a7
 
 name:           secondNewServer
 version:        0.1.0.0
@@ -68,6 +68,7 @@ library
       Domain.Types.User
       DraftOfCode
       Lib
+      Logging
   other-modules:
       Paths_secondNewServer
   hs-source-dirs:
@@ -150,7 +151,9 @@ test-suite secondNewServer-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      Adapter.PostgreSQL.AuthSpec
       Domain.Service.AuthSpec
+      Fixture
       Paths_secondNewServer
   hs-source-dirs:
       test
@@ -175,6 +178,7 @@ test-suite secondNewServer-test
     , postgresql-libpq >=0.9.4.2
     , postgresql-simple
     , postgresql-simple-migration
+    , process
     , resource-pool
     , scotty
     , secondNewServer
