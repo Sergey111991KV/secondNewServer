@@ -1,4 +1,4 @@
-module Adapter.PostgreSQL.SortedOfService where
+module Adapter.PostgreSQL.SortedOfService.SortedOfService where
 
 import  Domain.ImportEntity 
 import  Adapter.PostgreSQL.Common

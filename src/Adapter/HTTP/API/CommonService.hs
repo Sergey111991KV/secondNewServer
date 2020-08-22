@@ -99,7 +99,7 @@ routes = do
                                                     print $ errorString err
                                             Right () -> do
                                                     status status200
-                                                    print "Create author success!!"
+                                                    print "Create success!!"
 
         put "/api/put/:entity" $ do
                 authResult <- getCookie "sId"

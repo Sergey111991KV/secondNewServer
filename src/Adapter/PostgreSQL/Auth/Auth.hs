@@ -1,4 +1,4 @@
-module Adapter.PostgreSQL.Auth where
+module Adapter.PostgreSQL.Auth.Auth where
 
 import Domain.ImportEntity 
 import ClassyPrelude

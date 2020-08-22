@@ -1,4 +1,4 @@
-module Adapter.PostgreSQL.FilterService where
+module Adapter.PostgreSQL.FilterService.FilterService where
 
 import  Domain.ImportEntity 
 import  Adapter.PostgreSQL.Common

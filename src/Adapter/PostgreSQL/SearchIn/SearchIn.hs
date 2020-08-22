@@ -1,4 +1,4 @@
-module Adapter.PostgreSQL.SearchIn where
+module Adapter.PostgreSQL.SearchIn.SearchIn where
 
 import  Domain.ImportEntity 
 import  Adapter.PostgreSQL.Common
