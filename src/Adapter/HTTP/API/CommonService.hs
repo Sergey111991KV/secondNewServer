@@ -101,7 +101,7 @@ routes = do
                                                     status status200
                                                     print "Create author success!!"
 
-        put "/api/create/:entity" $ do
+        put "/api/put/:entity" $ do
                 authResult <- getCookie "sId"
                 case authResult of
                         Nothing -> do
@@ -124,7 +124,7 @@ routes = do
                                                         status status200
                                                         print "Put success!!"
 
-        Web.Scotty.Trans.delete "/api/create/:entity/:ide" $ do
+        Web.Scotty.Trans.delete "/api/delete/:entity/:ide" $ do
                 authResult <- getCookie "sId"
                 case authResult of
                         Nothing -> do

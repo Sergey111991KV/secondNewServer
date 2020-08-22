@@ -2,13 +2,16 @@ module Adapter.PostgreSQL.AuthSpec where
 
 import ClassyPrelude
 import Test.Hspec
+-- import Domain.ImportService
+import Domain.ImportEntity 
 
 import Database.PostgreSQL.Simple
 import Adapter.PostgreSQL.Common
 import Adapter.PostgreSQL.Auth
 import Text.StringRandom
 import qualified Prelude as Prelude
-import Domain.ImportEntity 
+-- import Adapter.Fixture
+import Fixture
 -- import Control.Monad.Catch (MonadThrow, MonadCatch)
 
 -- import Data.Pool
@@ -27,13 +30,21 @@ import Domain.ImportEntity
 --   }
 
 
+-- instance Auth App where
+--         findUsers = dispatch2 _findUsers
+--         newSession = dispatch _newSession
+--         findUserBySession = dispatch _findUserBySession
+
+
+
 spec :: Spec
 spec = beforeAll initDB $ do
   describe "findUsers" $
-    it "should return user  if the user already exists" $ do -- pending 
-      user <- randomUser
+    it "should return user  if the user already exists"  pending 
+        -- $ do
+        -- user <- randomUser
     --   withState testConf (newSession user) `shouldReturn` (SessionId "sss")
-      runTestApp (findUsers (authLogin user) (authPassword user)) `shouldReturn` Left LoginErrorInvalidAuth
+        -- runTestApp  (findUsers (authLogin user) (authPassword user) >> findUsers (authLogin user) (authPassword user) ) `shouldReturn` Left LoginErrorInvalidAuth
     --   runTestApp (findUsers (authLogin user) (authPassword user)  >> findUsers (authLogin user) (authPassword user)) `shouldReturn` Left LoginErrorInvalidAuth
 
 
@@ -54,8 +65,7 @@ testConf =
           } 
 
 runTestApp :: ReaderT State IO a -> IO a
-runTestApp action =
-  withPool testConf $ runReaderT action
+runTestApp action = withPool testConf $ runReaderT action
 
 
 -- newtype App a = App

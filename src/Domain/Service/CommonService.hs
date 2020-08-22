@@ -5,7 +5,7 @@ import  Domain.ImportEntity
 import ClassyPrelude
 
 
-class Monad m =>  CommonService m  where
+class (Monad m) =>  CommonService m  where
     create  :: SessionId -> Entity  -> m (Either Error ())
     editing :: SessionId -> Entity -> m (Either Error ())
     getAll  :: SessionId -> Text -> m (Either Error [Entity])

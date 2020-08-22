@@ -19,6 +19,7 @@ import qualified Data.Attoparsec.ByteString.Char8 as A
 import Domain.Parse.ParsePostgresTypes as TT
 import qualified Text.Parsec as Parsec
 import qualified ClassyPrelude as ClassyPrelude
+import Logging
 
 
 
@@ -64,11 +65,11 @@ instance SearchIn App where
 
 withState :: Config.Config -> (Int -> State -> IO ()) -> IO ()
 withState config action = do
-    PG.withState (Config.configPG config) $ \pgState -> do
-          let state = pgState -- тут можно накрутить state на state
-          action (Config.configPort config) state
+        PG.withState (Config.configPG config) $ \pgState -> do
+                let state = pgState -- тут можно накрутить state на state
+                action (Config.configPort config) state
 
-
+-- withLogging :: (LogConfig -> IO a) -> IO a
 
 
 

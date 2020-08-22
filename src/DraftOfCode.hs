@@ -110,7 +110,6 @@ module DraftOfCode where
 -- 	main_photo_url			text,
 -- 	other_photo_url			text[],
 -- 	short_name				text );
-	
 -- CREATE TYPE  comment_type AS(
 -- 	id_comments 				integer,
 -- 	text_comments				text,
@@ -177,10 +176,6 @@ module DraftOfCode where
 --                 return $ case result of
 --                         [ ]             ->  Left DataErrorPostgreSQL
 --                         [teg]             ->  Right teg
-
-
-
-
 
                           -- let q = "SELECT   (elements_draft).id_draft  \
                                                 --         \ , (elements_draft).text_draft \
