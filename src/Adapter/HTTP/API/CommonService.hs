@@ -142,7 +142,24 @@ routes = do
                                             status status200
                                             print "Delete  success!!"
 
-                            
+        get "/api/updeite/:idE" $ do                
+                        authResult <- getCookie "sId"
+                        case authResult of
+                                Nothing -> do
+                                    status status400
+                                    Web.Scotty.Trans.json ("not verification" :: Text)
+                                Just sess -> do
+                                        draftId   :: Text   <-      param "idE" 
+                                        resultUpdeit <- lift $  updeit (SessionId sess)  (Prelude.read (ClassyPrelude.unpack draftId) :: Int)
+                                        case resultUpdeit of
+                                                Left err -> do
+                                                        status status400
+                                                        print $ errorString err
+                                                Right () -> do
+                                                        status status200
+                                                        print "Upgreid  success!!"
+
+
 
 
 funcGetMaybeEntity ::( ScottyError e, MonadIO m, CommonService m) => Text -> ActionT e m ( Maybe Entity)

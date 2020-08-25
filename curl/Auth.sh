@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# авторизация пользователя
+# авторизация пользователя 
 
 curl -X GET http://localhost:3000/api/auth/5678ABCDefgh/oleg@test.com
 

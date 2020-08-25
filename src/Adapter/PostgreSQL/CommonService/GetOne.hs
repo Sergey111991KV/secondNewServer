@@ -64,7 +64,10 @@ getOne sess text idE
                                         Right user -> do      
                                                 case (authAuthor user) of
                                                         True -> do
-                                                                let q = "SELECT elements_draft FROM drafts, news, author where  (elements_draft).news_id_draft = news.id_news and author.id_author = news.authors_id and author.id_user = (?) and (elements_draft).id_draft = (?);"
+                                                                let q = "SELECT (elements_draft).id_draft \
+                                                                \ , (elements_draft).text_draft , (elements_draft).data_create_draft \
+                                                                \ , (elements_draft).news_id_draft , (elements_draft).main_photo_url \
+                                                                \ , (elements_draft).other_photo_url , (elements_draft).short_name FROM drafts, news, author where  (elements_draft).news_id_draft = news.id_news and author.id_author = news.authors_id and author.id_user = (?) and (elements_draft).id_draft = (?);"
                                                                 result <- (withConn $ \conn -> query conn q ((id_user user),idE) :: IO [Draft]) 
                                                                 return $ case result of
                                                                         [x]     -> Right $ convertToEntity x 

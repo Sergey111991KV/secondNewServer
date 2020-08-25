@@ -9,6 +9,11 @@ import System.IO
 import Domain.Types.Error
 
 
+-- class Monad m => Logging m where
+--         writeLogginHandler                   :: Text -> Text -> m (Either Error User) -- password login
+  
+
+
 type LoggingInConfig = Logging
 
 data LogConfig = LogConfig

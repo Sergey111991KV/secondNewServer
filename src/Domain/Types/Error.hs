@@ -7,6 +7,9 @@ import ClassyPrelude
 data Error =  AccessError 
             | LoginErrorInvalidAuth 
             | NotResearch 
+            | NotResearchDraft
+            | NotResearchAuthor
+            | NotResearchNews
             | DataErrorPostgreSQL
             | AccessErrorAdmin
             | AccessErrorAuthor
@@ -17,6 +20,9 @@ errorString err
         | err == AccessError              =  "AccessError"
         | err == LoginErrorInvalidAuth              =  "LoginErrorInvalidAuth"
         | err == NotResearch =  "NotResearch"
+        | err == NotResearchDraft =  "NotResearchDraft"
+        | err == NotResearchAuthor =  "NotResearchAuthor"
+        | err == NotResearchNews =  "NotResearchNews"
         | err == DataErrorPostgreSQL = "DataErrorPostgreSQL"
         | err == AccessErrorAdmin = "AccessErrorAdmin"
         | err == AccessErrorAuthor = "AccessErrorAuthor"

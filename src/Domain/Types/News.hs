@@ -21,8 +21,8 @@ data News = News {
     text_news             :: Text,
     main_photo_url_news   :: Text,
     other_photo_url_news  :: PGArray Text,
-    short_name_news       :: Text
-    , drafts              :: PGArray Draft,
+    short_name_news       :: Text,
+    drafts                :: PGArray Draft,
     comments              :: PGArray Comment,
     tegs                  :: PGArray Teg
     } deriving (Show, Generic)

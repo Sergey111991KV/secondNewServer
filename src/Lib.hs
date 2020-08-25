@@ -59,9 +59,9 @@ instance FilterService App where
         filterName          =   PG.filterName
         filterContent      =   PG.filterContent
 
-instance SearchIn App where
-                searchInContent =  PG.searchInEntyty
-                searchInEntyty  =  PG.searchInEntyty
+-- instance SearchIn App where
+--                 searchInContent =  PG.searchInEntyty
+--                 searchInEntyty  =  PG.searchInEntyty
 
 withState :: Config.Config -> (Int -> State -> IO ()) -> IO ()
 withState config action = do
@@ -81,5 +81,33 @@ mainWithConfig config =
 
 mainDev :: IO ()
 mainDev = do
+                -- let time = ( Prelude.read "2011-11-19 18:28:52.607875 UTC" )::UTCTime
+                -- let pgArrayText = PGArray ["test 1 other photo", "test 1 other photo2"]
+                -- let comment = Comment 5 "test comment4" time 1 1
+                -- let draft = Draft 2 "test 2 draft" time 1 "test 2 main photo url" pgArrayText "TestDragtForFirstNews"
+                -- let draft2 = Draft 3 "test 3 draft" time 1 "test 2 main photo url" pgArrayText "TestDragtForFirstNews"
+                -- let teg = Teg 7 "Health"
+                -- let teg2 = Teg 8 "India"
+                -- let auth = Author 1 "TestAutor1" (User  2 "Daniel" "Abramov" "daniel11" "qwerty" "avatarDaniel"  time  True True)
+                -- let cat3' = Category3 14 "Meditation in India" (Category2 7 "Meditation" (Category1 4 "Health"))
+                -- let news =  News 
+                --                 1  
+                --                 time 
+                --                 auth  
+                --                 cat3' 
+                --                 "News of Today" 
+                --                 "url main Photo" 
+                --                 pgArrayText 
+                --                 "TodayNews" 
+                --                 (PGArray [draft, draft2])
+                --                 (PGArray [comment])
+                --                 (PGArray [teg,teg2])
+                               
+                -- print (encode comment)
+                -- print (encode teg)
+                -- print (encode auth)
+                -- print (encode news)
+                
+
         mainWithConfig Config.devConfig
  

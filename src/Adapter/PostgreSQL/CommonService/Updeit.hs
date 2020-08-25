@@ -20,31 +20,70 @@ updeit sess idD  = do
                     True -> do
                             draftResult <- getOne  sess  ("draft" :: Text) idD 
                             case draftResult of
-                                Left err -> return $ Left NotResearch
+                                Left err -> return $ Left NotResearchDraft
                                 Right (EntDraft draft)  -> do
-                                    authorResult <-  getOne  sess  ("draft" :: Text) idD 
-                                    case authorResult of
-                                        Left err -> return $ Left NotResearch
-                                        Right (EntAuthor author)  -> do
-                                                let q  = "UPDATE news SET       \
-                                                        \  data_create_n = (?) \
-                                                        \ , description_news = (?) \
-                                                        \ , main_photo_url_n = (?) \
-                                                        \ , other_photo_url_n = (?) \
-                                                        \ , short_name_n = (?) \
-                                                        \    WHERE id_news = (?) and authors_id = (?) ;"
-                                                result <- withConn $ \conn -> execute conn q    ( (data_create_draft draft)
-                                                        , (text_draft draft)  
-                                                        ,  (main_photo_url draft)
-                                                        ,  (other_photo_url draft)
-                                                        ,  (short_name draft)
-                                                        ,  (news_id_draft draft)
-                                                        ,  (id_author author))
-                            
-                                                return $ case result of
-                                                        1        ->  Right () 
-                                                        0        ->  Left AccessErrorAuthor
-                    False -> return $ Left AccessErrorAdmin
+                                        newsResult <- getOne  sess  ("news" :: Text)  (news_id_draft draft)
+                                        case newsResult of
+                                                Left err -> return $ Left NotResearchNews
+                                                Right (EntNews news) -> do
+                                                        let newNews = News       (id_news news)
+                                                                (data_create_draft draft)
+                                                                (authors news)
+                                                                (category news)
+                                                                (ClassyPrelude.pack $ text_draft draft)
+                                                                (ClassyPrelude.pack $ main_photo_url draft)
+                                                                (other_photo_url draft)
+                                                                (ClassyPrelude.pack $ short_name draft)
+                                                                (drafts news)
+                                                                (comments news)
+                                                                (tegs news)
+                                                        case (id_user users) == (id_user $ user $ authors news) of
+                                                                True -> editing sess ( EntNews     newNews) 
+                                                                False ->  return $ Left AccessErrorAuthor 
+                    False -> return $ Left AccessErrorAuthor
             Left err -> return $ Left UserErrorFindBySession
+                                                    
+                                    
+                                --                 authorResult <-  getOne  sess  ("author" :: Text) idD 
+                                --     case authorResult of
+                                --         Left err -> return $ Left NotResearchAuthor
+                                --         Right (EntAuthor author)  -> do
 
+                                                --  пока превращение черновика в новость не реализовал, так как логику нужно продумать
+                                                -- case (news_id_draft draft) of
+                                                --         0 -> do
+                                                --                 idNews <- getLastIdNews
+                                                --                 let n = News idNews (data_create_draft draft) author ?? (text_draft draft)   (main_photo_url draft) (other_photo_url draft) (short_name draft) ?? ?? ?? ??
 
+                                                        -- _ -> do
+                                                                -- print "запрос"
+                                                                -- print draft 
+                                                                -- print 
+                                                                -- let q  = "UPDATE news SET       \
+                                                                --         \  data_create_n = (?) \
+                                                                --         \ , description_news = (?) \
+                                                                --         \ , main_photo_url_n = (?) \
+                                                                --         \ , other_photo_url_n = (?) \
+                                                                --         \ , short_name_n = (?) \
+                                                                --         \    WHERE id_news = (?) and authors_id = (?) ;"
+                                                                -- result <- withConn $ \conn -> execute conn q    ( (data_create_draft draft)
+                                                                --         , (text_draft draft)  
+                                                                --         ,  (main_photo_url draft)
+                                                                --         ,  (other_photo_url draft)
+                                                                --         ,  (short_name draft)
+                                                                --         ,  (news_id_draft draft)
+                                                                --         ,  (id_author author))
+                                                                --         -- data_create_n = (?) \
+                                                                --         -- \ , authors_id = (?) \
+                                                                --         -- \ , category_3_id = (?) \
+                                                                --         -- \ , description_news = (?) \
+                                                                --         -- \ , main_photo_url_n = (?) \
+                                                                --         -- \ , other_photo_url_n = (?) \
+                                                                --         -- \ , short_name_n = (?) \
+                                                                -- return $ case result of
+                                                                --         1        ->  Right () 
+                                                                --         0        ->  Left AccessErrorAuthor
+        
+
+-- getLastIdNews :: (PG r m, CommonService m) => m Int
+-- getLastIdNews = undefined
