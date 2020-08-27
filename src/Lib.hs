@@ -31,6 +31,8 @@ newtype App a = App
 run :: State -> App a -> IO a
 run  state =  flip runReaderT state . unApp
 
+
+
 instance CommonService App where
       create  =   PG.create
       editing =   PG.editing
@@ -70,7 +72,7 @@ withState config action = do
                 action (Config.configPort config) state
 
 -- withLogging :: (LogConfig -> IO a) -> IO a
-
+-- withLogging 
 
 
 mainWithConfig :: Config.Config -> IO ()
@@ -107,7 +109,7 @@ mainDev = do
                 -- print (encode teg)
                 -- print (encode auth)
                 -- print (encode news)
-                
+              
 
         mainWithConfig Config.devConfig
  

@@ -112,7 +112,7 @@ editing sess (EntDraft    draft )                 = do
                                                 \ , elements_draft.main_photo_url = (?) \
                                                 \ , elements_draft.other_photo_url = (?) \
                                                 \ , elements_draft.short_name = (?) \
-                                                \ FROM drafts, news , author \
+                                                \ FROM news , author \
                                                 \ WHERE (elements_draft).id_draft = (?)  and \
                                                 \ (elements_draft).news_id_draft = news.id_news and author.id_author = news.authors_id and author.id_user = (?);"
                                                 result <- withConn $ \conn -> execute conn q    (  (text_draft draft)   

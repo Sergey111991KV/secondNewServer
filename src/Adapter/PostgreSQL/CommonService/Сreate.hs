@@ -9,6 +9,8 @@ import ClassyPrelude
 import Data.Text
 import qualified Data.ByteString.Lazy as B
 import Domain.Service.Auth 
+import Logging 
+import Config
 
 
 create  :: PG r m => SessionId -> Entity  -> m (Either Error ())

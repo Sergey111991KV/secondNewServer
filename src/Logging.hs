@@ -9,11 +9,6 @@ import System.IO
 import Domain.Types.Error
 
 
--- class Monad m => Logging m where
---         writeLogginHandler                   :: Text -> Text -> m (Either Error User) -- password login
-  
-
-
 type LoggingInConfig = Logging
 
 data LogConfig = LogConfig
@@ -50,20 +45,21 @@ instance FromJSON LogConfig
 
 
 
-writeInLogFile :: FilePath -> Bool -> String -> IO ()
+writeInLogFile :: FilePath -> Bool -> Text -> IO ()
 writeInLogFile lF bl txt = do
         case bl of
-            True -> appendFile lF txt
+            True -> appendFile lF ( unpack txt)
             False -> return ()
 
-writeInTerminal :: Bool -> String -> IO ()
+writeInTerminal :: Bool -> Text -> IO ()
 writeInTerminal bl txt = do
         case bl of
-                True -> System.IO.print txt
+                True -> do
+                        ClassyPrelude.putStrLn txt
                 False -> return ()
 
  
-writFileHandler ::  FilePath -> LoggingInConfig -> Logging -> Bool -> String -> IO ()
+writFileHandler ::  FilePath -> LoggingInConfig -> Logging -> Bool -> Text -> IO ()
 writFileHandler lF logCong log bl txt = do
         let ifWrite =  caseOfWriteLogging logCong log
         writeInLogFile lF ifWrite txt
@@ -87,5 +83,5 @@ takeCurrentDate = unpack  $ formatISODateTime $ unsafePerformIO time
         where 
                 time = getCurrentTime
      
-writeLogginHandler :: LogConfig -> Logging -> String -> IO ()
+writeLogginHandler :: LogConfig -> Logging -> Text -> IO ()
 writeLogginHandler  (LogConfig lf logLev logBool) loging txt =  writFileHandler lf logLev loging logBool txt
