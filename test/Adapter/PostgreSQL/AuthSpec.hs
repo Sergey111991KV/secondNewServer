@@ -7,11 +7,12 @@ import Domain.ImportEntity
 
 import Database.PostgreSQL.Simple
 import Adapter.PostgreSQL.Common
-import Adapter.PostgreSQL.Auth
+import Adapter.PostgreSQL.Auth.Auth
 import Text.StringRandom
 import qualified Prelude as Prelude
+import Lib
 -- import Adapter.Fixture
-import Fixture
+
 -- import Control.Monad.Catch (MonadThrow, MonadCatch)
 
 -- import Data.Pool
@@ -40,12 +41,13 @@ import Fixture
 spec :: Spec
 spec = beforeAll initDB $ do
   describe "findUsers" $
-    it "should return user  if the user already exists"  pending 
+    it "should return user  if the user already exists"  $ do
+      -- pending 
         -- $ do
-        -- user <- randomUser
-    --   withState testConf (newSession user) `shouldReturn` (SessionId "sss")
-        -- runTestApp  (findUsers (authLogin user) (authPassword user) >> findUsers (authLogin user) (authPassword user) ) `shouldReturn` Left LoginErrorInvalidAuth
-    --   runTestApp (findUsers (authLogin user) (authPassword user)  >> findUsers (authLogin user) (authPassword user)) `shouldReturn` Left LoginErrorInvalidAuth
+          user <- randomUser
+          -- withState testConf (newSession user) `shouldReturn` (SessionId "sss")
+          -- runTestApp  (findUsers (authLogin user) (authPassword user) >> findUsers (authLogin user) (authPassword user) ) `shouldReturn` Left LoginErrorInvalidAuth
+          runTestApp (findUsers (authLogin user) (authPassword user) >> findUsers (authLogin user) (authPassword user) )   `shouldReturn` Left LoginErrorInvalidAuth
 
 
 

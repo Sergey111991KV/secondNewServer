@@ -85,3 +85,8 @@ takeCurrentDate = unpack  $ formatISODateTime $ unsafePerformIO time
      
 writeLogginHandler :: LogConfig -> Logging -> Text -> IO ()
 writeLogginHandler  (LogConfig lf logLev logBool) loging txt =  writFileHandler lf logLev loging logBool txt
+
+
+
+class (Monad m) =>  Log m  where
+    logIn :: m ()

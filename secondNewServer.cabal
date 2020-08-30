@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: a6bac000f1c1880467776e03e5bde5edec4e67c70b28a7ef55c9ec551fed772e
+-- hash: 86d7e03c517b2fa12ed6898cd985c552a91c84d6320e988eb26019fc53009e1b
 
 name:           secondNewServer
 version:        0.1.0.0
@@ -150,7 +150,6 @@ test-suite secondNewServer-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      Adapter.Fixture
       Adapter.PostgreSQL.AuthSpec
       Domain.Service.AuthSpec
       Fixture

@@ -13,9 +13,10 @@ import Control.Monad.IO.Class
 import ClassyPrelude
 import Domain.ImportEntity 
 import Domain.ImportService
+import Logging
 
 
-type PG r m = (Has State r, MonadReader r m, MonadIO m, MonadThrow m, Auth m )
+type PG r m = (Has State r, MonadReader r m, MonadIO m, MonadThrow m, Auth m, Log m )
 
 type State = Pool Connection
 

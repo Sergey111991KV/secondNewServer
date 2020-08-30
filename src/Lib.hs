@@ -26,12 +26,14 @@ import Logging
 type State = (PG.State)
 newtype App a = App
   { unApp :: ReaderT State IO a
-  } deriving (Applicative, Functor, Monad, MonadReader State, MonadIO, MonadThrow)
+  } deriving (Applicative, Functor, Monad, MonadReader State, MonadIO, MonadThrow, Log)
 
 run :: State -> App a -> IO a
 run  state =  flip runReaderT state . unApp
 
-
+instance MonadIO m => Log (ReaderT State m) where
+        logIn = do
+                liftIO $ print "Log"
 
 instance CommonService App where
       create  =   PG.create
@@ -104,7 +106,7 @@ mainDev = do
                 --                 (PGArray [draft, draft2])
                 --                 (PGArray [comment])
                 --                 (PGArray [teg,teg2])
-                               
+                -- let u =   "{authAdmin/":true,"lastName":"Abramojjv","dataCreate":"2011-11-19T18:28:52.607875Z","authPassword":"qwerty","nameU":"Daniel","authAuthor":true,"authLogin":"daniel1kk1","id_user":33,"avatar":"avatarDaniel"}'
                 -- print (encode comment)
                 -- print (encode teg)
                 -- print (encode auth)
