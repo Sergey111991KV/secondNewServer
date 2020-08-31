@@ -19,8 +19,8 @@ import qualified Data.Attoparsec.ByteString.Char8 as A
 import Domain.Parse.ParsePostgresTypes as TT
 import qualified Text.Parsec as Parsec
 import qualified ClassyPrelude as ClassyPrelude
-import Logging
-
+import Logging.LogMonad
+import Logging.Logging
 
 
 type State = (PG.State)
@@ -32,8 +32,10 @@ run :: State -> App a -> IO a
 run  state =  flip runReaderT state . unApp
 
 instance MonadIO m => Log (ReaderT State m) where
-        logIn = do
-                liftIO $ print "Log"
+        logIn log txt = do
+                let confLog = Config.configLog Config.devConfig 
+                liftIO $ writeLogginHandler confLog log txt
+              
 
 instance CommonService App where
       create  =   PG.create

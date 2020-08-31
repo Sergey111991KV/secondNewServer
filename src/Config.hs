@@ -3,7 +3,7 @@ module Config where
 import ClassyPrelude
 import System.Environment
 import qualified Adapter.PostgreSQL.Common as PG
-import Logging
+import Logging.Logging
 
 data  Config  =  Config
 

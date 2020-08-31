@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 86d7e03c517b2fa12ed6898cd985c552a91c84d6320e988eb26019fc53009e1b
+-- hash: 448c8e6e6924bdd0b380ef463a76af87f52c0ff0ec0ef169c8036de95ccb1e05
 
 name:           secondNewServer
 version:        0.1.0.0
@@ -67,7 +67,8 @@ library
       Domain.Types.User
       DraftOfCode
       Lib
-      Logging
+      Logging.Logging
+      Logging.LogMonad
   other-modules:
       Paths_secondNewServer
   hs-source-dirs:

@@ -13,7 +13,8 @@ import Control.Monad.IO.Class
 import ClassyPrelude
 import Domain.ImportEntity 
 import Domain.ImportService
-import Logging
+import Logging.LogMonad
+
 
 
 type PG r m = (Has State r, MonadReader r m, MonadIO m, MonadThrow m, Auth m, Log m )

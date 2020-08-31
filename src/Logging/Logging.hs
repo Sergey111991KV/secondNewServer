@@ -1,4 +1,4 @@
-module Logging where
+module Logging.Logging where
 
 import ClassyPrelude
 import Data.Aeson
@@ -29,7 +29,7 @@ takeValueLogging :: Logging -> Integer
 takeValueLogging log
                 | log == Debug     = 1
                 | log == Warning   = 2
-                | log == Logging.Error     = 3
+                | log == Logging.Logging.Error     = 3
 
 caseOfWriteLogging :: Logging -> LogForFile -> Bool
 caseOfWriteLogging log logConf =  (takeValueLogging log) >= (takeValueLogging logConf)
@@ -87,6 +87,3 @@ writeLogginHandler :: LogConfig -> Logging -> Text -> IO ()
 writeLogginHandler  (LogConfig lf logLev logBool) loging txt =  writFileHandler lf logLev loging logBool txt
 
 
-
-class (Monad m) =>  Log m  where
-    logIn :: m ()

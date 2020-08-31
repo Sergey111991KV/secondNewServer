@@ -4,17 +4,15 @@ import Domain.ImportEntity
 import ClassyPrelude
 import  Adapter.PostgreSQL.Common
 import Text.StringRandom
-import Logging 
-import Config as Conf
+import Logging.LogMonad
+import Logging.Logging
 
 
 
 findUsers :: PG r m  => Text -> Text -> m (Either Error User)
 findUsers pas log = do 
-        let c = configLog $ Conf.devConfig
         let q = "SELECT * FROM user_blog where password = (?) and login = (?)"
         i <- (withConn $ \conn -> query conn q (pas, log ) :: IO [User]) 
-        liftIO $ writeLogginHandler c Debug "findUsers"
         return $ case i of
                 [x]     -> Right  x
                        
@@ -23,17 +21,14 @@ findUsers pas log = do
 
 newSession :: PG r m  => User -> m SessionId
 newSession us = do 
-    let c = configLog $ Conf.devConfig
     deleteOldSession us
     insertNewSession us
     result <- withConn $ \conn -> query conn qry [(id_user us)]
     case result of
         [sId] -> do
-            liftIO $ writeLogginHandler c Debug "New Session"
-            print $ sessionRaw sId
+            logIn Debug "Auth"
             return sId
         err -> do
-            liftIO $ writeLogginHandler c Debug "New Session"
             throwString $ "Unexpected error: " <> show err
     where
     qry = "select key from session where user_id= ?"
@@ -80,9 +75,8 @@ findUserBySession sesId = do
 
 findUserIdBySessionId      :: PG r m => SessionId ->  m (Either Error UserId) 
 findUserIdBySessionId sesId = do
-        let c = configLog $ Conf.devConfig 
+
         result <- withConn $ \conn -> query conn qry (sesId)
-        liftIO $ writeLogginHandler c Debug "findUserIdBySessionId"
         return $ case result of
             [uIdStr] -> Right uIdStr
             _        -> Left DataErrorPostgreSQL
