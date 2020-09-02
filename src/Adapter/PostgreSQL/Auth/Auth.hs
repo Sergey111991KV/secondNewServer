@@ -4,8 +4,7 @@ import Domain.ImportEntity
 import ClassyPrelude
 import  Adapter.PostgreSQL.Common
 import Text.StringRandom
-import Logging.LogMonad
-import Logging.Logging
+import ImportLogging
 
 
 
@@ -26,12 +25,13 @@ newSession us = do
     result <- withConn $ \conn -> query conn qry [(id_user us)]
     case result of
         [sId] -> do
-            logIn Debug "Auth"
+            logIn Debug (entityToText  us) -- logggg)))
             return sId
         err -> do
+            logIn ImportLogging.Error "Error newSession"
             throwString $ "Unexpected error: " <> show err
     where
-    qry = "select key from session where user_id= ?"
+        qry = "select key from session where user_id= ?"
 
 
 deleteOldSession :: PG r m

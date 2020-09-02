@@ -8,6 +8,8 @@ import System.IO.Unsafe
 import System.IO
 import Domain.Types.Error
 import Logging.Logging 
+import Logging.LogEntity
+
 
 
 class (Monad m) =>  Log m  where

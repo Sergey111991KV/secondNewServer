@@ -7,48 +7,32 @@ import Data.Text.Time
 import System.IO.Unsafe
 import System.IO
 import Domain.Types.Error
+import Domain.ImportEntity 
+import Logging.LogEntity
+import qualified Data.Text.Encoding as T
+import qualified Data.ByteString               as B
 
+import qualified Data.ByteString.Lazy          as BL
 
-type LoggingInConfig = Logging
+toStrict1 :: BL.ByteString -> B.ByteString
+toStrict1 = B.concat . BL.toChunks
 
-data LogConfig = LogConfig
-  { logFile :: FilePath
-  , logLevelForFile :: LoggingInConfig
-  , logConsole :: Bool
-  } deriving (Show, Generic)
-
-type LogForFile =  Logging 
-
-data Logging
-  = Debug
-  | Warning
-  | Error
-  deriving (Eq, Ord, Read, Show, Generic)
-
-takeValueLogging :: Logging -> Integer
-takeValueLogging log
-                | log == Debug     = 1
-                | log == Warning   = 2
-                | log == Logging.Logging.Error     = 3
-
-caseOfWriteLogging :: Logging -> LogForFile -> Bool
-caseOfWriteLogging log logConf =  (takeValueLogging log) >= (takeValueLogging logConf)
-
-instance ToJSON Logging
-
-instance FromJSON Logging
-
-
-instance ToJSON LogConfig
-
-instance FromJSON LogConfig
+-- entityToText :: Entity -> Text
+-- EntAuthor   Author   | 
+-- entityToText   EntCategory Category   | 
+-- entityToText  EntComment  Comment  | 
+-- entityToText (EntDraft    Draft    |
+-- entityToText (EntNews     News)     | 
+-- entityToText  (EntUser    User)    | 
+-- entityToText  (EntTeg      Teg)
+-- entityToText ent = T.decodeUtf8 $ toStrict1 $ encode $ convertFromEntity ent
 
 
 
 writeInLogFile :: FilePath -> Bool -> Text -> IO ()
 writeInLogFile lF bl txt = do
         case bl of
-            True -> appendFile lF ( unpack txt)
+            True -> appendFile lF ( ClassyPrelude.unpack txt)
             False -> return ()
 
 writeInTerminal :: Bool -> Text -> IO ()
@@ -79,7 +63,7 @@ writeText txt = date ++  txt
 
         
 takeCurrentDate ::  String
-takeCurrentDate = unpack  $ formatISODateTime $ unsafePerformIO time
+takeCurrentDate = ClassyPrelude.unpack  $ formatISODateTime $ unsafePerformIO time
         where 
                 time = getCurrentTime
      

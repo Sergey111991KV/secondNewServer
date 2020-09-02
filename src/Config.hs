@@ -4,6 +4,7 @@ import ClassyPrelude
 import System.Environment
 import qualified Adapter.PostgreSQL.Common as PG
 import Logging.Logging
+import Logging.LogEntity
 
 data  Config  =  Config
 

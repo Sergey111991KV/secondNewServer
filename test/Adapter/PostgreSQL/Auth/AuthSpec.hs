@@ -1,53 +1,41 @@
-module Adapter.PostgreSQL.AuthSpec where
+module Adapter.PostgreSQL.Auth.AuthSpec where
 
 import ClassyPrelude
 import Test.Hspec
--- import Domain.ImportService
+import Data.Time 
 import Domain.ImportEntity 
 
 import Database.PostgreSQL.Simple
 import Adapter.PostgreSQL.Common
-import Adapter.PostgreSQL.Auth.Auth
+import qualified Adapter.PostgreSQL.Auth.Auth as Auth
 import Text.StringRandom
 import qualified Prelude as Prelude
-import Lib
--- import Adapter.Fixture
+import Domain.Service.Auth
+import Logging.LogMonad
+import Logging.Logging
+import qualified Config as Config
 
--- import Control.Monad.Catch (MonadThrow, MonadCatch)
-
--- import Data.Pool
-
-
--- type State = Pool Connection
-
--- -- findUsers                   :: Text -> Text -> m (Either Error User) -- password login
--- -- newSession                  :: User -> m SessionId
--- -- findUserBySession           :: SessionId -> m (Either Error User)
--- data Config = Config
---   { configUrl :: ByteString
---   , configStripeCount :: Int
---   , configMaxOpenConnPerStripe :: Int
---   , configIdleConnTimeout :: NominalDiffTime
---   }
-
-
--- instance Auth App where
---         findUsers = dispatch2 _findUsers
---         newSession = dispatch _newSession
---         findUserBySession = dispatch _findUserBySession
-
+instance Auth (ReaderT State IO ) where
+        findUsers = Auth.findUsers
+        newSession = Auth.newSession
+        findUserBySession = Auth.findUserBySession
+      
+instance Log (ReaderT State IO ) where
+  logIn log txt = do
+    let confLog = Config.configLog Config.devConfig 
+    liftIO $ writeLogginHandler confLog log txt
+      
 
 
 spec :: Spec
 spec = beforeAll initDB $ do
   describe "findUsers" $
     it "should return user  if the user already exists"  $ do
-      -- pending 
-        -- $ do
           user <- randomUser
-          -- withState testConf (newSession user) `shouldReturn` (SessionId "sss")
-          -- runTestApp  (findUsers (authLogin user) (authPassword user) >> findUsers (authLogin user) (authPassword user) ) `shouldReturn` Left LoginErrorInvalidAuth
-          runTestApp (findUsers (authLogin user) (authPassword user) >> findUsers (authLogin user) (authPassword user) )   `shouldReturn` Left LoginErrorInvalidAuth
+          runTestApp (findUsers (authLogin user) (authPassword user) )  `shouldReturn` Left DataErrorPostgreSQL
+          
+          let time = ( Prelude.read "2015-09-01 13:34:02 UTC" )::UTCTime
+          runTestApp (findUsers "3456ABCDefgh" "pasha@test.com"  )  `shouldReturn` Right (User {id_user = 1, nameU = "Pasha", lastName = "Dragon", authLogin = "pasha@test.com", authPassword = "3456ABCDefgh", avatar = "https://nlotv.com/ru/news/view/6554-novye-kadry-iz-avatar-2-predstavili-druguyu-lokaciyu-pandory", dataCreate = time, authAdmin = True, authAuthor = True})
 
 
 
