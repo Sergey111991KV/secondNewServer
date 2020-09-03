@@ -26,7 +26,7 @@ routes = do
                 result <- lift $ findUsers password login
                 case result of 
                     Left err -> do
-                        print "Ошибка авторизации"
+                        -- print "Ошибка авторизации"
                         status status400
                     Right user -> do
                         sess <- lift $ newSession user

@@ -33,7 +33,7 @@ spec = beforeAll initDB $ do
     it "should return user  if the user already exists"  $ do
           user <- randomUser
           runTestApp (findUsers (authLogin user) (authPassword user) )  `shouldReturn` Left DataErrorPostgreSQL
-          
+
           let time = ( Prelude.read "2015-09-01 13:34:02 UTC" )::UTCTime
           runTestApp (findUsers "3456ABCDefgh" "pasha@test.com"  )  `shouldReturn` Right (User {id_user = 1, nameU = "Pasha", lastName = "Dragon", authLogin = "pasha@test.com", authPassword = "3456ABCDefgh", avatar = "https://nlotv.com/ru/news/view/6554-novye-kadry-iz-avatar-2-predstavili-druguyu-lokaciyu-pandory", dataCreate = time, authAdmin = True, authAuthor = True})
 
@@ -57,30 +57,6 @@ testConf =
 runTestApp :: ReaderT State IO a -> IO a
 runTestApp action = withPool testConf $ runReaderT action
 
-
--- newtype App a = App
---     { unApp :: ReaderT State IO a
---     } deriving (Applicative, Functor, Monad, MonadReader State, MonadIO, MonadThrow)
-  
--- run :: State -> App a -> IO a
--- run  state =  flip runReaderT state . unApp
-
--- withPool :: Config -> (State -> IO a) -> IO a
--- withPool cfg action =
---     bracket initPool cleanPool action
---         where
---           initPool = createPool openConn closeConn
---                       (configStripeCount cfg)
---                       (configIdleConnTimeout cfg)
---                       (configMaxOpenConnPerStripe cfg)
---           cleanPool = destroyAllResources
---           openConn = connectPostgreSQL (configUrl cfg)
---           closeConn = close
-
--- withState  ::  Config  -> ( State  ->  IO  a ) ->  IO  a
--- withState cfg action =
---     withPool cfg $ \state -> do
---         action state
 
 
 

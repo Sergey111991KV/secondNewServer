@@ -49,7 +49,7 @@ dependencies:
 - blaze-builder
 - string-random
 - hspec
-
+- warp
 
 
 
@@ -103,3 +103,5 @@ tests:
     dependencies:
     - secondNewServer
     - process
+    - hspec-wai
+    - hspec-wai-json

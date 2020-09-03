@@ -16,13 +16,20 @@ import qualified Adapter.HTTP.API.Auth as  AuthReppo
 import qualified Domain.ImportService as Service
 import qualified Domain.ImportEntity as Entity
 
-
+import Network.Wai.Handler.Warp
 import Network.Wai
 -- import Network.Wai.Middleware.Gzip
 
+
+app :: (MonadIO m, Service.Auth m , Service.CommonService m, Service.FilterService m, Service.SortedOfService m )
+     => (m Response -> IO Response) -> IO Application
+app runner =
+  scottyAppT runner routes
+
+
 mainHTTP :: (MonadIO m, Service.Auth m , Service.CommonService m, Service.FilterService m, Service.SortedOfService m ) => Int -> (m Response -> IO Response) -> IO ()
 mainHTTP port runner = 
-  scottyT port runner routes
+  app runner >>= run port
 
 routes :: (MonadIO m, Service.Auth m , Service.CommonService m, Service.FilterService m, Service.SortedOfService m ) => ScottyT LText m ()
 routes = do
