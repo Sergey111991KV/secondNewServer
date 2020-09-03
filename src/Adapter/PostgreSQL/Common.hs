@@ -13,7 +13,7 @@ import Control.Monad.IO.Class
 import ClassyPrelude
 import Domain.ImportEntity 
 import Domain.ImportService
-import ImportLogging
+import Logging.ImportLogging
 
 
 

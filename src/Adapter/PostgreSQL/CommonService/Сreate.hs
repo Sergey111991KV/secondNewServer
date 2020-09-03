@@ -9,7 +9,7 @@ import ClassyPrelude
 import Data.Text
 import qualified Data.ByteString.Lazy as B
 import Domain.Service.Auth 
-import ImportLogging
+import Logging.ImportLogging
 
 
 

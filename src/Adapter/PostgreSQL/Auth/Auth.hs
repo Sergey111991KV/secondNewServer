@@ -4,8 +4,8 @@ import Domain.ImportEntity
 import ClassyPrelude
 import  Adapter.PostgreSQL.Common
 import Text.StringRandom
-import ImportLogging
-
+import Logging.ImportLogging as L
+ 
 
 
 findUsers :: PG r m  => Text -> Text -> m (Either Error User)
@@ -28,7 +28,7 @@ newSession us = do
             logIn Debug (entityToText  us) -- logggg)))
             return sId
         err -> do
-            logIn ImportLogging.Error "Error newSession"
+            logIn L.Error "Error newSession"
             throwString $ "Unexpected error: " <> show err
     where
         qry = "select key from session where user_id= ?"

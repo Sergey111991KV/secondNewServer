@@ -19,8 +19,7 @@ import qualified Data.Attoparsec.ByteString.Char8 as A
 import Domain.Parse.ParsePostgresTypes as TT
 import qualified Text.Parsec as Parsec
 import qualified ClassyPrelude as ClassyPrelude
-import Logging.LogMonad
-import Logging.Logging
+import Logging.ImportLogging
 
 
 type State = (PG.State)

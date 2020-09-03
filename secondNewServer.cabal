@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 7ff33846e7a7fce488ec5c9d57a30ff2414308d619f03c65f81a9a726d4c578a
+-- hash: d9a864d6db192933772ed7c7b9acb53e4c624fd4bad3fd18e41d1a038e8a1af0
 
 name:           secondNewServer
 version:        0.1.0.0
@@ -66,8 +66,8 @@ library
       Domain.Types.Teg
       Domain.Types.User
       DraftOfCode
-      ImportLogging
       Lib
+      Logging.ImportLogging
       Logging.LogEntity
       Logging.Logging
       Logging.LogMonad
