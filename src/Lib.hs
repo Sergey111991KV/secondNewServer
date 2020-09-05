@@ -19,22 +19,26 @@ import qualified Data.Attoparsec.ByteString.Char8 as A
 import Domain.Parse.ParsePostgresTypes as TT
 import qualified Text.Parsec as Parsec
 import qualified ClassyPrelude as ClassyPrelude
-import Logging.ImportLogging
+import qualified Logging.ImportLogging as Log
+import Data.Has
 
 
-type State = (PG.State)
+type State = (PG.State, TVar Log.State)
 newtype App a = App
   { unApp :: ReaderT State IO a
-  } deriving (Applicative, Functor, Monad, MonadReader State, MonadIO, MonadThrow, Log)
+  } deriving (Applicative, Functor, Monad, MonadReader State, MonadIO, MonadThrow, Log.Log)
 
 run :: State -> App a -> IO a
 run  state =  flip runReaderT state . unApp
 
-instance MonadIO m => Log (ReaderT State m) where
+instance MonadIO m => Log.Log (ReaderT State m) where
         logIn log txt = do
-                let confLog = Config.configLog Config.devConfig 
-                liftIO $ writeLogginHandler confLog log txt
-              
+                (st, st2) <-  ask
+                logSt <- readTVarIO st2
+                liftIO $ Log.writeLogginHandler (Log.logStCong logSt) log txt
+       
+       
+         
 
 instance CommonService App where
       create  =   PG.create
@@ -42,7 +46,7 @@ instance CommonService App where
       getAll  =   PG.getAll
       getOne  =   PG.getOne
       remove  =   PG.remove
-      updeit  =   PG.updeit
+      update  =   PG.update
 
 instance Auth App where
         findUsers                   = PG.findUsers
@@ -71,11 +75,10 @@ instance FilterService App where
 withState :: Config.Config -> (Int -> State -> IO ()) -> IO ()
 withState config action = do
         PG.withState (Config.configPG config) $ \pgState -> do
-                let state = pgState -- тут можно накрутить state на state
+                logState <- newTVarIO $ Config.configLog config
+                let state = (pgState, logState)
                 action (Config.configPort config) state
 
--- withLogging :: (LogConfig -> IO a) -> IO a
--- withLogging 
 
 
 mainWithConfig :: Config.Config -> IO ()

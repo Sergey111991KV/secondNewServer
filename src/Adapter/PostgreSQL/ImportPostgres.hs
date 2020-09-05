@@ -9,5 +9,5 @@ import Adapter.PostgreSQL.CommonService.Editing                             as P
 import Adapter.PostgreSQL.CommonService.GetAll                              as P
 import Adapter.PostgreSQL.CommonService.GetOne                              as P
 import Adapter.PostgreSQL.CommonService.Remove                              as P
-import Adapter.PostgreSQL.CommonService.Updeit                              as P
+import Adapter.PostgreSQL.CommonService.Update                              as P
 import Adapter.PostgreSQL.SearchIn.SearchIn                                 as P

@@ -3,22 +3,22 @@ module Config where
 import ClassyPrelude
 import System.Environment
 import qualified Adapter.PostgreSQL.Common as PG
-import Logging.Logging
-import Logging.LogEntity
+import qualified Logging.ImportLogging as Log
+
 
 data  Config  =  Config
 
   { configPort     ::  Int
-  , configLog      ::  LogConfig
+  , configLog      ::  Log.State
   , configPG       ::  PG.Config
   }
 
 
 devConfig = Config
     { configPort = 3000
-    , configLog = LogConfig { logFile = "log-journal"
-                            , logLevelForFile = Debug
-                            , logConsole = True }
+    , configLog = Log.State { logStCong = Log.LogConfig { logFile = "log-journal"
+                                                        , logLevelForFile = Log.Debug
+                                                        , logConsole = True } }
     , configPG = PG.Config 
         { PG.configUrl = " host='localhost' port=5432 dbname='hblog'"
         , PG.configStripeCount = 2

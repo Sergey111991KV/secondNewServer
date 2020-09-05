@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: d9a864d6db192933772ed7c7b9acb53e4c624fd4bad3fd18e41d1a038e8a1af0
+-- hash: 4d5f7298e670d52d84963fcdac690d80e00d1258c267662b8bd6b82cf702b775
 
 name:           secondNewServer
 version:        0.1.0.0
@@ -39,7 +39,7 @@ library
       Adapter.PostgreSQL.CommonService.GetAll
       Adapter.PostgreSQL.CommonService.GetOne
       Adapter.PostgreSQL.CommonService.Remove
-      Adapter.PostgreSQL.CommonService.Updeit
+      Adapter.PostgreSQL.CommonService.Update
       Adapter.PostgreSQL.CommonService.Сreate
       Adapter.PostgreSQL.FilterService.FilterService
       Adapter.PostgreSQL.ImportPostgres
@@ -86,6 +86,7 @@ library
     , cookie
     , data-has
     , exceptions
+    , hlint
     , hspec
     , http-client
     , http-client-tls
@@ -127,6 +128,7 @@ executable secondNewServer-exe
     , cookie
     , data-has
     , exceptions
+    , hlint
     , hspec
     , http-client
     , http-client-tls
@@ -175,6 +177,7 @@ test-suite secondNewServer-test
     , cookie
     , data-has
     , exceptions
+    , hlint
     , hspec
     , hspec-wai
     , hspec-wai-json

@@ -142,7 +142,7 @@ routes = do
                                             status status200
                                             print "Delete  success!!"
 
-        get "/api/updeite/:idE" $ do                
+        get "/api/update/:idE" $ do                
                         authResult <- getCookie "sId"
                         case authResult of
                                 Nothing -> do
@@ -150,7 +150,7 @@ routes = do
                                     Web.Scotty.Trans.json ("not verification" :: Text)
                                 Just sess -> do
                                         draftId   :: Text   <-      param "idE" 
-                                        resultUpdeit <- lift $  updeit (SessionId sess)  (Prelude.read (ClassyPrelude.unpack draftId) :: Int)
+                                        resultUpdeit <- lift $  update (SessionId sess)  (Prelude.read (ClassyPrelude.unpack draftId) :: Int)
                                         case resultUpdeit of
                                                 Left err -> do
                                                         status status400

@@ -4,7 +4,7 @@ import Domain.ImportEntity
 import ClassyPrelude
 import  Adapter.PostgreSQL.Common
 import Text.StringRandom
-import Logging.ImportLogging as L
+import qualified Logging.ImportLogging as Log
  
 
 
@@ -12,10 +12,14 @@ findUsers :: PG r m  => Text -> Text -> m (Either Error User)
 findUsers pas log = do 
         let q = "SELECT * FROM user_blog where password = (?) and login = (?)"
         i <- (withConn $ \conn -> query conn q (pas, log ) :: IO [User]) 
-        return $ case i of
-                [x]     -> Right  x
+        case i of
+                [x]     -> do
+                    Log.logIn Log.Debug $ "findUsers " ++ (entityToText  x) -- log
+                    return $  Right  x
                        
-                []      -> Left DataErrorPostgreSQL
+                []      -> do
+                    Log.logIn Log.Error $ "Error findUsers " ++ (errorText DataErrorPostgreSQL)  -- log
+                    return $  Left DataErrorPostgreSQL
 
 
 newSession :: PG r m  => User -> m SessionId
@@ -25,10 +29,10 @@ newSession us = do
     result <- withConn $ \conn -> query conn qry [(id_user us)]
     case result of
         [sId] -> do
-            logIn Debug (entityToText  us) -- logggg)))
+            Log.logIn Log.Debug (entityToText  us) -- log
             return sId
         err -> do
-            logIn L.Error "Error newSession"
+            Log.logIn Log.Error "Error newSession"  -- log
             throwString $ "Unexpected error: " <> show err
     where
         qry = "select key from session where user_id= ?"
@@ -66,10 +70,14 @@ findUserBySession sesId = do
                 Right uIdStr     -> do
                         let q = "SELECT * FROM user_blog where id_user = (?)"
                         i <- (withConn $ \conn -> query conn q [uIdStr] :: IO [User]) 
-                        return $ case i of
-                                [y]     ->  Right  y
+                        case i of
+                                [y]     ->  do
+                                        Log.logIn Log.Debug $ "findUserBySession " ++ (entityToText  y) -- log
+                                        return $ Right  y
                                        
-                                []      ->  Left DataErrorPostgreSQL
+                                []      ->  do
+                                        Log.logIn Log.Error $ "Error findUserBySession " ++ (errorText DataErrorPostgreSQL)  -- log
+                                        return $ Left DataErrorPostgreSQL
                        
                 Left err      -> return $ Left err
 

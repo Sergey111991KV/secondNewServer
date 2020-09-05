@@ -9,7 +9,7 @@ import ClassyPrelude
 import Data.Text
 import qualified Data.ByteString.Lazy as B
 import Domain.Service.Auth 
-import Logging.ImportLogging
+import qualified Logging.ImportLogging as Log
 
 
 
@@ -22,9 +22,13 @@ create sess (EntAuthor  auth)  = do
                                         True -> do
                                                 let q = "INSERT INTO author (id_author, description_author, id_user) VALUES (?,?,?);"
                                                 result <- withConn $ \conn -> execute conn q ((id_author auth), (description auth), (id_user $ user auth) )
-                                                return $ case result of
-                                                        1        ->  Right () 
-                                                        0        ->  Left DataErrorPostgreSQL
+                                                case result of
+                                                        1        -> do
+                                                                Log.logIn Log.Debug $ "create author good!"  ++ (entityToText  auth) -- log
+                                                                return $ Right () 
+                                                        0        ->  do
+                                                                Log.logIn Log.Error $ "Error create author " ++ (errorText DataErrorPostgreSQL) 
+                                                                return $ Left DataErrorPostgreSQL
                                         False -> return $ Left AccessErrorAdmin
                         Left err -> return $ Left UserErrorFindBySession
        
@@ -36,9 +40,13 @@ create sess (EntUser  us)  = do
                                         True -> do
                                                 let q = "INSERT INTO user_blog  VALUES (?,?,?,?,?,?,?,?,?);"
                                                 result <- withConn $ \conn -> execute conn q us
-                                                return $ case result of
-                                                        1        ->  Right () 
-                                                        0        ->  Left DataErrorPostgreSQL
+                                                case result of
+                                                        1        ->  do
+                                                                Log.logIn Log.Debug $ "create user user!"  ++ (entityToText  us) -- log
+                                                                return $ Right () 
+                                                        0        ->  do
+                                                                Log.logIn Log.Error $ "Error create user" ++ (errorText DataErrorPostgreSQL) 
+                                                                return $ Left DataErrorPostgreSQL
                                         False -> return $ Left AccessErrorAdmin
                         Left err -> return $ Left UserErrorFindBySession
        
@@ -51,11 +59,19 @@ create sess (EntCategory (CatCategory1 cat))  = do
                                         True -> do
                                                         let q = "INSERT INTO category_1 (id_c1, description_cat1) VALUES (?,?);"
                                                         result <- withConn $ \conn -> execute conn q (id_category_1 cat, name_category_1 cat )
-                                                        return $ case result of
-                                                            1        ->  Right () 
-                                                            0        ->  Left DataErrorPostgreSQL
-                                        False -> return $ Left AccessErrorAdmin
-                        Left err -> return $ Left UserErrorFindBySession
+                                                        case result of
+                                                            1        ->  do
+                                                                        Log.logIn Log.Debug $ "create user category!"  ++ (entityToText  cat) -- log
+                                                                        return $  Right () 
+                                                            0        ->  do
+                                                                        Log.logIn Log.Error $ "Error create category" ++ (errorText UserErrorFindBySession)
+                                                                        return $  Left DataErrorPostgreSQL
+                                        False -> do
+                                                Log.logIn Log.Error $ "Error create category" ++ (errorText UserErrorFindBySession)
+                                                return $ Left AccessErrorAdmin
+                        Left err -> do
+                                Log.logIn Log.Error $ "Error create category" ++ (errorText UserErrorFindBySession) 
+                                return $ Left UserErrorFindBySession
       
 create sess (EntCategory (CatCategory2 cat))  = do
                 access <-  findUserBySession sess
@@ -65,11 +81,19 @@ create sess (EntCategory (CatCategory2 cat))  = do
                                                 True -> do
                                                                 let q = "INSERT INTO category_2 (id_c2, description_cat2, category_1_id) VALUES (?,?,?);"
                                                                 result <- withConn $ \conn -> execute conn q (id_category_2 cat, name_category_2 cat , (id_category_1 $ category1 cat))
-                                                                return $ case result of
-                                                                    1        ->  Right () 
-                                                                    0        ->  Left DataErrorPostgreSQL
-                                                False -> return $ Left AccessErrorAdmin
-                                Left err -> return $ Left UserErrorFindBySession
+                                                                case result of
+                                                                                1        ->  do
+                                                                                        Log.logIn Log.Debug $ "create user category!"  ++ (entityToText  cat) -- log
+                                                                                        return $  Right () 
+                                                                                0        ->  do
+                                                                                        Log.logIn Log.Error $ "Error create category" ++ (errorText UserErrorFindBySession)
+                                                                                        return $  Left DataErrorPostgreSQL
+                                                False -> do
+                                                                Log.logIn Log.Error $ "Error create category" ++ (errorText AccessErrorAdmin)
+                                                                return $ Left AccessErrorAdmin
+                                Left err -> do
+                                                Log.logIn Log.Error $ "Error create category" ++ (errorText UserErrorFindBySession) 
+                                                return $ Left UserErrorFindBySession
 
 create sess (EntCategory (CatCategory3 cat))  = do
                 access <-  findUserBySession sess
@@ -79,11 +103,19 @@ create sess (EntCategory (CatCategory3 cat))  = do
                                                 True -> do
                                                                 let q = "INSERT INTO category_3 (id_c3, description_cat3, category_2_id) VALUES (?,?,?);"
                                                                 result <- withConn $ \conn -> execute conn q (id_category_3 cat, name_category_3 cat , (id_category_2 $ category2 cat))
-                                                                return $ case result of
-                                                                    1        ->  Right () 
-                                                                    0        ->  Left DataErrorPostgreSQL
-                                                False -> return $ Left AccessErrorAdmin
-                                Left err -> return $ Left UserErrorFindBySession
+                                                                case result of
+                                                                        1        ->  do
+                                                                                Log.logIn Log.Debug $ "create user category!"  ++ (entityToText  cat) -- log
+                                                                                return $  Right () 
+                                                                        0        ->  do
+                                                                                Log.logIn Log.Error $ "Error create category" ++ (errorText UserErrorFindBySession)
+                                                                                return $  Left DataErrorPostgreSQL
+                                                False -> do
+                                                        Log.logIn Log.Error $ "Error create category" ++ (errorText UserErrorFindBySession)
+                                                        return $ Left AccessErrorAdmin
+                                Left err -> do
+                                        Log.logIn Log.Error $ "Error create category" ++ (errorText UserErrorFindBySession) 
+                                        return $ Left UserErrorFindBySession
 
 create sess (EntComment  com)                 = do
         let q = "INSERT INTO comments (element_comment) VALUES((?,?,?,?,?));"
@@ -100,11 +132,19 @@ create sess (EntDraft    draft)               = do
                                                 True -> do
                                                                 let q = "INSERT INTO drafts (elements_draft) VALUES((?,?,?,?,?,?,?));"
                                                                 result <- withConn $ \conn -> execute conn q draft
-                                                                return $ case result of
-                                                                    1        ->  Right () 
-                                                                    0        ->  Left DataErrorPostgreSQL
-                                                False -> return $ Left AccessErrorAdmin
-                                Left err -> return $ Left UserErrorFindBySession
+                                                                case result of
+                                                                        1        ->  do
+                                                                                Log.logIn Log.Debug $ "create draft!"  ++ (entityToText  draft) -- log
+                                                                                return $  Right () 
+                                                                        0        ->  do
+                                                                                Log.logIn Log.Error $ "Error create draft" ++ (errorText UserErrorFindBySession)
+                                                                                return $  Left DataErrorPostgreSQL
+                                                False -> do
+                                                        Log.logIn Log.Error $ "Error create draft" ++ (errorText UserErrorFindBySession)
+                                                        return $ Left AccessErrorAdmin
+                                Left err -> do
+                                        Log.logIn Log.Error $ "Error create draft" ++ (errorText UserErrorFindBySession) 
+                                        return $ Left UserErrorFindBySession
 
 create sess (EntTeg      teg)                 = do
                 access <-  findUserBySession sess
@@ -114,11 +154,19 @@ create sess (EntTeg      teg)                 = do
                                                 True -> do
                                                                 let q = "INSERT INTO tags (element_tags) VALUES(?);"
                                                                 result <- withConn $ \conn -> execute conn q teg
-                                                                return $ case result of
-                                                                    1        ->  Right () 
-                                                                    0        ->  Left DataErrorPostgreSQL
-                                                False -> return $ Left AccessErrorAdmin
-                                Left err -> return $ Left UserErrorFindBySession
+                                                                case result of
+                                                                        1        ->  do
+                                                                                Log.logIn Log.Debug $ "create teg!"  ++ (entityToText  teg) -- log
+                                                                                return $  Right () 
+                                                                        0        ->  do
+                                                                                Log.logIn Log.Error $ "Error create teg" ++ (errorText UserErrorFindBySession)
+                                                                                return $  Left DataErrorPostgreSQL
+                                                False -> do
+                                                        Log.logIn Log.Error $ "Error create teg" ++ (errorText UserErrorFindBySession)
+                                                        return $ Left AccessErrorAdmin
+                                Left err -> do
+                                        Log.logIn Log.Error $ "Error create teg" ++ (errorText UserErrorFindBySession) 
+                                        return $ Left UserErrorFindBySession
      
 
 create sess (EntNews     news)                = do
@@ -137,8 +185,16 @@ create sess (EntNews     news)                = do
                                                                                                              , (other_photo_url_news news)
                                                                                                              , (short_name_news news)
                                                                                                             )                            
-                                                                return $ case result of
-                                                                    1        ->  Right () 
-                                                                    0        ->  Left DataErrorPostgreSQL
-                                                False -> return $ Left AccessErrorAdmin
-                                Left err -> return $ Left UserErrorFindBySession
+                                                                case result of
+                                                                                                                        1        ->  do
+                                                                                                                                Log.logIn Log.Debug $ "create news!"  ++ (entityToText  news) -- log
+                                                                                                                                return $  Right () 
+                                                                                                                        0        ->  do
+                                                                                                                                Log.logIn Log.Error $ "Error create news" ++ (errorText UserErrorFindBySession)
+                                                                                                                                return $  Left DataErrorPostgreSQL
+                                                False -> do
+                                                                Log.logIn Log.Error $ "Error create news" ++ (errorText UserErrorFindBySession)
+                                                                return $ Left AccessErrorAdmin
+                                Left err -> do
+                                        Log.logIn Log.Error $ "Error create news" ++ (errorText UserErrorFindBySession) 
+                                        return $ Left AccessErrorAdmin

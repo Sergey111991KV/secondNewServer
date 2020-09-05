@@ -12,6 +12,7 @@ import qualified Data.ByteString.Lazy as B
 
 
 
+
 sortedNews  :: PG r m => Text ->  m [News] 
 sortedNews txt 
                 | txt == "date" = sortedDate

@@ -11,6 +11,9 @@ import Logging.Logging
 import Logging.LogEntity
 
 
+data State = State {
+    logStCong :: LogConfig
+    }
 
 class (Monad m) =>  Log m  where
     logIn :: Logging -> Text ->  m ()

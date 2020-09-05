@@ -62,7 +62,7 @@ class ConvertClas a where
         convertFromCategory :: Category -> a
         convertToCatEntArray :: [a] -> [Category]
         convertFromCatEntArray :: [Category] -> [a]
-        -- categoryToText :: Category -> Text
+       
 
 instance ConvertClas Category1 where
         convertToCategory a = CatCategory1 a

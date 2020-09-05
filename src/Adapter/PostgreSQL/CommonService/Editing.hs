@@ -8,7 +8,8 @@ import GHC.Exception.Type
 import ClassyPrelude
 import Data.Text
 import qualified Data.ByteString.Lazy as B
-import Domain.Service.Auth 
+import Domain.Service.Auth
+import qualified Logging.ImportLogging as Log
 
 
 editing  :: PG r m =>  SessionId -> Entity -> m (Either Error ())
@@ -20,11 +21,19 @@ editing sess (EntTeg      teg)                 = do
                                 True -> do
                                                 let q  = "UPDATE tags SET element_tags.name_teg = (?) WHERE (element_tags).id_teg = (?);"
                                                 result <- withConn $ \conn -> execute conn q ((name_teg teg), (id_teg teg))
-                                                return $ case result of
-                                                        1        ->  Right () 
-                                                        0        ->  Left DataErrorPostgreSQL
-                                False -> return $ Left AccessErrorAdmin
-                        Left err -> return $ Left UserErrorFindBySession
+                                                case result of
+                                                        1        ->  do
+                                                                Log.logIn Log.Debug $ "editing user teg!"  ++ (entityToText  teg) -- log
+                                                                return $ Right () 
+                                                        0        -> do
+                                                                Log.logIn Log.Error $ "Error create teg" ++ (errorText DataErrorPostgreSQL)
+                                                                return $ Left DataErrorPostgreSQL
+                                False -> do
+                                        Log.logIn Log.Error $ "Error create teg" ++ (errorText AccessErrorAdmin)
+                                        return $ Left AccessErrorAdmin
+                        Left err -> do
+                                Log.logIn Log.Error $ "Error create teg" ++ (errorText UserErrorFindBySession)
+                                return $ Left UserErrorFindBySession
        
             
 editing sess (EntAuthor      auth)                 = do
@@ -35,11 +44,19 @@ editing sess (EntAuthor      auth)                 = do
                                 True -> do
                                         let q  = "UPDATE author SET  description_author = (?), id_user = (?)  WHERE id_author = (?) ;"
                                         result <- withConn $ \conn -> execute conn q ((description auth), (id_user $ user  auth), (id_author auth))
-                                        return $ case result of
-                                                1        ->  Right () 
-                                                0        ->  Left DataErrorPostgreSQL
-                                False -> return $ Left AccessErrorAdmin
-                        Left err -> return $ Left UserErrorFindBySession
+                                        case result of
+                                                1        ->  do
+                                                                Log.logIn Log.Debug $ "editing user author!"  ++ (entityToText  auth) -- log
+                                                                return $ Right () 
+                                                0        ->  do
+                                                                Log.logIn Log.Error $ "Error create author" ++ (errorText DataErrorPostgreSQL)
+                                                                return $ Left DataErrorPostgreSQL
+                                False -> do
+                                        Log.logIn Log.Error $ "Error create author" ++ (errorText AccessErrorAdmin)
+                                        return $ Left AccessErrorAdmin
+                        Left err -> do
+                                Log.logIn Log.Error $ "Error create author" ++ (errorText UserErrorFindBySession)
+                                return $ Left UserErrorFindBySession
        
 
 editing sess (EntCategory (CatCategory1 cat1))                 = do
@@ -50,11 +67,19 @@ editing sess (EntCategory (CatCategory1 cat1))                 = do
                                 True -> do
                                         let q  = "UPDATE category_1 SET  description_cat1 = (?)  WHERE id_c1 = (?) ;"
                                         result <- withConn $ \conn -> execute conn q ((name_category_1 cat1), (id_category_1 cat1))
-                                        return $ case result of
-                                                1        ->  Right () 
-                                                0        ->  Left DataErrorPostgreSQL
-                                False -> return $ Left AccessErrorAdmin
-                        Left err -> return $ Left UserErrorFindBySession
+                                        case result of
+                                                1        -> do
+                                                        Log.logIn Log.Debug $ "editing user category1!"  ++ (entityToText  cat1) -- log
+                                                        return $ Right () 
+                                                0        -> do
+                                                        Log.logIn Log.Error $ "Error create category1" ++ (errorText DataErrorPostgreSQL)
+                                                        return $ Left DataErrorPostgreSQL
+                                False -> do
+                                        Log.logIn Log.Error $ "Error create category1" ++ (errorText AccessErrorAdmin)
+                                        return $ Left AccessErrorAdmin
+                        Left err -> do
+                                Log.logIn Log.Error $ "Error create category1" ++ (errorText UserErrorFindBySession)
+                                return $ Left UserErrorFindBySession
        
 editing sess (EntCategory (CatCategory2 cat2))                 = do
                 access <-  findUserBySession sess
@@ -64,11 +89,19 @@ editing sess (EntCategory (CatCategory2 cat2))                 = do
                                 True -> do
                                         let q  = "UPDATE category_2 SET  description_cat2 = (?)  WHERE id_c2 = (?) ;"
                                         result <- withConn $ \conn -> execute conn q ((name_category_2 cat2), (id_category_2 cat2))
-                                        return $ case result of
-                                                1        ->  Right () 
-                                                0        ->  Left DataErrorPostgreSQL
-                                False -> return $ Left AccessErrorAdmin
-                        Left err -> return $ Left UserErrorFindBySession
+                                        case result of
+                                                1        ->  do
+                                                                Log.logIn Log.Debug $ "editing user category2!"  ++ (entityToText  cat2) -- log
+                                                                return $ Right () 
+                                                0        ->  do
+                                                                Log.logIn Log.Error $ "Error create category2" ++ (errorText DataErrorPostgreSQL)
+                                                                return $ Left DataErrorPostgreSQL
+                                False -> do
+                                        Log.logIn Log.Error $ "Error create category2" ++ (errorText AccessErrorAdmin)
+                                        return $ Left AccessErrorAdmin
+                        Left err -> do
+                                Log.logIn Log.Error $ "Error create category2" ++ (errorText UserErrorFindBySession)
+                                return $ Left UserErrorFindBySession
        
 editing sess (EntCategory (CatCategory3 cat3))                 = do
                 access <-  findUserBySession sess
@@ -78,11 +111,19 @@ editing sess (EntCategory (CatCategory3 cat3))                 = do
                                 True -> do
                                                 let q  = "UPDATE category_3 SET  description_cat3 = (?)  WHERE id_c3 = (?) ;"
                                                 result <- withConn $ \conn -> execute conn q ((name_category_3 cat3), (id_category_3 cat3))
-                                                return $ case result of
-                                                    1        ->  Right () 
-                                                    0        ->  Left DataErrorPostgreSQL
-                                False -> return $ Left AccessErrorAdmin
-                        Left err -> return $ Left UserErrorFindBySession
+                                                case result of
+                                                    1        ->  do
+                                                                Log.logIn Log.Debug $ "editing user category3!"  ++ (entityToText  cat3) -- log
+                                                                return $ Right () 
+                                                    0        ->  do
+                                                                Log.logIn Log.Error $ "Error create category3" ++ (errorText DataErrorPostgreSQL)
+                                                                return $ Left DataErrorPostgreSQL
+                                False -> do
+                                        Log.logIn Log.Error $ "Error create category3" ++ (errorText AccessErrorAdmin)
+                                        return $ Left AccessErrorAdmin
+                        Left err -> do
+                                Log.logIn Log.Error $ "Error create category3" ++ (errorText UserErrorFindBySession)
+                                return $ Left UserErrorFindBySession
         
 editing sess ( EntComment  com )                 = do
                 let q  = "UPDATE comments SET  element_comment.text_comments = (?) \
@@ -95,9 +136,13 @@ editing sess ( EntComment  com )                 = do
                                                                  ,  (news_id_comments com)
                                                                  ,  (users_id_comments com)
                                                                  , (id_comments com))
-                return $ case result of
-                        1        ->  Right () 
-                        0        ->  Left DataErrorPostgreSQL
+                case result of
+                        1        ->  do
+                                        Log.logIn Log.Debug $ "editing user comment!"  ++ (entityToText  com) -- log
+                                        return $ Right () 
+                        0        ->  do
+                                        Log.logIn Log.Error $ "Error create comment" ++ (errorText DataErrorPostgreSQL)
+                                        return $ Left DataErrorPostgreSQL
                        
 
 editing sess (EntDraft    draft )                 = do
@@ -123,11 +168,19 @@ editing sess (EntDraft    draft )                 = do
                                                         ,  (short_name draft)
                                                         ,  (id_draft draft)
                                                         ,  (id_user user))
-                                                return $ case result of
-                                                        1        ->  Right () 
-                                                        0        ->  Left DataErrorPostgreSQL
-                                False -> return $ Left AccessErrorAdmin
-                        Left err -> return $ Left UserErrorFindBySession
+                                                case result of
+                                                        1        ->  do
+                                                                Log.logIn Log.Debug $ "editing user draft!"  ++ (entityToText  draft) -- log
+                                                                return $ Right () 
+                                                        0        ->  do
+                                                                Log.logIn Log.Error $ "Error create draft" ++ (errorText DataErrorPostgreSQL)
+                                                                return $ Left DataErrorPostgreSQL
+                                False -> do
+                                        Log.logIn Log.Error $ "Error create draft" ++ (errorText AccessErrorAdmin)
+                                        return $ Left AccessErrorAdmin
+                        Left err -> do
+                                Log.logIn Log.Error $ "Error create draft" ++ (errorText UserErrorFindBySession)
+                                return $ Left UserErrorFindBySession
         
 editing sess ( EntNews     news)                 = do
         
@@ -148,9 +201,13 @@ editing sess ( EntNews     news)                 = do
                          ,  (other_photo_url_news news)
                          ,  (short_name_news news)
                          ,  (id_news news))
-        return $ case result of
-            1        ->  Right () 
-            0        ->  Left DataErrorPostgreSQL
+        case result of
+            1        ->  do
+                        Log.logIn Log.Debug $ "editing user news!"  ++ (entityToText  news) -- log
+                        return $  Right () 
+            0        ->  do
+                        Log.logIn Log.Error $ "Error create category" ++ (errorText DataErrorPostgreSQL)
+                        return $  Left DataErrorPostgreSQL
 
 editing sess (EntUser    user )                 = do
         access <-  findUserBySession sess
@@ -177,10 +234,18 @@ editing sess (EntUser    user )                 = do
                                                 ,  (authAdmin user)
                                                 ,  (authAuthor user)
                                                 ,  (id_user user))
-                                        return $ case result of
-                                                1        ->  Right () 
-                                                0        ->  Left DataErrorPostgreSQL
+                                        case result of
+                                                1        ->  do
+                                                                Log.logIn Log.Debug $ "editing user user!"  ++ (entityToText  user) -- log
+                                                                return $ Right () 
+                                                0        ->  do
+                                                                Log.logIn Log.Error $ "Error create user" ++ (errorText DataErrorPostgreSQL)
+                                                                return $ Left DataErrorPostgreSQL
         
-                                False -> return $ Left AccessErrorAdmin
-                Left err -> return $ Left UserErrorFindBySession
+                                False -> do
+                                        Log.logIn Log.Error $ "Error create user" ++ (errorText AccessErrorAdmin)
+                                        return $ Left AccessErrorAdmin
+                Left err -> do
+                        Log.logIn Log.Error $ "Error create user" ++ (errorText UserErrorFindBySession)
+                        return $ Left UserErrorFindBySession
       

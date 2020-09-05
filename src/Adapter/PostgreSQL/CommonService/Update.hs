@@ -1,4 +1,4 @@
-module Adapter.PostgreSQL.CommonService.Updeit where
+module Adapter.PostgreSQL.CommonService.Update where
 
 import  Domain.ImportEntity 
 import  Adapter.PostgreSQL.Common
@@ -10,9 +10,10 @@ import Data.Text
 import qualified Data.ByteString.Lazy as B
 import Domain.Service.Auth 
 import Domain.Service.CommonService 
+import qualified Logging.ImportLogging as Log
 
-updeit  :: (PG r m, CommonService m) => SessionId -> Int  -> m (Either Error ())
-updeit sess idD  = do
+update  :: (PG r m, CommonService m) => SessionId -> Int  -> m (Either Error ())
+update sess idD  = do
         access <-  findUserBySession sess
         case access of
             Right users -> do      
@@ -24,7 +25,9 @@ updeit sess idD  = do
                                 Right (EntDraft draft)  -> do
                                         newsResult <- getOne  sess  ("news" :: Text)  (news_id_draft draft)
                                         case newsResult of
-                                                Left err -> return $ Left NotResearchNews
+                                                Left err -> do
+                                                                Log.logIn Log.Error $ "Error remove category3" ++ (errorText DataErrorPostgreSQL)
+                                                                return $ Left NotResearchNews
                                                 Right (EntNews news) -> do
                                                         let newNews = News       (id_news news)
                                                                 (data_create_draft draft)
@@ -38,10 +41,18 @@ updeit sess idD  = do
                                                                 (comments news)
                                                                 (tegs news)
                                                         case (id_user users) == (id_user $ user $ authors news) of
-                                                                True -> editing sess ( EntNews     newNews) 
-                                                                False ->  return $ Left AccessErrorAuthor 
-                    False -> return $ Left AccessErrorAuthor
-            Left err -> return $ Left UserErrorFindBySession
+                                                                True  ->  do
+                                                                        Log.logIn Log.Debug $ "update can take "  
+                                                                        editing sess ( EntNews     newNews) 
+                                                                False ->  do
+                                                                        Log.logIn Log.Error $ "Error update " ++ (errorText DataErrorPostgreSQL)
+                                                                        return $ Left AccessErrorAuthor 
+                    False -> do
+                                Log.logIn Log.Error $ "Error update " ++ (errorText DataErrorPostgreSQL)
+                                return $ Left AccessErrorAuthor
+            Left err -> do
+                        Log.logIn Log.Error $ "Error update " ++ (errorText DataErrorPostgreSQL)
+                        return $ Left UserErrorFindBySession
                                                     
                                     
                                 --                 authorResult <-  getOne  sess  ("author" :: Text) idD 
