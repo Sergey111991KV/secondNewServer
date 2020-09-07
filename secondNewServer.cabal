@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 4d5f7298e670d52d84963fcdac690d80e00d1258c267662b8bd6b82cf702b775
+-- hash: b5889a1b001a0d87705d6209b2a47e6c20e87b0b5c4288bbcc5a0696a1330436
 
 name:           secondNewServer
 version:        0.1.0.0
@@ -43,7 +43,6 @@ library
       Adapter.PostgreSQL.CommonService.Сreate
       Adapter.PostgreSQL.FilterService.FilterService
       Adapter.PostgreSQL.ImportPostgres
-      Adapter.PostgreSQL.SearchIn.SearchIn
       Adapter.PostgreSQL.SortedOfService.SortedOfService
       Config
       Domain.ImportEntity
@@ -52,7 +51,6 @@ library
       Domain.Service.Auth
       Domain.Service.CommonService
       Domain.Service.FilterService
-      Domain.Service.SearchIn
       Domain.Service.SortedOfService
       Domain.Types.Auth
       Domain.Types.Author
@@ -160,6 +158,8 @@ test-suite secondNewServer-test
       Adapter.HTTP.API.AuthSpec
       Adapter.HTTP.Fixture
       Adapter.PostgreSQL.Auth.AuthSpec
+      Adapter.PostgreSQL.CommonService.CreateSpec
+      Adapter.PostgreSQL.TestHelpPostgres
       Domain.Service.AuthSpec
       Fixture
       Paths_secondNewServer

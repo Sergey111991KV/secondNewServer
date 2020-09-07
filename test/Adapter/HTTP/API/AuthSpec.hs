@@ -27,22 +27,11 @@ spec = do
         with (app wrongTakenFixture ) $ do
             it "should not return user " $  
                 get "/api/auth/wwww/wwww"  `shouldRespondWith` 400 
-    -- describe "GET /api/auth/:password/:login if login and password true" $ do
-    --     let rightTakenFixture = emptyFixture { _findUsers = \"3456ABCDefgh" "pasha@test.com"  -> return $  Right user }
-    --     with (app rightTakenFixture ) $ do
-    --         it "should return user as login and password true" $ 
-    --             get "/api/auth/3456ABCDefgh/pasha@test.com"  `shouldRespondWith` 200 
-            
-                     
+    describe "GET /api/auth/:password/:login if login and password true" $ do
+        let rightTakenFixture = emptyFixture { _findUsers = \"3456ABCDefgh" "pasha@test.com"  -> return $  Right user ,
+                    _newSession = \user ->  return $ (SessionId "sId")  }
+        with (app rightTakenFixture ) $ do
+            it "should return user as login and password true" $ 
+                get "/api/auth/3456ABCDefgh/pasha@test.com"  `shouldRespondWith` 200 
+   
 
-
--- import Text.StringRandom
--- import Logging.LogMonad
--- import Logging.Logging
--- import qualified Config as Config
-
-
--- type Path = ByteString
--- type Body = ByteString
--- get, options, delete :: Path -> WaiSession SResponse
--- post, put, patch :: Path -> Body -> WaiSession SResponse

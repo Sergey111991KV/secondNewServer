@@ -1,1 +1,1 @@
-FailureReport {failureReportSeed = 863850165, failureReportMaxSuccess = 100, failureReportMaxSize = 100, failureReportMaxDiscardRatio = 10, failureReportPaths = [(["Adapter.HTTP.API.Auth","GET /api/auth/:password/:login if login and password true"],"should return user as login and password true")]}
+FailureReport {failureReportSeed = 863850165, failureReportMaxSuccess = 100, failureReportMaxSize = 100, failureReportMaxDiscardRatio = 10, failureReportPaths = [(["Adapter.PostgreSQL.CommonService.Create","create"],"should create user  if the user already right")]}

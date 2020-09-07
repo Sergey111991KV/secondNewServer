@@ -14,7 +14,7 @@ import Control.Monad.Catch (MonadThrow, MonadCatch)
 import qualified Prelude as Prelude 
 import Database.PostgreSQL.Simple.Types
 import Data.Time.LocalTime
-import System.IO.Unsafe
+-- import System.IO.Unsafe
 import qualified Data.Attoparsec.ByteString.Char8 as A
 import Domain.Parse.ParsePostgresTypes as TT
 import qualified Text.Parsec as Parsec
@@ -68,9 +68,6 @@ instance FilterService App where
         filterName          =   PG.filterName
         filterContent      =   PG.filterContent
 
--- instance SearchIn App where
---                 searchInContent =  PG.searchInEntyty
---                 searchInEntyty  =  PG.searchInEntyty
 
 withState :: Config.Config -> (Int -> State -> IO ()) -> IO ()
 withState config action = do
