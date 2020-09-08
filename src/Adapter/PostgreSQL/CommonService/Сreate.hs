@@ -12,7 +12,6 @@ import Domain.Service.Auth
 import qualified Logging.ImportLogging as Log
 
 
-
 create  :: PG r m => SessionId -> Entity  -> m (Either Error ())
 create sess (EntAuthor  auth)  = do
         access <-  findUserBySession sess
@@ -20,8 +19,8 @@ create sess (EntAuthor  auth)  = do
                         Right users -> do      
                                 case (authAdmin users) of
                                         True -> do
-                                                let q = "INSERT INTO author (id_author, description_author, id_user) VALUES (?,?,?);"
-                                                result <- withConn $ \conn -> execute conn q ((id_author auth), (description auth), (id_user $ user auth) )
+                                                let q = "INSERT INTO author (description_author, id_user) VALUES (?,?,?);"
+                                                result <- withConn $ \conn -> execute conn q ((description auth), (id_user $ user auth) )
                                                 case result of
                                                         1        -> do
                                                                 Log.logIn Log.Debug $ "create author good!"  ++ (entityToText  auth) -- log
@@ -38,8 +37,12 @@ create sess (EntUser  us)  = do
                         Right user -> do      
                                 case (authAdmin user) of
                                         True -> do
-                                                let q = "INSERT INTO user_blog  VALUES (?,?,?,?,?,?,?,?,?);"
-                                                result <- withConn $ \conn -> execute conn q us
+                                                let q = "INSERT INTO user_blog (name_user, last_name_user, login, password  \
+                                                \ , avatar, data_create_u, admini, author) VALUES (?,?,?,?,?,?,?,?);"
+                                                result <- withConn $ \conn -> execute conn q ((nameU us), (lastName us), (authLogin us), (authPassword us), (avatar us), (dataCreate us), (authAdmin us), (authAuthor us))  
+                                                -- `catch` \(e :: SqlError) -> do
+                                                        -- return 2  -- exeption))
+                                                               
                                                 case result of
                                                         1        ->  do
                                                                 Log.logIn Log.Debug $ "create user user!"  ++ (entityToText  us) -- log
@@ -47,6 +50,7 @@ create sess (EntUser  us)  = do
                                                         0        ->  do
                                                                 Log.logIn Log.Error $ "Error create user" ++ (errorText DataErrorPostgreSQL) 
                                                                 return $ Left DataErrorPostgreSQL
+
                                         False -> return $ Left AccessErrorAdmin
                         Left err -> return $ Left UserErrorFindBySession
        

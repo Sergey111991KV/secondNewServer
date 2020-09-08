@@ -33,8 +33,9 @@ spec = beforeAll initDB $ do
             user <- randomUser
             runTestApp $ do
               s <- newSession userCreateAdmin
-              val <-  create s (EntUser user)
+              val <-  create s (EntUser userCreateAdmin)
               liftIO $ val `shouldBe` Right ()
+
   -- describe "create author" $ do
   --   it "should not create as session is fall "  $ do
   --           let s = SessionId ""

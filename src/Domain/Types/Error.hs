@@ -13,6 +13,7 @@ data Error =  AccessError
             | DataErrorPostgreSQL
             | AccessErrorAdmin
             | AccessErrorAuthor
+            | SQLExeptionError
             | UserErrorFindBySession deriving (Eq, Ord, Read, Show, Generic)
 
 errorString :: Error ->  String
@@ -26,6 +27,7 @@ errorString err
         | err == DataErrorPostgreSQL = "DataErrorPostgreSQL"
         | err == AccessErrorAdmin = "AccessErrorAdmin"
         | err == AccessErrorAuthor = "AccessErrorAuthor"
+        | err == SQLExeptionError = "SQLExeptionError"
         | err == UserErrorFindBySession = "UserErrorFindBySession"
 
 errorText :: Error ->  Text
@@ -39,4 +41,5 @@ errorText err
         | err == DataErrorPostgreSQL = "DataErrorPostgreSQL"
         | err == AccessErrorAdmin = "AccessErrorAdmin"
         | err == AccessErrorAuthor = "AccessErrorAuthor"
+        | err == SQLExeptionError = "SQLExeptionError"
         | err == UserErrorFindBySession = "UserErrorFindBySession"
