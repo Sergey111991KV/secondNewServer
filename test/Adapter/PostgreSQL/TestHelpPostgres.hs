@@ -7,6 +7,7 @@ import Database.PostgreSQL.Simple
 import Adapter.PostgreSQL.Common
 import Text.StringRandom
 import qualified Prelude as Prelude
+import System.Random
 
 import Domain.ImportService
 import Domain.ImportEntity 
@@ -78,5 +79,86 @@ randomUser = do
   lastName <- stringRandomIO "[A-Za-z0]{16}"
   login <- stringRandomIO "[A-Za-z0]{16}"
   password <- stringRandomIO "[A-Za-z0]{16}"
-  return $ User 26 name lastName login password "avatar" time True True  
+  idU <- getStdRandom (randomR (1,1000000))
+  return $ User idU name lastName login password "avatar" time True True  
+
+-- randomUser :: IO Author
+-- randomUser = do
+--   let time = ( Prelude.read "2011-11-19 18:28:52.607875 UTC" ) :: UTCTime
+--   name <- stringRandomIO "[A-Za-z0]{16}"
+--   lastName <- stringRandomIO "[A-Za-z0]{16}"
+--   login <- stringRandomIO "[A-Za-z0]{16}"
+--   password <- stringRandomIO "[A-Za-z0]{16}"
+--   idU <- getStdRandom (randomR (1,1000000))
+--   return $ User idU name lastName login password "avatar" time True True  
+
+-- randomUser :: IO Category1
+-- randomUser = do
+--   let time = ( Prelude.read "2011-11-19 18:28:52.607875 UTC" ) :: UTCTime
+--   name <- stringRandomIO "[A-Za-z0]{16}"
+--   lastName <- stringRandomIO "[A-Za-z0]{16}"
+--   login <- stringRandomIO "[A-Za-z0]{16}"
+--   password <- stringRandomIO "[A-Za-z0]{16}"
+--   idU <- getStdRandom (randomR (1,1000000))
+--   return $ User idU name lastName login password "avatar" time True True  
+
+-- randomUser :: IO Category2
+-- randomUser = do
+--   let time = ( Prelude.read "2011-11-19 18:28:52.607875 UTC" ) :: UTCTime
+--   name <- stringRandomIO "[A-Za-z0]{16}"
+--   lastName <- stringRandomIO "[A-Za-z0]{16}"
+--   login <- stringRandomIO "[A-Za-z0]{16}"
+--   password <- stringRandomIO "[A-Za-z0]{16}"
+--   idU <- getStdRandom (randomR (1,1000000))
+--   return $ User idU name lastName login password "avatar" time True True 
+  
+-- randomUser :: IO Category3
+-- randomUser = do
+--   let time = ( Prelude.read "2011-11-19 18:28:52.607875 UTC" ) :: UTCTime
+--   name <- stringRandomIO "[A-Za-z0]{16}"
+--   lastName <- stringRandomIO "[A-Za-z0]{16}"
+--   login <- stringRandomIO "[A-Za-z0]{16}"
+--   password <- stringRandomIO "[A-Za-z0]{16}"
+--   idU <- getStdRandom (randomR (1,1000000))
+--   return $ User idU name lastName login password "avatar" time True True 
+  
+--   randomUser :: IO Comment
+-- randomUser = do
+--   let time = ( Prelude.read "2011-11-19 18:28:52.607875 UTC" ) :: UTCTime
+--   name <- stringRandomIO "[A-Za-z0]{16}"
+--   lastName <- stringRandomIO "[A-Za-z0]{16}"
+--   login <- stringRandomIO "[A-Za-z0]{16}"
+--   password <- stringRandomIO "[A-Za-z0]{16}"
+--   idU <- getStdRandom (randomR (1,1000000))
+--   return $ User idU name lastName login password "avatar" time True True  
+
+--   randomUser :: IO Draft
+-- randomUser = do
+--   let time = ( Prelude.read "2011-11-19 18:28:52.607875 UTC" ) :: UTCTime
+--   name <- stringRandomIO "[A-Za-z0]{16}"
+--   lastName <- stringRandomIO "[A-Za-z0]{16}"
+--   login <- stringRandomIO "[A-Za-z0]{16}"
+--   password <- stringRandomIO "[A-Za-z0]{16}"
+--   idU <- getStdRandom (randomR (1,1000000))
+--   return $ User idU name lastName login password "avatar" time True True  
+
+--   randomUser :: IO News
+-- randomUser = do
+--   let time = ( Prelude.read "2011-11-19 18:28:52.607875 UTC" ) :: UTCTime
+--   name <- stringRandomIO "[A-Za-z0]{16}"
+--   lastName <- stringRandomIO "[A-Za-z0]{16}"
+--   login <- stringRandomIO "[A-Za-z0]{16}"
+--   password <- stringRandomIO "[A-Za-z0]{16}"
+--   idU <- getStdRandom (randomR (1,1000000))
+--   return $ User idU name lastName login password "avatar" time True True  
+
+-- randomUser :: IO Teg
+-- randomUser = do
+--   let time = ( Prelude.read "2011-11-19 18:28:52.607875 UTC" ) :: UTCTime
+--   name <- stringRandomIO "[A-Za-z0]{16}"
+--   lastName <- stringRandomIO "[A-Za-z0]{16}"
+--   login <- stringRandomIO "[A-Za-z0]{16}"
+--   password <- stringRandomIO "[A-Za-z0]{16}"
+--   idU <- getStdRandom (randomR (1,1000000))
+--   return $ User idU name lastName login password "avatar" time True True  
    

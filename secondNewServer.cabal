@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: b5889a1b001a0d87705d6209b2a47e6c20e87b0b5c4288bbcc5a0696a1330436
+-- hash: 56db2827f2d96dc4acb981ba89bcfdfea70ff142078b1532efaefc6e580ef451
 
 name:           secondNewServer
 version:        0.1.0.0
@@ -94,6 +94,7 @@ library
     , postgresql-libpq >=0.9.4.2
     , postgresql-simple
     , postgresql-simple-migration
+    , random
     , resource-pool
     , scotty
     , string-random
@@ -136,6 +137,7 @@ executable secondNewServer-exe
     , postgresql-libpq >=0.9.4.2
     , postgresql-simple
     , postgresql-simple-migration
+    , random
     , resource-pool
     , scotty
     , secondNewServer
@@ -159,6 +161,13 @@ test-suite secondNewServer-test
       Adapter.HTTP.Fixture
       Adapter.PostgreSQL.Auth.AuthSpec
       Adapter.PostgreSQL.CommonService.CreateSpec
+      Adapter.PostgreSQL.CommonService.EditingSpec
+      Adapter.PostgreSQL.CommonService.GetAllSpec
+      Adapter.PostgreSQL.CommonService.GetOneSpec
+      Adapter.PostgreSQL.CommonService.RemoveSpec
+      Adapter.PostgreSQL.CommonService.UpdateSpec
+      Adapter.PostgreSQL.FilterService.FilterServiceSpec
+      Adapter.PostgreSQL.SortedOfService.SortedOfServiceSpec
       Adapter.PostgreSQL.TestHelpPostgres
       Domain.Service.AuthSpec
       Fixture
@@ -190,6 +199,7 @@ test-suite secondNewServer-test
     , postgresql-simple
     , postgresql-simple-migration
     , process
+    , random
     , resource-pool
     , scotty
     , secondNewServer
