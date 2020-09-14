@@ -12,6 +12,7 @@ data Error =  AccessError
             | NotResearchNews
             | DataErrorPostgreSQL
             | AccessErrorAdmin
+            | ErrorCommentToUser
             | AccessErrorAuthor
             | SQLExeptionError
             | UserErrorFindBySession deriving (Eq, Ord, Read, Show, Generic)
@@ -24,6 +25,7 @@ errorString err
         | err == NotResearchDraft =  "NotResearchDraft"
         | err == NotResearchAuthor =  "NotResearchAuthor"
         | err == NotResearchNews =  "NotResearchNews"
+        | err == ErrorCommentToUser =  "ErrorCommentToUser"
         | err == DataErrorPostgreSQL = "DataErrorPostgreSQL"
         | err == AccessErrorAdmin = "AccessErrorAdmin"
         | err == AccessErrorAuthor = "AccessErrorAuthor"
@@ -38,6 +40,7 @@ errorText err
         | err == NotResearchDraft =  "NotResearchDraft"
         | err == NotResearchAuthor =  "NotResearchAuthor"
         | err == NotResearchNews =  "NotResearchNews"
+        | err == ErrorCommentToUser =  "ErrorCommentToUser"
         | err == DataErrorPostgreSQL = "DataErrorPostgreSQL"
         | err == AccessErrorAdmin = "AccessErrorAdmin"
         | err == AccessErrorAuthor = "AccessErrorAuthor"

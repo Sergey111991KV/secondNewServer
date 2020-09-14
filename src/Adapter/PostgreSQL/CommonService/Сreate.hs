@@ -19,7 +19,7 @@ create sess (EntAuthor  auth)  = do
                         Right users -> do      
                                 case (authAdmin users) of
                                         True -> do
-                                                let q = "INSERT INTO author (description_author, id_user) VALUES (?,?,?);"
+                                                let q = "INSERT INTO author (description_author, id_user_a) VALUES (?,?);"
                                                 result <- withConn $ \conn -> execute conn q ((description auth), (id_user $ user auth) )
                                                 case result of
                                                         1        -> do
@@ -61,8 +61,8 @@ create sess (EntCategory (CatCategory1 cat))  = do
                         Right user -> do      
                                 case (authAdmin user) of
                                         True -> do
-                                                        let q = "INSERT INTO category_1 (id_c1, description_cat1) VALUES (?,?);"
-                                                        result <- withConn $ \conn -> execute conn q (id_category_1 cat, name_category_1 cat )
+                                                        let q = "INSERT INTO category_1 (description_cat1) VALUES (?);"
+                                                        result <- withConn $ \conn -> execute conn q [name_category_1 cat]
                                                         case result of
                                                             1        ->  do
                                                                         Log.logIn Log.Debug $ "create user category!"  ++ (entityToText  cat) -- log
@@ -83,8 +83,8 @@ create sess (EntCategory (CatCategory2 cat))  = do
                                 Right user -> do      
                                         case (authAdmin user) of
                                                 True -> do
-                                                                let q = "INSERT INTO category_2 (id_c2, description_cat2, category_1_id) VALUES (?,?,?);"
-                                                                result <- withConn $ \conn -> execute conn q (id_category_2 cat, name_category_2 cat , (id_category_1 $ category1 cat))
+                                                                let q = "INSERT INTO category_2 (description_cat2, category_1_id) VALUES (?,?);"
+                                                                result <- withConn $ \conn -> execute conn q (name_category_2 cat , (id_category_1 $ category1 cat))
                                                                 case result of
                                                                                 1        ->  do
                                                                                         Log.logIn Log.Debug $ "create user category!"  ++ (entityToText  cat) -- log
@@ -105,8 +105,8 @@ create sess (EntCategory (CatCategory3 cat))  = do
                                 Right user -> do      
                                         case (authAdmin user) of
                                                 True -> do
-                                                                let q = "INSERT INTO category_3 (id_c3, description_cat3, category_2_id) VALUES (?,?,?);"
-                                                                result <- withConn $ \conn -> execute conn q (id_category_3 cat, name_category_3 cat , (id_category_2 $ category2 cat))
+                                                                let q = "INSERT INTO category_3 (description_cat3, category_2_id) VALUES (?,?);"
+                                                                result <- withConn $ \conn -> execute conn q (name_category_3 cat , (id_category_2 $ category2 cat))
                                                                 case result of
                                                                         1        ->  do
                                                                                 Log.logIn Log.Debug $ "create user category!"  ++ (entityToText  cat) -- log
@@ -121,12 +121,20 @@ create sess (EntCategory (CatCategory3 cat))  = do
                                         Log.logIn Log.Error $ "Error create category" ++ (errorText UserErrorFindBySession) 
                                         return $ Left UserErrorFindBySession
 
+                                        -- ////////////
+                                        
 create sess (EntComment  com)                 = do
-        let q = "INSERT INTO comments (element_comment) VALUES((?,?,?,?,?));"
-        result <- withConn $ \conn -> execute conn q com
-        return $ case result of
-            1        ->  Right () 
-            0        ->  Left DataErrorPostgreSQL
+                access <-  findUserBySession sess
+                case access of
+                        Right user -> do    
+                                let q = "INSERT INTO comments (element_comment) VALUES((?,?,?,?,?));"
+                                result <- withConn $ \conn -> execute conn q com
+                                return $ case result of
+                                        1        ->  Right () 
+                                        0        ->  Left DataErrorPostgreSQL
+                        Left err -> do
+                                Log.logIn Log.Error $ "Error create category" ++ (errorText UserErrorFindBySession) 
+                                return $ Left UserErrorFindBySession
 
 create sess (EntDraft    draft)               = do
                 access <-  findUserBySession sess
@@ -144,8 +152,8 @@ create sess (EntDraft    draft)               = do
                                                                                 Log.logIn Log.Error $ "Error create draft" ++ (errorText UserErrorFindBySession)
                                                                                 return $  Left DataErrorPostgreSQL
                                                 False -> do
-                                                        Log.logIn Log.Error $ "Error create draft" ++ (errorText UserErrorFindBySession)
-                                                        return $ Left AccessErrorAdmin
+                                                        Log.logIn Log.Error $ "Error create draft" ++ (errorText AccessErrorAuthor)
+                                                        return $ Left AccessErrorAuthor
                                 Left err -> do
                                         Log.logIn Log.Error $ "Error create draft" ++ (errorText UserErrorFindBySession) 
                                         return $ Left UserErrorFindBySession
@@ -156,7 +164,7 @@ create sess (EntTeg      teg)                 = do
                                 Right user -> do      
                                         case (authAdmin user) of
                                                 True -> do
-                                                                let q = "INSERT INTO tags (element_tags) VALUES(?);"
+                                                                let q = "INSERT INTO tags (element_tags) VALUES((?,?));"
                                                                 result <- withConn $ \conn -> execute conn q teg
                                                                 case result of
                                                                         1        ->  do
@@ -194,11 +202,11 @@ create sess (EntNews     news)                = do
                                                                                                                                 Log.logIn Log.Debug $ "create news!"  ++ (entityToText  news) -- log
                                                                                                                                 return $  Right () 
                                                                                                                         0        ->  do
-                                                                                                                                Log.logIn Log.Error $ "Error create news" ++ (errorText UserErrorFindBySession)
+                                                                                                                                Log.logIn Log.Error $ "Error create news" ++ (errorText DataErrorPostgreSQL)
                                                                                                                                 return $  Left DataErrorPostgreSQL
                                                 False -> do
-                                                                Log.logIn Log.Error $ "Error create news" ++ (errorText UserErrorFindBySession)
-                                                                return $ Left AccessErrorAdmin
+                                                                Log.logIn Log.Error $ "Error create news" ++ (errorText AccessErrorAuthor)
+                                                                return $ Left AccessErrorAuthor
                                 Left err -> do
                                         Log.logIn Log.Error $ "Error create news" ++ (errorText UserErrorFindBySession) 
-                                        return $ Left AccessErrorAdmin
+                                        return $ Left UserErrorFindBySession

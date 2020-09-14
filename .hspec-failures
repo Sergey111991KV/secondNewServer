@@ -1,1 +1,1 @@
-FailureReport {failureReportSeed = 863850165, failureReportMaxSuccess = 100, failureReportMaxSize = 100, failureReportMaxDiscardRatio = 10, failureReportPaths = [(["Adapter.PostgreSQL.CommonService.Create","create user"],"should create user ")]}
+FailureReport {failureReportSeed = 863850165, failureReportMaxSuccess = 100, failureReportMaxSize = 100, failureReportMaxDiscardRatio = 10, failureReportPaths = []}

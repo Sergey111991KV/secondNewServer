@@ -1,6 +1,6 @@
 module Adapter.PostgreSQL.TestHelpPostgres where
 
-import ClassyPrelude
+import ClassyPrelude 
 import Test.Hspec
 import Data.Time 
 import Database.PostgreSQL.Simple
@@ -8,6 +8,7 @@ import Adapter.PostgreSQL.Common
 import Text.StringRandom
 import qualified Prelude as Prelude
 import System.Random
+import Database.PostgreSQL.Simple.Types 
 
 import Domain.ImportService
 import Domain.ImportEntity 
@@ -82,83 +83,76 @@ randomUser = do
   idU <- getStdRandom (randomR (1,1000000))
   return $ User idU name lastName login password "avatar" time True True  
 
--- randomUser :: IO Author
--- randomUser = do
---   let time = ( Prelude.read "2011-11-19 18:28:52.607875 UTC" ) :: UTCTime
---   name <- stringRandomIO "[A-Za-z0]{16}"
---   lastName <- stringRandomIO "[A-Za-z0]{16}"
---   login <- stringRandomIO "[A-Za-z0]{16}"
---   password <- stringRandomIO "[A-Za-z0]{16}"
---   idU <- getStdRandom (randomR (1,1000000))
---   return $ User idU name lastName login password "avatar" time True True  
+randomAuthor :: IO Author
+randomAuthor = do
+  -- idA      <- getStdRandom (randomR (1,1000000))
+  let time = ( Prelude.read "2011-11-19 18:28:52.607875 UTC" ) :: UTCTime
+  let descrip = "test"
+  let us = (User  2 "Daniel" "Abramov" "daniel11" "qwerty" "avatarDaniel"  time  True True)
+  return $ Author 2 descrip us
 
--- randomUser :: IO Category1
--- randomUser = do
---   let time = ( Prelude.read "2011-11-19 18:28:52.607875 UTC" ) :: UTCTime
---   name <- stringRandomIO "[A-Za-z0]{16}"
---   lastName <- stringRandomIO "[A-Za-z0]{16}"
---   login <- stringRandomIO "[A-Za-z0]{16}"
---   password <- stringRandomIO "[A-Za-z0]{16}"
---   idU <- getStdRandom (randomR (1,1000000))
---   return $ User idU name lastName login password "avatar" time True True  
+randomCategory1 :: IO Category1
+randomCategory1 = do
+    idCat1      <- getStdRandom (randomR (1,1000000))
+    let name = "test"
+    return $ Category1 idCat1  name 
 
--- randomUser :: IO Category2
--- randomUser = do
---   let time = ( Prelude.read "2011-11-19 18:28:52.607875 UTC" ) :: UTCTime
---   name <- stringRandomIO "[A-Za-z0]{16}"
---   lastName <- stringRandomIO "[A-Za-z0]{16}"
---   login <- stringRandomIO "[A-Za-z0]{16}"
---   password <- stringRandomIO "[A-Za-z0]{16}"
---   idU <- getStdRandom (randomR (1,1000000))
---   return $ User idU name lastName login password "avatar" time True True 
+randomCategory2 :: IO Category2
+randomCategory2 = do
+        let cat1 = Category1 4 "Health"
+        idCat2      <- getStdRandom (randomR (1,1000000))
+        let name = "test"
+        return $ Category2 idCat2  name cat1
   
--- randomUser :: IO Category3
--- randomUser = do
---   let time = ( Prelude.read "2011-11-19 18:28:52.607875 UTC" ) :: UTCTime
---   name <- stringRandomIO "[A-Za-z0]{16}"
---   lastName <- stringRandomIO "[A-Za-z0]{16}"
---   login <- stringRandomIO "[A-Za-z0]{16}"
---   password <- stringRandomIO "[A-Za-z0]{16}"
---   idU <- getStdRandom (randomR (1,1000000))
---   return $ User idU name lastName login password "avatar" time True True 
+randomCategory3 :: IO Category3
+randomCategory3 = do
+  let cat2 =  (Category2 7 "Meditation" (Category1 4 "Health"))
+  idCat3      <- getStdRandom (randomR (1,1000000))
+  let name = "test"
+  return $ Category3 idCat3 name cat2
   
---   randomUser :: IO Comment
--- randomUser = do
---   let time = ( Prelude.read "2011-11-19 18:28:52.607875 UTC" ) :: UTCTime
---   name <- stringRandomIO "[A-Za-z0]{16}"
---   lastName <- stringRandomIO "[A-Za-z0]{16}"
---   login <- stringRandomIO "[A-Za-z0]{16}"
---   password <- stringRandomIO "[A-Za-z0]{16}"
---   idU <- getStdRandom (randomR (1,1000000))
---   return $ User idU name lastName login password "avatar" time True True  
 
---   randomUser :: IO Draft
--- randomUser = do
---   let time = ( Prelude.read "2011-11-19 18:28:52.607875 UTC" ) :: UTCTime
---   name <- stringRandomIO "[A-Za-z0]{16}"
---   lastName <- stringRandomIO "[A-Za-z0]{16}"
---   login <- stringRandomIO "[A-Za-z0]{16}"
---   password <- stringRandomIO "[A-Za-z0]{16}"
---   idU <- getStdRandom (randomR (1,1000000))
---   return $ User idU name lastName login password "avatar" time True True  
 
---   randomUser :: IO News
--- randomUser = do
---   let time = ( Prelude.read "2011-11-19 18:28:52.607875 UTC" ) :: UTCTime
---   name <- stringRandomIO "[A-Za-z0]{16}"
---   lastName <- stringRandomIO "[A-Za-z0]{16}"
---   login <- stringRandomIO "[A-Za-z0]{16}"
---   password <- stringRandomIO "[A-Za-z0]{16}"
---   idU <- getStdRandom (randomR (1,1000000))
---   return $ User idU name lastName login password "avatar" time True True  
+randomComment :: IO Comment
+randomComment = do
+  idcom <- getStdRandom (randomR (1,1000000))
+  let text = "test"
+  let time = ( Prelude.read "2011-11-19 18:28:52.607875 UTC" ) :: UTCTime
+  return $ Comment idcom text time 2 5
 
--- randomUser :: IO Teg
--- randomUser = do
---   let time = ( Prelude.read "2011-11-19 18:28:52.607875 UTC" ) :: UTCTime
---   name <- stringRandomIO "[A-Za-z0]{16}"
---   lastName <- stringRandomIO "[A-Za-z0]{16}"
---   login <- stringRandomIO "[A-Za-z0]{16}"
---   password <- stringRandomIO "[A-Za-z0]{16}"
---   idU <- getStdRandom (randomR (1,1000000))
---   return $ User idU name lastName login password "avatar" time True True  
+
+
+randomDraft :: IO Draft
+randomDraft = do
+  iddraft <- getStdRandom (randomR (1,1000000))
+  let text = "test"
+  let time = ( Prelude.read "2011-11-19 18:28:52.607875 UTC" ) :: UTCTime
+  let mainphoto = "test"
+  let pgArrayText = PGArray ["test 1 other photo", "test 1 other photo2"]
+  let short = "test"
+  return $ Draft iddraft text time 2 mainphoto pgArrayText short  
+
+
+  
+randomNews :: IO News
+randomNews = do
+  idnews <- getStdRandom (randomR (1,1000000))
+  let time = ( Prelude.read "2011-11-19 18:28:52.607875 UTC" ) :: UTCTime
+  let auth = Author 1 "TestAutor1" (User  2 "Daniel" "Abramov" "daniel11" "qwerty" "avatarDaniel"  time  True True)
+  let category = Category3 13 "Meditation in India" (Category2 7 "Meditation" (Category1 4 "Health"))
+  text <- stringRandomIO "[A-Za-z0]{16}"
+  mainPhoto <- stringRandomIO "[A-Za-z0]{16}"
+  let pgArrayText = PGArray ["test 1 other photo", "test 1 other photo2"]
+  shortName <- stringRandomIO "[A-Za-z0]{16}"
+  let pgArrayDraft = PGArray [Draft 2 "test 2 draft" time 1 "test 2 main photo url" pgArrayText "TestDragtForFirstNews"]
+  let pgArrayComment = PGArray [Comment 5 "test comment4" time 1 1]
+  let pgArrayTeg = PGArray [ Teg 7 "Health"]
+  return $ News idnews time auth category text mainPhoto pgArrayText shortName pgArrayDraft pgArrayComment pgArrayTeg
+ 
+randomTeg :: IO Teg
+randomTeg = do
+  idt   <- getStdRandom (randomR (1,1000000))
+  let namet = "test"
+  
+  return $ Teg idt namet
    

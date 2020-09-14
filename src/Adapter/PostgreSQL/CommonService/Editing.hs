@@ -126,24 +126,34 @@ editing sess (EntCategory (CatCategory3 cat3))                 = do
                                 return $ Left UserErrorFindBySession
         
 editing sess ( EntComment  com )                 = do
-                let q  = "UPDATE comments SET  element_comment.text_comments = (?) \
-                        \ , element_comment.data_create_comments = (?) \
-                        \ , element_comment.news_id_comments = (?) \
-                        \ , element_comment.users_id_comments = (?) \
-                        \    WHERE (element_comment).id_comments = (?)  ;"
-                result <- withConn $ \conn -> execute conn q (  (text_comments com)
+                access <-  findUserBySession sess
+                case access of
+                        Right user -> do 
+                                case  (id_user user) == ( toInteger (users_id_comments com)) of
+                                        True -> do
+                                                let q  = "UPDATE comments SET  element_comment.text_comments = (?) \
+                                                \ , element_comment.data_create_comments = (?) \
+                                                \ , element_comment.news_id_comments = (?) \
+                                                \ , element_comment.users_id_comments = (?) \
+                                                \    WHERE (element_comment).id_comments = (?)  ;"
+                                                result <- withConn $ \conn -> execute conn q (  (text_comments com)
                                                                  ,  (data_create_comments com)
                                                                  ,  (news_id_comments com)
                                                                  ,  (users_id_comments com)
                                                                  , (id_comments com))
-                case result of
-                        1        ->  do
-                                        Log.logIn Log.Debug $ "editing user comment!"  ++ (entityToText  com) -- log
-                                        return $ Right () 
-                        0        ->  do
-                                        Log.logIn Log.Error $ "Error create comment" ++ (errorText DataErrorPostgreSQL)
-                                        return $ Left DataErrorPostgreSQL
-                       
+                                                case result of
+                                                        1        ->  do
+                                                                Log.logIn Log.Debug $ "editing user comment!"  ++ (entityToText  com) -- log
+                                                                return $ Right () 
+                                                        0        ->  do
+                                                                Log.logIn Log.Error $ "Error create comment" ++ (errorText DataErrorPostgreSQL)
+                                                                return $ Left DataErrorPostgreSQL
+                                        False -> do
+                                                Log.logIn Log.Error $ "Error create comment" ++ (errorText ErrorCommentToUser)
+                                                return $ Left ErrorCommentToUser
+                        Left err -> do
+                                Log.logIn Log.Error $ "Error create draft" ++ (errorText UserErrorFindBySession)
+                                return $ Left UserErrorFindBySession       
 
 editing sess (EntDraft    draft )                 = do
                 access <-  findUserBySession sess
@@ -161,13 +171,13 @@ editing sess (EntDraft    draft )                 = do
                                                 \ WHERE (elements_draft).id_draft = (?)  and \
                                                 \ (elements_draft).news_id_draft = news.id_news and author.id_author = news.authors_id and author.id_user = (?);"
                                                 result <- withConn $ \conn -> execute conn q    (  (text_draft draft)   
-                                                        ,  (data_create_draft draft)
-                                                        ,  (news_id_draft draft)
-                                                        ,  (main_photo_url draft)
-                                                        ,  (other_photo_url draft)
-                                                        ,  (short_name draft)
-                                                        ,  (id_draft draft)
-                                                        ,  (id_user user))
+                                                                                                ,  (data_create_draft draft)
+                                                                                                ,  (news_id_draft draft)
+                                                                                                ,  (main_photo_url draft)
+                                                                                                ,  (other_photo_url draft)
+                                                                                                ,  (short_name draft)
+                                                                                                ,  (id_draft draft)
+                                                                                                ,  (id_user user))
                                                 case result of
                                                         1        ->  do
                                                                 Log.logIn Log.Debug $ "editing user draft!"  ++ (entityToText  draft) -- log
@@ -176,8 +186,8 @@ editing sess (EntDraft    draft )                 = do
                                                                 Log.logIn Log.Error $ "Error create draft" ++ (errorText DataErrorPostgreSQL)
                                                                 return $ Left DataErrorPostgreSQL
                                 False -> do
-                                        Log.logIn Log.Error $ "Error create draft" ++ (errorText AccessErrorAdmin)
-                                        return $ Left AccessErrorAdmin
+                                        Log.logIn Log.Error $ "Error create draft" ++ (errorText AccessErrorAuthor)
+                                        return $ Left AccessErrorAuthor
                         Left err -> do
                                 Log.logIn Log.Error $ "Error create draft" ++ (errorText UserErrorFindBySession)
                                 return $ Left UserErrorFindBySession
