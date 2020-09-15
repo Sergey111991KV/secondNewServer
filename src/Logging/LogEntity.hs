@@ -33,7 +33,7 @@ takeValueLogging log
                 | log == Logging.LogEntity.Error     = 3
 
 caseOfWriteLogging :: Logging -> LogForFile -> Bool
-caseOfWriteLogging log logConf =  (takeValueLogging log) >= (takeValueLogging logConf)
+caseOfWriteLogging log logConf =  takeValueLogging log >= takeValueLogging logConf
 
 instance ToJSON Logging
 

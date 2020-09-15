@@ -93,16 +93,14 @@ fromPGRow fname parser f (Just bs) = do
 timeToByteStr :: UTCTime -> ByteString
 timeToByteStr = B.pack . formatTime defaultTimeLocale "%Y-%m-%dT%H:%M:%S"
 
-time = ( P.read "1970-01-01 00:00:00.000000 UTC" )::UTCTime
+time = P.read "1970-01-01 00:00:00.000000 UTC" ::UTCTime
 
 timeFromByteString :: Text -> UTCTime
-timeFromByteString  s = case  (timeFromByteString' s) of
-          Nothing -> time
-          Just t  -> zonedTimeToUTC t
+timeFromByteString  s =  maybe time zonedTimeToUTC (timeFromByteString' s)
 
 timeFromByteString' :: Text -> Maybe ZonedTime
 timeFromByteString' s =  parseTimeM True defaultTimeLocale  "%Y" (ClassyPrelude.unpack  s) :: Maybe ZonedTime
 
 
 parseTextToPGArrayText :: [Text] -> PGArray Text
-parseTextToPGArrayText text =  PGArray text
+parseTextToPGArrayText  =  PGArray 

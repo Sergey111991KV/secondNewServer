@@ -5,19 +5,19 @@
 
 packages:
 - completed:
-    hackage: string-random-0.1.0.0@sha256:421a99e3330a23ae664a706be4712c5ca0ff188bbd5d95e8a4a1fbf143365b98,2238
+    hackage: string-random-0.1.3.0@sha256:0de5969191f326616f002f64031ffbad31a9b5d71f9d17e16a005379e0a137f9,2439
     pantry-tree:
-      size: 434
-      sha256: 4092aa6c08612cf9c07a1f1eea0ae3e42b28bac9e621bf491c781859a70bffcd
+      size: 489
+      sha256: 31e80448992dc8642295172aee17de0179ff037c15b4eee4b4050a925430c7bf
   original:
-    hackage: string-random-0.1.0.0
+    hackage: string-random-0.1.3.0
 - completed:
-    hackage: text-time-0.2.0@sha256:ae94071e29a5265f60de19c054a5308cee54a849678fbb8ea8d9657510c87b4c,1757
+    hackage: text-time-0.3.1@sha256:c4301ea47bcb72deb60b0be25cf6f6b693a34a862ea9a8e9bc8b9a750e0857e9,1757
     pantry-tree:
-      size: 637
-      sha256: 086572dbcc5663ab43f658634dcb3b08cc595690fba0a92387eeb7aa72651d6f
+      size: 638
+      sha256: 0f3cc12775c099769901af4708a4ac04cdc9cbca8b22747be0c82c9c916d7e24
   original:
-    hackage: text-time-0.2.0
+    hackage: text-time-0.3.1
 - completed:
     hackage: postgresql-simple-migration-0.1.15.0@sha256:0e24e96908430f5caf9c1c1d9ca7c5c108e4e0409a255e2cbd77e8cd252dbb02,3879
     pantry-tree:
@@ -25,6 +25,13 @@ packages:
       sha256: c2843bfe43b804992bc913f33ec6b2c6cb0fc99c6d931b6ff85894e8aef9a99e
   original:
     hackage: postgresql-simple-migration-0.1.15.0
+- completed:
+    hackage: hindent-5.3.1@sha256:23dc3d423820a1de4a11f54eb87992f2c9fa1b686b2230bb06d1af46edc85c4b,3452
+    pantry-tree:
+      size: 1027
+      sha256: 29ea7cff1847793ca6249158ad919f4bb7095e59067f9750f4ce7051496e03d0
+  original:
+    hackage: hindent-5.3.1
 snapshots:
 - completed:
     size: 531707

@@ -53,10 +53,10 @@ parseDraft = do
   _ <- A.char ','
   sname <- textContent 
   _ <- A.char ')'
-  pure (Draft (P.read $ ClassyPrelude.unpack $ idD) 
+  pure (Draft (P.read $ ClassyPrelude.unpack idD) 
                 (ClassyPrelude.unpack text)  
                 (timeFromByteString dataTime  )
-                (P.read $ ClassyPrelude.unpack $ newId)
+                (P.read $ ClassyPrelude.unpack newId)
                 (ClassyPrelude.unpack mainP) 
                 (parseTextToPGArrayText othrP) 
                 (ClassyPrelude.unpack sname)
@@ -94,7 +94,7 @@ instance ToJSON (PGArray Draft)
 
 deriving instance Generic (PGArray Draft) => Generic (PGArray Draft)
 
-data TestArrayDraft = TestArrayDraft {
+newtype TestArrayDraft = TestArrayDraft {
   arrayd :: PGArray Draft
   } deriving (Show, Generic)
 

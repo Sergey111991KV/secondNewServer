@@ -11,7 +11,7 @@ import Logging.Logging
 import Logging.LogEntity
 
 
-data State = State {
+newtype State = State {
     logStCong :: LogConfig
     }
 

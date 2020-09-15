@@ -27,31 +27,31 @@ sortedNews txt
 
 sortedDate      :: PG r m =>  m [News]           -- дате,
 sortedDate = do
-    let q = fromString $ (ClassyPrelude.init $ impureNonNull getAllNewsSQLText) ++ " ORDER BY data_create_n;"
-    result <- (withConn $ \conn -> query_ conn q  :: IO [News])
-    return  result 
+    let q = fromString $ ClassyPrelude.init (impureNonNull getAllNewsSQLText) ++ " ORDER BY data_create_n;"
+    withConn $ \conn -> query_ conn q  :: IO [News]
+    
 
 
 
 sortedAuthor    :: PG r m =>  m [News]        -- автору (имя по алфавиту),
 sortedAuthor = do
-        let q = fromString $ (ClassyPrelude.init $ impureNonNull getAllNewsSQLText) ++ " ORDER BY description_author;"
-        result <- (withConn $ \conn -> query_ conn q  :: IO [News])
-        return  result 
+        let q = fromString $ ClassyPrelude.init  (impureNonNull getAllNewsSQLText) ++ " ORDER BY description_author;"
+        withConn $ \conn -> query_ conn q  :: IO [News]
+        
 
 
 sortedCategory  :: PG r m =>  m [News] -- по категориям (название по алфавиту), 
 sortedCategory = do
-    let q = fromString $ (ClassyPrelude.init $ impureNonNull getAllNewsSQLText) ++ " ORDER BY description_cat3;"
-    result <- (withConn $ \conn -> query_ conn q  :: IO [News])
-    return  result 
+    let q = fromString $ ClassyPrelude.init (impureNonNull getAllNewsSQLText) ++ " ORDER BY description_cat3;"
+    withConn $ \conn -> query_ conn q  :: IO [News]
+   
 
 
 sortedPhoto     :: PG r m =>  m [News] -- по количеству фотографий
 sortedPhoto = do
-    let q = fromString $ (ClassyPrelude.init $ impureNonNull getAllNewsSQLText) ++ " ORDER BY other_photo_url_n;"
-    result <- (withConn $ \conn -> query_ conn q  :: IO [News])
-    return  result 
+    let q = fromString $ ClassyPrelude.init (impureNonNull getAllNewsSQLText) ++ " ORDER BY other_photo_url_n;"
+    withConn $ \conn -> query_ conn q  :: IO [News]
+     
 
 
 

@@ -31,7 +31,7 @@ parseTeg = do
   _ <- A.char ','
   name_teg <-  textContent
   _ <- A.char ')'
-  pure (Teg (P.read $ ClassyPrelude.unpack $ id_teg) ( ClassyPrelude.unpack name_teg))
+  pure (Teg (P.read $ ClassyPrelude.unpack id_teg) ( ClassyPrelude.unpack name_teg))
 
 
 instance ToField Teg where
@@ -52,7 +52,7 @@ deriving instance Generic (PGArray Teg) => Generic (PGArray Teg)
 
 
 
-data TestArrayTeg = TestArrayTeg {
+newtype TestArrayTeg = TestArrayTeg {
   arrays :: PGArray Teg
   } deriving (Show, Generic)
 

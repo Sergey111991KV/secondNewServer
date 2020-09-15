@@ -2,7 +2,6 @@ module Domain.Types.News where
 
 import Domain.Types.Imports
 import Domain.Types.Author
-import Domain.Types.Imports
 import Domain.Types.Draft
 import Domain.Types.Comment 
 import Domain.Types.Teg 

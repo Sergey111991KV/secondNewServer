@@ -1,8 +1,5 @@
 module Adapter.PostgreSQL.Common where
 
-import Domain.ImportEntity 
-
-
 import Data.Has
 import Data.Pool
 import Data.ByteString
@@ -29,8 +26,8 @@ data Config = Config
   }
 
 withPool :: Config -> (State -> IO a) -> IO a
-withPool cfg action =
-        Control.Monad.Catch.bracket initPool cleanPool action
+withPool cfg  =
+        Control.Monad.Catch.bracket initPool cleanPool 
         where
           initPool = createPool openConn closeConn
                       (configStripeCount cfg)

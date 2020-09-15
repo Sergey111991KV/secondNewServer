@@ -1,4 +1,3 @@
- {- # LANGUAGE NoMonadFailDesugaring # -}
 module Domain.Types.Comment where
 
 import Domain.Types.Imports
@@ -11,7 +10,6 @@ import qualified Data.ByteString.Char8                as B
 import qualified Prelude as P
 import Data.Time.Format
 
-import Data.Time.Format
 
 
 
@@ -64,11 +62,11 @@ parseComment = do
   _ <- A.char ','
   userId <- textContent 
   _ <- A.char ')'
-  pure (Comment (P.read $ ClassyPrelude.unpack $ idC) 
+  pure (Comment (P.read $ ClassyPrelude.unpack idC) 
                 (ClassyPrelude.unpack text)  
                 (timeFromByteString dataC  )
-                (P.read $ ClassyPrelude.unpack $ newId)
-                (P.read $ ClassyPrelude.unpack $ userId)
+                (P.read $ ClassyPrelude.unpack newId)
+                (P.read $ ClassyPrelude.unpack userId)
                 )
 
 
@@ -79,7 +77,7 @@ instance ToJSON (PGArray Comment)
 deriving instance Generic (PGArray Comment) => Generic (PGArray Comment)
 
 
-data TestArrayComment = TestArrayComment {
+newtype TestArrayComment = TestArrayComment {
   array :: PGArray Comment
   } deriving (Show, Generic)
 

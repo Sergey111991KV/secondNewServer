@@ -11,43 +11,30 @@ import Domain.ImportEntity
 import Logging.LogEntity
 import qualified Data.Text.Encoding as T
 import qualified Data.ByteString               as B
+import Control.Monad
 
 import qualified Data.ByteString.Lazy          as BL
 
 toStrict1 :: BL.ByteString -> B.ByteString
 toStrict1 = B.concat . BL.toChunks
 
--- entityToText :: Entity -> Text
--- EntAuthor   Author   | 
--- entityToText   EntCategory Category   | 
--- entityToText  EntComment  Comment  | 
--- entityToText (EntDraft    Draft    |
--- entityToText (EntNews     News)     | 
--- entityToText  (EntUser    User)    | 
--- entityToText  (EntTeg      Teg)
--- entityToText ent = T.decodeUtf8 $ toStrict1 $ encode $ convertFromEntity ent
-
-
 
 writeInLogFile :: FilePath -> Bool -> Text -> IO ()
 writeInLogFile lF bl txt = do
-        case bl of
-            True -> appendFile lF ( ClassyPrelude.unpack txt)
-            False -> return ()
+        when bl $ appendFile lF ( ClassyPrelude.unpack txt)
+       
 
 writeInTerminal :: Bool -> Text -> IO ()
 writeInTerminal bl txt = do
-        case bl of
-                True -> do
-                        ClassyPrelude.putStrLn txt
-                False -> return ()
+        when bl $ ClassyPrelude.putStrLn txt
+       
 
- 
 writFileHandler ::  FilePath -> LoggingInConfig -> Logging -> Bool -> Text -> IO ()
 writFileHandler lF logCong log bl txt = do
         let ifWrite =  caseOfWriteLogging logCong log
         writeInLogFile lF ifWrite txt
         writeInTerminal bl txt  
+
 
 writeTextError      :: Error -> String -> String
 writeTextError  err txt    =  date ++  errText ++  txt
@@ -67,7 +54,8 @@ takeCurrentDate = ClassyPrelude.unpack  $ formatISODateTime $ unsafePerformIO ti
         where 
                 time = getCurrentTime
      
+     
 writeLogginHandler :: LogConfig -> Logging -> Text -> IO ()
-writeLogginHandler  (LogConfig lf logLev logBool) loging txt =  writFileHandler lf logLev loging logBool txt
+writeLogginHandler  (LogConfig lf logLev logBool) loging  =  writFileHandler lf logLev loging logBool 
 
 

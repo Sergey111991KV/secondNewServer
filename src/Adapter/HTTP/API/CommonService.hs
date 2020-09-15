@@ -7,7 +7,7 @@ import Data.Aeson ()
 import Adapter.HTTP.Common
 import Domain.ImportService
 import Domain.ImportEntity
-import qualified Prelude as Prelude
+import qualified Prelude 
 
 
 routes :: ( ScottyError e, MonadIO m, CommonService m)
@@ -66,15 +66,15 @@ routes = do
                                     print $ errorString err
                             Right ent -> do
                                 case entity of
-                                    "authors" -> Web.Scotty.Trans.json ((convertFromEntityArray ent) :: [Author])
-                                    "users" -> Web.Scotty.Trans.json ((convertFromEntityArray ent) :: [User])
-                                    "tags" -> Web.Scotty.Trans.json ((convertFromEntityArray ent) :: [Teg])
-                                    "news" -> Web.Scotty.Trans.json ((convertFromEntityArray ent) :: [News])
-                                    "categorys1" -> Web.Scotty.Trans.json ((convertFromCatEntArray $ convertFromEntityArray ent) :: [Category1])
-                                    "categorys2" -> Web.Scotty.Trans.json ((convertFromCatEntArray $ convertFromEntityArray ent) :: [Category2])
-                                    "categorys3" -> Web.Scotty.Trans.json ((convertFromCatEntArray $ convertFromEntityArray ent) :: [Category3])
-                                    "drafts" -> Web.Scotty.Trans.json ((convertFromEntityArray ent) :: [Draft])
-                                    "comments" -> Web.Scotty.Trans.json ((convertFromEntityArray ent) :: [Comment])
+                                    "authors" -> Web.Scotty.Trans.json (convertFromEntityArray ent :: [Author])
+                                    "users" -> Web.Scotty.Trans.json (convertFromEntityArray ent :: [User])
+                                    "tags" -> Web.Scotty.Trans.json (convertFromEntityArray ent :: [Teg])
+                                    "news" -> Web.Scotty.Trans.json (convertFromEntityArray ent :: [News])
+                                    "categorys1" -> Web.Scotty.Trans.json (convertFromCatEntArray $ convertFromEntityArray ent :: [Category1])
+                                    "categorys2" -> Web.Scotty.Trans.json (convertFromCatEntArray $ convertFromEntityArray ent :: [Category2])
+                                    "categorys3" -> Web.Scotty.Trans.json (convertFromCatEntArray $ convertFromEntityArray ent :: [Category3])
+                                    "drafts" -> Web.Scotty.Trans.json (convertFromEntityArray ent :: [Draft])
+                                    "comments" -> Web.Scotty.Trans.json (convertFromEntityArray ent :: [Comment])
 
                                     
                                     
