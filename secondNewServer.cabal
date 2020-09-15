@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 6a4dbce2e23522fa2de1eec41893272189c39e6e654678459f35da4c85dbb58a
+-- hash: 56db2827f2d96dc4acb981ba89bcfdfea70ff142078b1532efaefc6e580ef451
 
 name:           secondNewServer
 version:        0.1.0.0
@@ -84,7 +84,6 @@ library
     , cookie
     , data-has
     , exceptions
-    , hindent
     , hlint
     , hspec
     , http-client
@@ -128,7 +127,6 @@ executable secondNewServer-exe
     , cookie
     , data-has
     , exceptions
-    , hindent
     , hlint
     , hspec
     , http-client
@@ -188,7 +186,6 @@ test-suite secondNewServer-test
     , cookie
     , data-has
     , exceptions
-    , hindent
     , hlint
     , hspec
     , hspec-wai

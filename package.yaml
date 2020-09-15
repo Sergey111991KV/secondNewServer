@@ -52,7 +52,7 @@ dependencies:
 - warp
 - hlint
 - random
-- hindent
+# - hindent
 
 
 
