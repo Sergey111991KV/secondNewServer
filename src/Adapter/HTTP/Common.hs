@@ -1,17 +1,17 @@
 module Adapter.HTTP.Common where
 
-import ClassyPrelude
-import Web.Scotty.Trans
 import Blaze.ByteString.Builder (toLazyByteString)
-import Web.Cookie
+import ClassyPrelude
 import Data.Time.Lens
-
+import Web.Cookie
+import Web.Scotty.Trans
 
 import Domain.ImportEntity as E
 import Domain.ImportService as S
 
 setCookie :: (ScottyError e, Monad m) => SetCookie -> ActionT e m ()
-setCookie = setHeader "Set-Cookie" . decodeUtf8 . toLazyByteString . renderSetCookie
+setCookie =
+  setHeader "Set-Cookie" . decodeUtf8 . toLazyByteString . renderSetCookie
 
 getCookie :: (ScottyError e, Monad m) => Text -> ActionT e m (Maybe Text)
 getCookie key = do
@@ -22,27 +22,25 @@ getCookie key = do
     val <- lookup bsKey cookie
     return $ decodeUtf8 val
 
-defCookie = defaultSetCookie { setCookieName = "sId", setCookieValue = "" }
+defCookie = defaultSetCookie {setCookieName = "sId", setCookieValue = ""}
 
 setDefaultCookie :: (ScottyError e, Monad m) => ActionT e m ()
-setDefaultCookie  = setCookie defCookie
+setDefaultCookie = setCookie defCookie
 
-
-setSessionIdInCookie :: (MonadIO m, ScottyError e) => SessionId -> ActionT e m ()
+setSessionIdInCookie ::
+     (MonadIO m, ScottyError e) => SessionId -> ActionT e m ()
 setSessionIdInCookie sId = do
   curTime <- liftIO getCurrentTime
-  setCookie $ def { setCookieName = "sId"
-                  , setCookiePath = Just "/"
-                  , setCookieValue = encodeUtf8  (rawSession sId)
-                  , setCookieExpires = Just $ modL month (+ 1) curTime
-                  , setCookieHttpOnly = True
-                  , setCookieSecure = False
-                  , setCookieSameSite = Just sameSiteLax
-                  }
-
-
-
-                  
+  setCookie $
+    def
+      { setCookieName = "sId"
+      , setCookiePath = Just "/"
+      , setCookieValue = encodeUtf8 (rawSession sId)
+      , setCookieExpires = Just $ modL month (+ 1) curTime
+      , setCookieHttpOnly = True
+      , setCookieSecure = False
+      , setCookieSameSite = Just sameSiteLax
+      }
 -- getCurrentUserId :: (S.SessionRepo m, ScottyError e) => ActionT e m (Maybe UserId)
 -- getCurrentUserId = do
 --   -- let err :: Text = "Error of Get SessionId"

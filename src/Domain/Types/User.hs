@@ -1,40 +1,40 @@
 module Domain.Types.User where
 
-import Domain.Types.Imports
-import Database.PostgreSQL.Simple.FromField
 import ClassyPrelude
+import Database.PostgreSQL.Simple.FromField
+import Domain.Types.Imports
 
-
-
-data  User = User
-  { 
-    id_user      :: Integer
-  , nameU        :: Text
-  , lastName     :: Text
-  , authLogin    :: Text
-  , authPassword :: Text
-  , avatar       :: Text
-  -- , dataCreate   :: ZonedTime
-  , dataCreate   :: UTCTime
-  , authAdmin    :: Bool
-  , authAuthor   :: Bool
-  } deriving (Show, Eq, Generic)
-
+data User =
+  User
+    { id_user :: Integer
+    , nameU :: Text
+    , lastName :: Text
+    , authLogin :: Text
+    , authPassword :: Text
+    , avatar :: Text
+    , dataCreate :: UTCTime
+    , authAdmin :: Bool
+    , authAuthor :: Bool
+    }
+  deriving (Show, Eq, Generic)
 
 instance FromJSON User
-instance ToJSON User
 
+instance ToJSON User
 
 instance FromField User where
   fromField u = fromJSONField u
-instance ToField User where
-    toField u = toJSONField u
 
+instance ToField User where
+  toField u = toJSONField u
 
 instance FromRow User where
-  fromRow = User <$> field <*> field <*> field <*> field <*> field <*> field <*> field <*> field <*> field
+  fromRow =
+    User <$> field <*> field <*> field <*> field <*> field <*> field <*> field <*>
+    field <*>
+    field
 
-instance  ToRow User
+instance ToRow User
 --  where
 --     toRow u = [ toField (id_user u)
 --               , toField (nameU u)

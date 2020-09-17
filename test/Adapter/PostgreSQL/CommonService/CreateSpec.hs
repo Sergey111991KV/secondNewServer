@@ -15,16 +15,16 @@ import Adapter.PostgreSQL.TestHelpPostgres
 
 -- pending
 
--- spec :: Spec
--- spec = beforeAll initDB $ do
---   describe "create user" $ do 
---         it "should not create as session is fall " pending
+spec :: Spec
+spec = beforeAll initDB $ do
+  describe "create user" $ do 
+        it "should not create as session is fall " pending
 time = ( Prelude.read "2015-09-01 13:34:02 UTC" )::UTCTime
 userCreateAdmin = User {id_user = 1, nameU = "Pasha", lastName = "Dragon", authLogin = "pasha@test.com", authPassword = "3456ABCDefgh", avatar = "https://nlotv.com/ru/news/view/6554-novye-kadry-iz-avatar-2-predstavili-druguyu-lokaciyu-pandory", dataCreate = time, authAdmin = False, authAuthor = True}
 --           
 
-spec :: Spec
-spec = beforeAll initDB $ do
+-- spec :: Spec
+-- spec = beforeAll initDB $ do
 --   describe "create user" $ do
 --     it "should not create as session is fall "  $ do
 --             let s = SessionId ""
@@ -152,18 +152,18 @@ spec = beforeAll initDB $ do
 --               s <- newSession userCreateAdmin
 --               val <-  create s (EntDraft draft)
 --               liftIO $ val `shouldBe` Right ()
-  -- describe "create comment" $ do
-  --   it "should not create comment as session is fall "  $ do
-  --           let s = SessionId ""
-  --           com <- randomComment
-  --           runTestApp (create s (EntComment com))  `shouldReturn` Left UserErrorFindBySession
-  --   it "should create comment everybody - also not authorithation"  $ do
-  --           let userCreateNotAuthor = User {id_user = 3, nameU = "Pasha", lastName = "Dragon", authLogin = "pasha@test.com", authPassword = "3456ABCDefgh", avatar = "https://nlotv.com/ru/news/view/6554-novye-kadry-iz-avatar-2-predstavili-druguyu-lokaciyu-pandory", dataCreate = time, authAdmin = False, authAuthor = False}     
-  --           com <- randomComment
-  --           runTestApp $ do
-  --             s <- newSession userCreateAdmin
-  --             val <-  create s (EntComment com)
-  --             liftIO $ val `shouldBe` Right ()
+--   describe "create comment" $ do
+--     it "should not create comment as session is fall "  $ do
+--             let s = SessionId ""
+--             com <- randomComment
+--             runTestApp (create s (EntComment com))  `shouldReturn` Left UserErrorFindBySession
+--     it "should create comment everybody - also not authorithation"  $ do
+--             let userCreateNotAuthor = User {id_user = 3, nameU = "Pasha", lastName = "Dragon", authLogin = "pasha@test.com", authPassword = "3456ABCDefgh", avatar = "https://nlotv.com/ru/news/view/6554-novye-kadry-iz-avatar-2-predstavili-druguyu-lokaciyu-pandory", dataCreate = time, authAdmin = False, authAuthor = False}     
+--             com <- randomComment
+--             runTestApp $ do
+--               s <- newSession userCreateAdmin
+--               val <-  create s (EntComment com)
+--               liftIO $ val `shouldBe` Right ()
 --   describe "create news" $ do
 --     it "should not create news as session is fall "  $ do
 --             let s = SessionId ""

@@ -32,13 +32,13 @@ CREATE TABLE author (
 CREATE UNIQUE INDEX author_pkey ON author(id_author int4_ops);
 
 CREATE TABLE category_1 (
-    id_c1 integer DEFAULT nextval('category_1_id_seq'::regclass) PRIMARY KEY,
+    id_c1 integer  PRIMARY KEY,
     description_cat1 text
 );
 
 -- Indices -------------------------------------------------------
 
-CREATE UNIQUE INDEX category_1_pkey ON category_1(id_c1 int4_ops);
+-- CREATE UNIQUE INDEX category_1_pkey ON category_1(id_c1 int4_ops);
 
 CREATE TABLE category_2 (
     id_c2 integer DEFAULT nextval('category_2_id_seq'::regclass) PRIMARY KEY,
@@ -47,6 +47,20 @@ CREATE TABLE category_2 (
 );
 
 -- Indices -------------------------------------------------------
+
+CREATE TABLE category_1 (
+    id SERIAL PRIMARY KEY,
+    description_cat1 text
+);
+
+-- Indices -------------------------------------------------------
+
+CREATE UNIQUE INDEX category_1_pkey ON category_1(id int4_ops);
+
+
+
+
+
 
 CREATE UNIQUE INDEX category_2_pkey ON category_2(id_c2 int4_ops);
 
