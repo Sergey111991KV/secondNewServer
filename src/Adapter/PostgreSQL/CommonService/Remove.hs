@@ -190,7 +190,7 @@ remove sess text idE
         if authAuthor user
           then do
             let q =
-                  "DELETE FROM drafts USING news, author WHERE (elements_draft).news_id_draft = news.id_news and author.id_author = news.authors_id and author.id_user = (?) and (elements_draft).id_draft = (?);"
+                  "DELETE FROM drafts USING news, author WHERE (elements_draft).news_id_draft = news.id_news and author.id_author = news.authors_id and author.id_user_a = (?) and (elements_draft).id_draft = (?);"
             result <- withConn $ \conn -> execute conn q (id_user user, idE)
             case result of
               0 -> do

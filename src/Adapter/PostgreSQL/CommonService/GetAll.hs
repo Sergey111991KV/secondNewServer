@@ -28,7 +28,7 @@ getAll sess text
                   "Error create authors" ++ errorText DataErrorPostgreSQL
                 return $ Left DataErrorPostgreSQL
               authors -> do
-                Log.logIn Log.Debug "editing user authors!" -- log
+                Log.logIn Log.Debug "get all  authors!" -- log
                 return $ Right (convertToEntityArray authors)
           else do
             Log.logIn Log.Error $
@@ -47,7 +47,7 @@ getAll sess text
           "Error create users" ++ errorText DataErrorPostgreSQL
         return $ Left DataErrorPostgreSQL
       users -> do
-        Log.logIn Log.Debug "editing user users!" -- log
+        Log.logIn Log.Debug "get all  users!" -- log
         return $ Right (convertToEntityArray users)
   | text == "tags" = do
     let q = "SELECT (element_tags).id_teg, (element_tags).name_teg FROM tags ;"
@@ -58,7 +58,7 @@ getAll sess text
           "Error create tags" ++ errorText DataErrorPostgreSQL
         return $ Left DataErrorPostgreSQL
       tags -> do
-        Log.logIn Log.Debug "editing user tags!" -- log
+        Log.logIn Log.Debug "get all  tags!" -- log
         return $ Right (convertToEntityArray tags)
   | text == "news" = do
     result <-
@@ -71,7 +71,8 @@ getAll sess text
           "Error create news" ++ errorText DataErrorPostgreSQL
         return $ Left DataErrorPostgreSQL
       news -> do
-        Log.logIn Log.Debug "editing user news!" -- log
+        print $ show $ ClassyPrelude.length news
+        Log.logIn Log.Debug "get all  news!" -- log
         return $ Right (convertToEntityArray news)
   | text == "categorys1" = do
     let q =
@@ -83,7 +84,7 @@ getAll sess text
           "Error create categorys1" ++ errorText DataErrorPostgreSQL
         return $ Left DataErrorPostgreSQL
       cat1 -> do
-        Log.logIn Log.Debug "editing user categorys1!" -- log
+        Log.logIn Log.Debug "get all  categorys1!" -- log
         return $ Right (convertToEntityArray $ convertToCatEntArray cat1)
   | text == "categorys2" = do
     let q =
@@ -95,7 +96,7 @@ getAll sess text
           "Error create categorys2" ++ errorText DataErrorPostgreSQL
         return $ Left DataErrorPostgreSQL
       cat2 -> do
-        Log.logIn Log.Debug "editing user categorys2!" -- log
+        Log.logIn Log.Debug "get all  categorys2!" -- log
         return $ Right (convertToEntityArray $ convertToCatEntArray cat2)
   | text == "categorys3" = do
     let q =
@@ -107,7 +108,7 @@ getAll sess text
           "Error create categorys3" ++ errorText DataErrorPostgreSQL
         return $ Left DataErrorPostgreSQL
       cat3 -> do
-        Log.logIn Log.Debug "editing user categorys3!" -- log
+        Log.logIn Log.Debug "get all  categorys3!" -- log
         return $ Right (convertToEntityArray $ convertToCatEntArray cat3)
   | text == "drafts" = do
     access <- findUserBySession sess
@@ -125,7 +126,7 @@ getAll sess text
                   "Error create drafts" ++ errorText DataErrorPostgreSQL
                 return $ Left DataErrorPostgreSQL
               drafts -> do
-                Log.logIn Log.Debug "editing user drafts!" -- log
+                Log.logIn Log.Debug "get all  drafts!" -- log
                 return $ Right (convertToEntityArray drafts)
           else do
             Log.logIn Log.Error $
@@ -149,5 +150,5 @@ getAll sess text
           "Error create comments" ++ errorText DataErrorPostgreSQL
         return $ Left DataErrorPostgreSQL
       comments -> do
-        Log.logIn Log.Debug "editing user comments!" -- log
+        Log.logIn Log.Debug "get all  comments!" -- log
         return $ Right (convertToEntityArray comments)

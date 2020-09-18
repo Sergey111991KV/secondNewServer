@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS user_blog (
 CREATE TABLE IF NOT EXISTS author (
     id_author serial PRIMARY KEY,
     description_author text,
-    id_user integer REFERENCES user_blog(id_user)
+    id_user_a integer REFERENCES user_blog(id_user)
 );
 
 

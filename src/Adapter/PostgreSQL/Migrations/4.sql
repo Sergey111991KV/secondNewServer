@@ -1,0 +1,12 @@
+INSERT INTO category_3 (description_cat3, category_2_id) VALUES ('Правительственные действия',1);
+INSERT INTO category_3 (description_cat3, category_2_id) VALUES ('Принимаемые законы',1);
+INSERT INTO category_3 (description_cat3, category_2_id) VALUES ('Европа',2);
+INSERT INTO category_3 (description_cat3, category_2_id) VALUES ('Америка',2);
+INSERT INTO category_3 (description_cat3, category_2_id) VALUES ('Автомобильные льготы на покупку',3);
+INSERT INTO category_3 (description_cat3, category_2_id) VALUES ('Действия центробанка',3);
+INSERT INTO category_3 (description_cat3, category_2_id) VALUES ('Цена на сезонные овощи',4);
+INSERT INTO category_3 (description_cat3, category_2_id) VALUES ('Туристические путевки',4);
+INSERT INTO category_3 (description_cat3, category_2_id) VALUES ('Мероприятия',5);
+INSERT INTO category_3 (description_cat3, category_2_id) VALUES ('Финансирование культурных объектов',5);
+INSERT INTO category_3 (description_cat3, category_2_id) VALUES ('Реставрации',6);
+INSERT INTO category_3 (description_cat3, category_2_id) VALUES ('Меценатство',6);

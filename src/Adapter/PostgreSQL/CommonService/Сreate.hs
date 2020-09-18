@@ -220,14 +220,14 @@ create sess (EntNews news) = do
     Right user -> do
       if authAuthor user
         then do
-          let q = "INSERT INTO news VALUES (?,?,?,?,?,?,?,?);"
+          let q = "INSERT INTO news (data_create_n, authors_id, category_3_id, description_news,  \
+                  \ main_photo_url_n, other_photo_url_n, short_name_n) VALUES (?,?,?,?,?,?,?);"
           result <-
             withConn $ \conn ->
               execute
                 conn
                 q
-                ( id_news news
-                , data_create_news news
+                ( data_create_news news
                 , id_author $ authors news
                 , id_category_3 $ category news
                 , text_news news

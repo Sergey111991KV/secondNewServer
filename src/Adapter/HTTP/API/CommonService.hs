@@ -234,7 +234,7 @@ funcGetMaybeEntity txt
       case result of
         Nothing -> Nothing
         Just auth -> Just (convertToEntity auth)
-  | txt == "newss" = do
+  | txt == "news" = do
     b <- body
     let result :: Maybe News = decode b
     return $

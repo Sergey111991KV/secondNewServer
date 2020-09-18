@@ -65,9 +65,9 @@ migrate pool =
 
 getAllNewsSQLText :: String
 getAllNewsSQLText =
-  "SELECT endNews.id_news \
+  "SELECT DISTINCT ON (endNews.id_news) endNews.id_news \
 		\ , endNews.data_create_n \
-		\ , endNews.id_author, endNews.description_author, endNews.id_user, endNews.name_user, endNews.last_name_user, endNews.login \
+		\ , endNews.id_author, endNews.description_author, endNews.id_user_a, endNews.name_user, endNews.last_name_user, endNews.login \
 		\ , endNews.password, endNews.avatar, endNews.data_create_u, endNews.admini, endNews.author \
     \ , endNews.id_c3, endNews.description_cat3, endNews.id_c2, endNews.description_cat2, endNews.id_c1, endNews.description_cat1 \
     \ , endNews.description_news , endNews.main_photo_url_n \
@@ -75,10 +75,10 @@ getAllNewsSQLText =
     \ , endNews.short_name_n \
     \ , ARRAY (SELECT * FROM drafts where  endNews.id_news = (elements_draft).news_id_draft) \
     \ , ARRAY(SELECT  * FROM comments where endNews.id_news = (element_comment).news_id_comments  ) \
-    \ , ARRAY(SELECT * FROM tags where endNews.id_news = news_tags.news_id) \
-    \ from news_tags, ( select * from (news LEFT join ( SELECT * from author LEFT join user_blog USING (id_user)) as a ON news.authors_id = a.id_author) as newsAuthor \
+    \ , ARRAY(SELECT * FROM tags where endNews.tags_id = (element_tags).id_teg  ) \
+    \ from  (select * from news_tags right join ( select * from (news LEFT join ( SELECT * from author LEFT join user_blog on user_blog.id_user = author.id_user_a ) as a ON news.authors_id = a.id_author) as newsAuthor \
     \  LEFT join (SELECT * from category_1 LEFT join (SELECT * from category_3 LEFT join category_2 ON category_3.category_2_id = category_2.id_c2) as c2 on category_1.id_c1 = c2.category_1_id) as cat on newsAuthor.category_3_id = cat.id_c3) \
-    \ as endNews "
+    \ as endN ON endN.id_news = news_tags.news_id) as endNews  ;"
 
 getAllNewsSQLTextTeg :: String
 getAllNewsSQLTextTeg =
@@ -92,8 +92,8 @@ getAllNewsSQLTextTeg =
                                   \ , ARRAY (SELECT  ((elements_draft).id_draft, (elements_draft).text_draft , (elements_draft).data_create_draft , (elements_draft).news_id_draft , (elements_draft).main_photo_url , (elements_draft).other_photo_url , (elements_draft).short_name  ) FROM drafts where (elements_draft).news_id_draft = n.id_news ) \
                                   \ , ARRAY(SELECT  ((element_comment).id_comments, (element_comment).text_comments , (element_comment).data_create_comments , (element_comment).news_id_comments , (element_comment).users_id_comments) FROM comments where (element_comment).news_id_comments = n.id_news ) \
                                   \ , ARRAY(SELECT  ((element_tags).id_teg, (element_tags).name_teg) FROM tags, news_tags where (element_tags).id_teg  = news_tags.tags_id and n.id_news = news_tags.news_id)  \
-                                  \ from (SELECT * from (SELECT * from news_tags LEFT join news AS tegnews on news_tags.news_id = tegnews.id_news) \
-                                        \ as tt LEFT join ( SELECT * from author LEFT join user_blog USING (id_user)) \
+                                  \ from news_tags , (SELECT * from (SELECT * from news_tags LEFT join news AS tegnews on news_tags.news_id = tegnews.id_news) \
+                                        \ as tt LEFT join ( SELECT * from author LEFT join user_blog USING (id_user)) \ 
                                         \ as a ON  tt.authors_id = a.id_author) as n LEFT join (SELECT * from category_1 LEFT join (SELECT * from category_3 LEFT join category_2 ON category_3.category_2_id = category_2.id_c2) \
                                         \ as c2 on category_1.id_c1 = c2.category_1_id) as cat on n.category_3_id = cat.id_c3 "
                                       --   CREATE TABLE news (
